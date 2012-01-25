@@ -1,5 +1,6 @@
             $(document).ready( function() {
             {% if not preview %}
+                var finished = false;
                 flowplayer("audioplayer", "/flowplayer/flowplayer-3.2.7.swf", {
                     plugins: {
                         controls: {
@@ -31,9 +32,13 @@
                         }
                     });
                 $('button#endinstr').click(function(){
-                    $(':input[name="starttime"]').val(isodatetime());
-                    $('#instructions').hide();
-                    $('#exposure').show();
+                    if ($('#wami')[0].getSettings().microphone.granted) {
+                        $(':input[name="starttime"]').val(isodatetime());
+                        $('#instructions').hide();
+                        $('#exposure').show();
+                    } else {
+                        alert("You have to allow microphone access for this experiment!");
+                    }
                 });
                 $('button#starttest').click(function(){
                     $('#testintr').hide();
@@ -101,8 +106,21 @@
                 function wrapup() {
                     $('#debriefing').show();
                     $("#comment").show(function(){$('#commentarea').focus();});
-                    $("#submit").show(function() {$(this).removeAttr('disabled')});
+                    $("#submit").show(function() {
+                        $(this).removeAttr('disabled');
+                        finished = true;
+                    });
                 }
+
+                $('#results').submit(function() {
+                    if (!finished) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
+
+                setupRecorder();
             {% endif %}
                     // disable submit and hide comment box until the end
                     $("#submit").attr('disabled', 'disabled');

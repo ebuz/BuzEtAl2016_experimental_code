@@ -27,3 +27,9 @@ iso8601.min.js
 
 # pickled version of stimuli
 *.pickle
+
+# Flash file of sound recorder
+Wami.swf
+
+# Wami recorder helper JS functions. Changes upstream frequently
+recorder.js

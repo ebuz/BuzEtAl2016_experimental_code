@@ -23,6 +23,7 @@ from random import choice
 import cPickle
 import ConfigParser
 import os.path
+from hashlib import sha224
 from webob import Request, Response
 from webob.exc import HTTPForbidden, HTTPBadRequest
 from jinja2 import Environment, FileSystemLoader
@@ -120,6 +121,10 @@ class SocAlign1Server(object):
             # cond is same for all pictrials in a list; grab from 1st
             condition = pictrials[0]['ExposureCondition']
 
+        amz_dict['hash'] = sha224("{}{}{}".format(req.params['workerId'],
+                                                  req.params['hitId'],
+                                                  req.params['assignmentId'])).hexdigest()
+
         template = env.get_template('socalign1.html')
         t = template.render(soundtrials = soundtrials,
             pictrials = pictrials,
@@ -143,5 +148,8 @@ if __name__ == '__main__':
     app['/flowplayer'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'flowplayer'))
     app['/mturk/stimuli/socalign1'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'stimuli'))
     app['/iso8601.min.js'] = fileapp.FileApp('iso8601.min.js')
+    app['/recorder.js'] = fileapp.FileApp('recorder.js')
+    app['/wami-helpers.js'] = fileapp.FileApp('wami-helpers.js')
+    app['/Wami.swf'] = fileapp.FileApp('Wami.swf')
     app['/expt'] = SocAlign1Server(app)
     httpserver.serve(app, host='127.0.0.1', port=8080)
