@@ -71,6 +71,7 @@
             particular takes a *long* time to load.
         #}
         {% if not preview %}
+        <div id="wami"></div>
         <div id="exposure">
             <div id="audioinstructions">
                 Listen to each clip carefully. After the final clip the player
@@ -103,9 +104,13 @@
             {% endif %}
                 {% for item in pictrials %}
                     <div id="pic{{loop.index}}" class="testtrial">
-                        <img src="/mturk/stimuli/osuprm1/{{item.FileName}}" alt="" width="{{item.PictureWidth}}" height="{{item.PictureHeight}}"/>
+                        <img src="/mturk/stimuli/socalign1/{{item.FileName}}" alt="" width="{{item.PictureWidth}}" height="{{item.PictureHeight}}"/>
                         <textarea id="{{item.StimulusID}}" name="{{item.StimulusID}}" cols="80" rows="2"></textarea>
                         <div id="error{{loop.index}}" class="error" style="color:red;"></div>
+                        <div class="wamibuttons" id="{{item.StimulusID}}_input1" name="{{item.StimulusID}}" style="display:none;">
+                            <button class="startrecord" id="startrecord_{{item.StimulusID}}_input1">Start</button>
+                            <button class="stoprecord" id="stoprecord_{{item.StimulusID}}_input1" disabled='disabled'>Stop</button>
+                        </div>
                         <input type="hidden" id="end_{{item.StimulusID}}" name="end_{{item.StimulusID}}" value="NA"/>
                     </div>
                 {% endfor %}

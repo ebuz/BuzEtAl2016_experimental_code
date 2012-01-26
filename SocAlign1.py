@@ -126,7 +126,7 @@ class SocAlign1Server(object):
                                                   req.params['assignmentId'])).hexdigest()
 
         template = env.get_template('socalign1.html')
-        t = template.render(soundtrials = soundtrials,
+        t = template.render(soundfile = soundtrials[0], #only one sound file
             pictrials = pictrials,
             amz = amz_dict,
             listid = listid,

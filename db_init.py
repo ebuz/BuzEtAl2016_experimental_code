@@ -31,7 +31,7 @@ import ConfigParser
 MAX_LIST = 12
 
 cfg = ConfigParser.SafeConfigParser()
-cfg.read('db.cfg')
+cfg.read('expt.cfg')
 
 engine_string = cfg.get('db', 'engine_string')
 
