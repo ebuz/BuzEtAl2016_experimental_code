@@ -155,6 +155,7 @@ if __name__ == '__main__':
     app['/iso8601.min.js'] = fileapp.FileApp('iso8601.min.js')
     app['/recorder.js'] = fileapp.FileApp('recorder.js')
     app['/wami-helpers.js'] = fileapp.FileApp('wami-helpers.js')
+    app['/socalign1.js'] = fileapp.FileApp('socalign1.js')
     app['/Wami.swf'] = fileapp.FileApp('Wami.swf')
     app['/expt'] = SocAlign1Server(app)
     httpserver.serve(app, host='127.0.0.1', port=8080)

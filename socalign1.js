@@ -1,16 +1,15 @@
             $(document).ready( function() {
                 var finished = false;
-                flowplayer("audioplayer", "/flowplayer/flowplayer-3.2.7.swf", {
+                $("#soundfile").flowplayer("/flowplayer/flowplayer-3.2.7.swf", {
                     plugins: {
                         controls: {
                             all: false, play: true, volume: true, time: true,
                             fullscreen: false, height: 30, autoHide: false,
-             {% if debug %} scrubber: true {% else %} scrubber: false {% endif %}
+                            scrubber: true //FIXME: change to false before deployment
                             }
                         },
                     clip:
-                        { url:'/mturk/stimuli/socalign1/{{ soundfile.FileName }}',
-                          title:'',
+                        { title:'',
                           autoPlay: false },
                         // blocks pause from happening
                         onBeforePause: function () {return false;},
@@ -22,7 +21,7 @@
                             $('#exposure').hide();
                             $('#testintr').show();
                         }
-                    });
+                });
                 $('button#endinstr').click(function(){
                     if ($('#wami')[0].getSettings().microphone.granted) {
                         $(':input[name="starttime"]').val(isodatetime());
@@ -62,19 +61,24 @@
                 $('.startrecord').on('click', function(e){
                     $(this).attr('disabled', 'disabled');
                     $(this).siblings('.stoprecord').removeAttr('disabled').focus();
-                    Wami.startRecording("http://localhost:8181/wav_uploader/?workerId={{amz.workerId}}&amp;assignmentId={{amz.assignmentId}}&amp;hitId={{amz.hitId}}&amp;hash={{amz.hash}}&amp;filename=" + $(this).parent().attr('name'), "onRecordStart", "onRecordFinish", "onError");
+                    Wami.startRecording("http://127.0.0.1:8181/wav_uploader/?workerId="
+                        + workerId
+                        + "&assignmentId=" + assignmentId
+                        + "&hitId=" + hitId
+                        + "&hash=" + amzhash
+                        + "&filename=" + $(this).parent().attr('name'), "onRecordStart", "onRecordFinish", "onError");
                 });
 
                 $('.stoprecord').on('click', function(e) {
                     Wami.stopRecording();
-                    //FIXME: get parent refernces right
-                    alert($(this).parent().attr('id'));
-                    $(':input[name="end_' + this.id + '"]').val(isodatetime());
-                    $(this).parent().hide();
-                    $(this).parent().next().show(function() {
-                        $(this).children('textarea').focus();
+                    $(':input[name="end_' + $(this).parent().attr('id') + '"]').val(isodatetime());
+                    $(this).parent().parent().hide();
+                    $(this).parent().parent().next().show(function() {
+                        $(this).children('.wamibuttons').show(function() {
+                            $(this).children('.startrecord').removeAttr('disabled').focus();
+                        });
                     });
-                    if(this === $('.testtrial > textarea').last()[0]) {
+                    if($(this)[0] === $('.stimitem').last()[0]) {
                         $('#surveychoice').show();
                     }
                 });
