@@ -93,6 +93,10 @@ class SocAlign1Server(object):
         required_keys = ['assignmentId', 'hitId']
         key_error_msg = 'Missing parameter: {0}. Required keys: {1}'
 
+        debug = False
+        if req.params.has_key('debug'):
+            debug = True if req.params['debug'] == '1' else False
+
         try:
             amz_dict['assignmentId'] = req.params['assignmentId']
             amz_dict['hitId'] = req.params['hitId']
@@ -132,6 +136,7 @@ class SocAlign1Server(object):
             listid = listid,
             condition = condition,
             formtype = formtype,
+            debug = debug,
             # on preview, don't bother loading heavy flash assets
             preview = in_preview)
 

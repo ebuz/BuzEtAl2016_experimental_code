@@ -3,13 +3,13 @@
                 flowplayer("audioplayer", "/flowplayer/flowplayer-3.2.7.swf", {
                     plugins: {
                         controls: {
-                            all: false, play: true, scrubber: false, volume: true,
-                            time: true, fullscreen: false, height: 30, autoHide: false
+                            all: false, play: true, volume: true, time: true,
+                            fullscreen: false, height: 30, autoHide: false,
+             {% if debug %} scrubber: true {% else %} scrubber: false {% endif %}
                             }
                         },
                     clip:
                         { url:'/mturk/stimuli/socalign1/{{ soundfile.FileName }}',
-                          baseurl: 'http://127.0.0.1:8080/',
                           title:'',
                           autoPlay: false },
                         // blocks pause from happening
@@ -35,7 +35,9 @@
                 $('button#starttest').click(function(){
                     $('#testintr').hide();
                     $('.testtrial').first().show(function() {
-                        $(this).children('textarea').focus();
+                        $(this).children('.wamibuttons').show(function() {
+                            $(this).children('.startrecord').removeAttr('disabled').focus();
+                        });
                     });
                 });
                 $(':button[name="dosurvey"]').click(function(){
