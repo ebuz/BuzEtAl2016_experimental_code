@@ -34,7 +34,7 @@ from models import Worker, TrialList
 
 basepath = os.path.dirname(__file__)
 
-cfg = ConfigParser.SafeConfigParser()
+cfg = ConfigParser.SafeConfigParser({'domain': '127.0.0.1'})
 cfg.read(os.path.join(basepath, 'expt.cfg'))
 engine_string = cfg.get('db', 'engine_string')
 
@@ -143,6 +143,9 @@ class SocAlign1Server(object):
         resp = Response()
         resp.content_type='application/xhtml+xml'
         resp.unicode_body = t
+        domain = cfg.get('host', 'domain')
+        # set a cookie that lives 1 hour
+        resp.set_cookie('turkrecord', amz_dict['hash'], max_age=3600, path='/', domain=domain, secure=False)
         return resp(environ, start_response)
 
 if __name__ == '__main__':

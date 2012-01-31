@@ -65,7 +65,6 @@
                         + workerId
                         + "&assignmentId=" + assignmentId
                         + "&hitId=" + hitId
-                        + "&hash=" + amzhash
                         + "&filename=" + $(this).parent().attr('name'), "onRecordStart", "onRecordFinish", "onError");
                 });
 
