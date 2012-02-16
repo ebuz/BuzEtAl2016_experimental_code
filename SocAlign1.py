@@ -155,7 +155,7 @@ if __name__ == '__main__':
     app = urlmap.URLMap()
     app['/flowplayer'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'flowplayer'))
     app['/mturk/stimuli/socalign1'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'stimuli'))
-    app['/iso8601.min.js'] = fileapp.FileApp('iso8601.min.js')
+    app['/iso8601shim.min.js'] = fileapp.FileApp('iso8601shim.min.js')
     app['/recorder.js'] = fileapp.FileApp('recorder.js')
     app['/wami-helpers.js'] = fileapp.FileApp('wami-helpers.js')
     app['/socalign1.js'] = fileapp.FileApp('socalign1.js')

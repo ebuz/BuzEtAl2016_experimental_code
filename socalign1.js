@@ -17,14 +17,14 @@
                             this.setVolume(100);
                         },
                         onFinish: function() {
-                            $(':input[name="endaudio"]').val(isodatetime());
+                            $(':input[name="endaudio"]').val(new Date().toISOString());
                             $('#exposure').hide();
                             $('#testintr').show();
                         }
                 });
                 $('button#endinstr').click(function(){
                     if ($('#wami')[0].getSettings().microphone.granted) {
-                        $(':input[name="starttime"]').val(isodatetime());
+                        $(':input[name="starttime"]').val(new Date().toISOString());
                         $('#instructions').hide();
                         $('#exposure').show();
                     } else {
@@ -70,7 +70,7 @@
 
                 $('.stoprecord').on('click', function(e) {
                     Wami.stopRecording();
-                    $(':input[name="end_' + $(this).parent().attr('id') + '"]').val(isodatetime());
+                    $(':input[name="end_' + $(this).parent().attr('id') + '"]').val(new Date().toISOString());
                     $(this).parent().parent().hide();
                     $(this).parent().parent().next().show(function() {
                         $(this).children('.wamibuttons').show(function() {

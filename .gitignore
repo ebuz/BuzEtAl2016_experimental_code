@@ -23,7 +23,7 @@ list*.html
 flowplayer/*
 
 # JS file for making iso8601 dates
-iso8601.min.js
+iso8601shim.min.js
 
 # pickled version of stimuli
 *.pickle
