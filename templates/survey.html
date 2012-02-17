@@ -1,126 +1,127 @@
                     <div id="survey">
-                        <p style="font-weight:bold;">Here are some questions about you:</p>
+
+                        <div id="page1">
+                            <p style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</p>
+                        </div>
+
+                        <div id="page2">
+                            <p style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</p>
+                        </div>
+
+                        <div id="page3">
+                            <fieldset>
+                                <label>Demographics</label>
+                                <table class="survquest" id="q.participant.age">
+                                    <tr><td>Age</td><td><input type="text" name="q.participant.age"/></td></tr>
+                                </table>
+                                <table class="survquest" id="q.participant.education">
+                                    <tr>
+                                        <td>Education</td>
+                                        <td>
+                                            <select name="q.participant.education">
+                                                <option value="didn't finish high school">didn't finish high school</option>
+                                                <option value="finished high school">finished high school</option>
+                                                <option value="attended college">attended college</option>
+                                                <option value="finished college">finished college</option>
+                                                <option value="attend graduate school">attend graduate school</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table class="survquest" id="q.participant.gender">
+                                <tr>
+                                    <td colspan="2"><p class="sentence">Gender</p></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="radio" name="q.participant.gender" value="male"></input></td>
+                                    <td><input type="radio" name="q.participant.gender" value="female"></input></td>
+                                    <td><input type="radio" name="q.participant.gender" value="other"></input></td>
+                                </tr>
+                                <tr>
+                                    <td>Male</td>
+                                    <td>Female</td>
+                                    <td>Other</td>
+                                </tr>
+                                <tr><td>If Other:</td><td><input type="text" name="q.participant.gender.other"/></td></tr>
+                                </table>
+                            </fieldset>
+
+                            <p style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</p>
+                            {% for question, formname, scale in [
+                                ('My political views are usually conservative.', 'q.ideology.conservative', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ('My political views are usually liberal.', 'q.ideology.liberal', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ('Of the two major political US parties, I most often agree with the Republicans.', 'q.ideology.republicans', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ('Of the two major political US parties, I most often agree with the Democrats.', 'q.ideology.democrats', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ('I enjoy hearing accents from different places.', 'q.ideology.enjoy_accents', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ("It bothers me when someone doesn't speak English properly.", 'q.ideology.proper_english', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ('English should be the official language of the US.', 'q.ideology.official_language', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ('Speaking well is important to me.', 'q.ideology.importance_of_speaking_well', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ("One's accent is an important part of one's self-presentation.", 'q.ideology.accent_and_self-presentation', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ('People with strong accents are just as likely to be smart as people without accents.', 'q.ideology.accent_predicts_intelligence', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                            ] %}
+                            <table class="survquest" id="{{formname}}">
+                                <tr>
+                                    <td colspan="6">
+                                        <p class="sentence">{{question}}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    {% for x in range(1,7) %}
+                                    <td><input type="radio" name="{{formname}}" value="{{x}}" class="likert"></input></td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    {% for x in range(1,7) %}
+                                    <td>{{x}}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td colspan="6">{{scale}}</td>
+                                </tr>
+                            </table>
+                            {% endfor %}
+                            <button type="button" class="next" id="end3">Next</button>
+                        </div>
+
+                        <div id="page4">
+                            <p style="font-weight:bold;">Please think of a specific,
+                            recent conflict you had with someone you did not know well.
+                            For each sentence below, rate how well that sentence describes
+                            your feelings or actions during that conflict.</p>
+
                         {% for question, formname, scale in [
-                            ('How are you feeling today?', 'feeling', '1=extremely poorly, 4=normal, 7=extremely well'),
-                            ('How much do you exercise?', 'exercise', '1=never, 4=a few times a month, 7=every day'),
-                            ('How much time do you spend outdoors?', 'outside', '1=not at all, 4=moderately, 7=very much'),
-                            ('How much do you care about politics?', 'politics', '1=not at all, 4=moderately, 7=very much'),
-                            ('How often do you watch sports?', 'sports','1=never, 4=a few times a month, 7=every day'),
-                            ('How much has your mood changed since the beginning of the experiment?', 'moodchange', '1=much worse, 4=stayed the same, 7=much better'),
-                            ('How often do you go to the movies?', 'moviefreq', '1=never, 4=a few times a month, 7=every day'),
-                            ('How often do you travel?', 'travel', '1=never, 4=a few times a year, 7=every month'),
-                            ('How religious are you?', 'religious', '1=not at all, 4=moderately, 7=extremely'),
-                            ('How often do you read for pleasure?', 'pleasureread', '1=never, 4=a few times a month, 7=every day'),
-                            ('How cheerful a person would you say you are?', 'cheerful', '1=not at all, 4=moderately, 7=extremely'),
-                            ('How musically inclined are you?', 'musical', '1=not at all, 4=moderately, 7=extremely'),
-                            ('How closely do you pay attention to current events?', 'currentevents', '1=not at all, 4=moderately, 7=very much'),
-                            ('How outgoing do you consider yourself?', 'outgoing', '1=not at all, 4=moderately, 7=extremely'),
-                            ('How social of a person are you?', 'usersocial', '1=not at all, 4=moderately, 7=extremely'),
-                            ('How often do you cook dinner at home?', 'cooking', '1=never, 4=a few times a week, 7=every day'),
-                            ('How well do you think the US economy is doing at the moment?', 'economy', '1=extremely poorly, 4=fair, 7=extremely well')
+                            ('I tried to persuade the other person that my way was the best way. ', 'q.conflict.dominate.my_way_best', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                            ('I tried to ignore the conflict and behaved as if nothing happened. ', 'q.conflict.avoid.ignore', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                            ('I tried to meet the other person halfway.', 'q.conflict.integrate.meet_halfway', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                            ('I insisted my position be accepted during the conflict.', 'q.conflict.dominate.insist_my_position_be_accepted', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                            ("I tried to pretend that the conflict didn't happen.", 'q.conflict.avoid.pretend_nothing_happend', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                            ("I pretended as if the conflict didn't exist.", 'q.conflict.avoid.pretend_no_conflict', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                            ('I tried to find a middle course to resolve the situation.', 'q.conflict.integrate.middle_course', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                            ('I dominated the argument until the other person understood my position. ', 'q.conflict.dominate.dominate_until_other_understands', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                            ("I tried to use 'give and take' so that a compromise could be made.", 'q.conflict.integrate.give_and_take', '1 not at all; 2; 3; 4; 5; 6 absolutely')
                         ] %}
                         <table class="survquest" id="{{formname}}">
                             <tr>
-                                <td colspan="7">
+                                <td colspan="6">
                                     <p class="sentence">{{question}}</p>
                                 </td>
                             </tr>
                             <tr>
-                                {% for x in range(1,8) %}
+                                {% for x in range(1,7) %}
                                 <td><input type="radio" name="{{formname}}" value="{{x}}" class="likert"></input></td>
                                 {% endfor %}
                             </tr>
                             <tr>
-                                {% for x in range(1,8) %}
+                                {% for x in range(1,7) %}
                                 <td>{{x}}</td>
                                 {% endfor %}
                             </tr>
                             <tr>
-                                <td colspan="7">{{scale}}</td>
+                                <td colspan="6">{{scale}}</td>
                             </tr>
                         </table>
                         {% endfor %}
-                        <table class="survquest" id="sleep">
-                            <tr>
-                                <td>
-                                    <p class="sentence">How much did you sleep last night? (In hours)</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select name="sleep">
-                                        <option value="NA" selected="selected">-----</option>
-                                        <option value="0-2">0-2</option>
-                                        <option value="2-4">2-4</option>
-                                        <option value="4-6">4-6</option>
-                                        <option value="6-8">6-8</option>
-                                        <option value="8+">8+</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        </table>
-                        <p style="font-weight:bold;">Finally, we have some questions about the speaker in Part 1 of the experiment:</p>
-                        {% for question, formname, scale in [
-                            ('How similar do you think the speaker in Part 1\'s personality is to your own?', 'similarpersonality', '1=extremely different, 4=somewhat similar, 7=extremely similar'),
-                            ('How much do you think you would like the speaker in Part 1?', 'likespeaker', '1=not at all, 4=moderately, 7=very much'),
-                            ('How successful in life do you think the speaker in Part 1 is?', 'speakersuccess', '1=not at all, 4=moderately, 7=very much'),
-                            ('How happy do you think the speaker in Part 1 is?', 'speakerhappiness', '1=not at all, 4=moderately, 7=extremely'),
-                            ('How well do you think the speaker in Part 1 did in school?', 'speakerschool', '1=extremely poorly, 4=fair, 7=extremely well'),
-                            ('How financially secure do you think the speaker is?', 'speakerfinance', '1=not at all, 4=moderately, 7=very much'),
-                            ('How confident do you think the speaker is?', 'speakerconfidence', '1=not at all, 4=moderately, 7=very much'),
-                            ('How successful in life, compared to yourself, do you think the speaker in Part 1 is?', 'speakercomparesuccess', '1=much less successful, 4=about the same, 7=much more successful'),
-                        ] %}
-                        <table class="survquest" id="{{formname}}">
-                            <tr>
-                                <td colspan="7">
-                                    <p class="sentence">{{question}}</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                {% for x in range(1,8) %}
-                                <td><input type="radio" name="{{formname}}" value="{{x}}" class="likert"></input></td>
-                                {% endfor %}
-                            </tr>
-                            <tr>
-                                {% for x in range(1,8) %}
-                                <td>{{x}}</td>
-                                {% endfor %}
-                            </tr>
-                            <tr>
-                                <td colspan="7">{{scale}}</td>
-                            </tr>
-                        </table>
-                        {% endfor %}
-                        <table class="survquest" id="speakerage">
-                            <tr>
-                                <td>
-                                    <p class="sentence">How old do you think the speaker in Part 1 is?</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select name="speakerage">
-                                        <option value="NA" selected="selected">-----</option>
-                                        {% for x in range(18,71) %}
-                                        <option value="{{x}}">{{x}}</option>
-                                        {% endfor %}
-                                        <option value="71+">71+</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        </table>
-                        <table class="survquest" id="malefemale">
-                            <tr>
-                                <td colspan="2"><p class="sentence">Is the speaker in Part 1 male or female?</p></td>
-                            </tr>
-                            <tr>
-                                <td><input type="radio" name="malefemale" value="male"></input></td>
-                                <td><input type="radio" name="malefemale" value="female"></input></td>
-                            </tr>
-                            <tr>
-                                <td>Male</td>
-                                <td>Female</td>
-                            </tr>
-                        </table>
                         <button type="button" id="endsurvey">Done</button>
+                        </div>
+
                     </div>

@@ -52,13 +52,13 @@
             #exposure, #testintr, .testtrial, #surveychoice, #survey, #debriefing {display:none;}
         </style>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-        <script type="text/javascript" src="/iso8601.min.js"></script>
+        <script type="text/javascript" src="/iso8601shim.min.js"></script>
         {% if not preview %}
         <script type="text/javascript" src="/flowplayer/flowplayer-3.2.6.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
-        <script type="text/javascript" src="recorder.js"></script>
-        <script type="text/javascript" src="wami-helpers.js"></script>
-        <script type="text/javascript" src="socalign1.js"></script>
+        <script type="text/javascript" src="/recorder.js"></script>
+        <script type="text/javascript" src="/wami-helpers.js"></script>
+        <script type="text/javascript" src="/socalign1.js"></script>
         <script type="text/javascript">
             var hitId = "{{amz.hitId}}";
             var workerId = "{{amz.workerId}}";
