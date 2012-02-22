@@ -1,11 +1,97 @@
                     <div id="survey">
 
                         <div id="page1">
+                        {%if listid == 1 %}
+                            {% set page1 = [("The speaker's arguments were politically conservative.", "q.speaker.conservative", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker's arguments were politically liberal.", "q.speaker.liberal", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded articulate.", "q.speaker.articulate", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker had an accent.", "q.speaker.accented", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded intelligent.", "q.speaker.intelligent", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded educated.", "q.speaker.educated", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded self-centered.", "q.speaker.self-centered", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded generous.", "q.speaker.generous", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker's arguments were weak.", "q.speaker.weak_arguments", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded shy.", "q.speaker.shy", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded enthusiastic.", "q.speaker.enthusiastic", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker was easy to understand.", "q.speaker.easy_to_understand", "1 not at all; 2; 3; 4; 5; 6 absolutely")] %}
+                        {% else %}
+                            {% set page1 = [("The speaker speaks like I do.", "q.participant.speaker_speaks_like_me", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker is similar to me.", "q.participant.speaker_is_similar_to_me", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker would have an easy time understanding me.", "q.participant.speaker_would_understand_me", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("I agree with the speaker's arguments.", "q.participant.agree_with_speaker", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("I would want the speaker as a friend.", "q.participant.want_speaker_as_friend", "1 not at all; 2; 3; 4; 5; 6 absolutely")] %}
                             <p style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</p>
+                            {% for question, formname, scale in page1 %}
+                            <table class="survquest" id="{{formname}}">
+                                <tr>
+                                    <td colspan="6">
+                                        <p class="sentence">{{question}}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    {% for x in range(1,7) %}
+                                    <td><input type="radio" name="{{formname}}" value="{{x}}" class="likert"></input></td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    {% for x in range(1,7) %}
+                                    <td>{{x}}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td colspan="6">{{scale}}</td>
+                                </tr>
+                            </table>
+                            {% endfor %}
+                        {% endif %}
+                            <button type="button" class="next" id="end1">Next</button>
                         </div>
 
                         <div id="page2">
+                        {%if listid == 1 %}
+                            {% set page2 = [("The speaker speaks like I do.", "q.participant.speaker_speaks_like_me", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker is similar to me.", "q.participant.speaker_is_similar_to_me", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker would have an easy time understanding me.", "q.participant.speaker_would_understand_me", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("I agree with the speaker's arguments.", "q.participant.agree_with_speaker", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("I would want the speaker as a friend.", "q.participant.want_speaker_as_friend", "1 not at all; 2; 3; 4; 5; 6 absolutely")] %}
+                        {% else %}
+                            {% set page2 = [("The speaker's arguments were politically conservative.", "q.speaker.conservative", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker's arguments were politically liberal.", "q.speaker.liberal", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded articulate.", "q.speaker.articulate", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker had an accent.", "q.speaker.accented", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded intelligent.", "q.speaker.intelligent", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded educated.", "q.speaker.educated", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded self-centered.", "q.speaker.self-centered", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded generous.", "q.speaker.generous", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker's arguments were weak.", "q.speaker.weak_arguments", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded shy.", "q.speaker.shy", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker sounded enthusiastic.", "q.speaker.enthusiastic", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
+                                            ("The speaker was easy to understand.", "q.speaker.easy_to_understand", "1 not at all; 2; 3; 4; 5; 6 absolutely")] %}
                             <p style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</p>
+                            {% for question, formname, scale in page2 %}
+                            <table class="survquest" id="{{formname}}">
+                                <tr>
+                                    <td colspan="6">
+                                        <p class="sentence">{{question}}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    {% for x in range(1,7) %}
+                                    <td><input type="radio" name="{{formname}}" value="{{x}}" class="likert"></input></td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    {% for x in range(1,7) %}
+                                    <td>{{x}}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td colspan="6">{{scale}}</td>
+                                </tr>
+                            </table>
+                            {% endfor %}
+                        {% endif %}
+                            <button type="button" class="next" id="end2">Next</button>
                         </div>
 
                         <div id="page3">

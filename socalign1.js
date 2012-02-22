@@ -23,7 +23,7 @@
                         }
                 });
                 $('button#endinstr').click(function(){
-                    if ($('#wami')[0].getSettings().microphone.granted) {
+                    if (Wami.getSettings().microphone.granted) {
                         $(':input[name="starttime"]').val(new Date().toISOString());
                         $('#instructions').hide();
                         $('#exposure').show();
