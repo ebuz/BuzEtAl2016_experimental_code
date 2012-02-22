@@ -1,7 +1,7 @@
                     <div id="survey">
 
                         <div id="page1">
-                        {%if listid == 1 %}
+                        {%if listid is odd %}
                             {% set page1 = [("The speaker's arguments were politically conservative.", "q.speaker.conservative", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
                                             ("The speaker's arguments were politically liberal.", "q.speaker.liberal", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
                                             ("The speaker sounded articulate.", "q.speaker.articulate", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
@@ -48,7 +48,7 @@
                         </div>
 
                         <div id="page2">
-                        {%if listid == 1 %}
+                        {%if listid is odd  %}
                             {% set page2 = [("The speaker speaks like I do.", "q.participant.speaker_speaks_like_me", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
                                             ("The speaker is similar to me.", "q.participant.speaker_is_similar_to_me", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
                                             ("The speaker would have an easy time understanding me.", "q.participant.speaker_would_understand_me", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
