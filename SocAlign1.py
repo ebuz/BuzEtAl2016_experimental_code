@@ -124,6 +124,7 @@ class SocAlign1Server(object):
             pictrials = [z for z in currlist if z['TrialType'] == 'TEST']
             # cond is same for all pictrials in a list; grab from 1st
             condition = pictrials[0]['ExposureCondition']
+            survey = pictrials[0]['SurveyList']
 
         amz_dict['hash'] = sha224("{}{}{}".format(req.params['workerId'],
                                                   req.params['hitId'],
@@ -134,6 +135,7 @@ class SocAlign1Server(object):
             pictrials = pictrials,
             amz = amz_dict,
             listid = listid,
+            survey = survey,
             condition = condition,
             formtype = formtype,
             debug = debug,

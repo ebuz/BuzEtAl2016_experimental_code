@@ -5,7 +5,8 @@
                         controls: {
                             all: false, play: true, volume: true, time: true,
                             fullscreen: false, height: 30, autoHide: false,
-                            scrubber: true //FIXME: change to false before deployment
+                            scrubber: true, //FIXME: change to false before deployment
+                            zIndex: 100
                             }
                         },
                     clip:
