@@ -90,7 +90,7 @@
             <div id="testintr">
                 <p>Next, you will describe 10 pictures. <span style="font-weight:bold;">
                 Please describe each picture in one sentence. Please do not use pronouns.
-                </span> Once you've entered a description, press ENTER to advance to
+                </span> Once you've entered a description, press "Finish" to advance to
                 the next picture. Please start Part 2 of the experiment now by clicking START.
                 Please continue to Part 2 of the experiment immediately after reading this.</p>
                 <button type="button" id="starttest">Start</button>
@@ -108,8 +108,8 @@
                     <div id="pic{{loop.index}}" class="testtrial">
                         <img src="/mturk/stimuli/socalign1/{{item.FileName}}" alt="" width="{{item.PictureWidth}}" height="{{item.PictureHeight}}"/>
                         <div class="wamibuttons" id="{{item.StimulusID}}" name="{{item.StimulusID}}" style="display:none;">
-                            <button class="startrecord" id="startrecord_{{item.StimulusID}}_input1">Start</button>
-                            <button class="stoprecord" id="stoprecord_{{item.StimulusID}}_input1" disabled='disabled'>Stop</button>
+                            <button class="startrecord" id="startrecord_{{item.StimulusID}}_input1">Record</button>
+                            <button class="stoprecord" id="stoprecord_{{item.StimulusID}}_input1" disabled='disabled'>Finish</button>
                         </div>
                         <input type="hidden" id="end_{{item.StimulusID}}" name="end_{{item.StimulusID}}" value="NA"/>
                     </div>
