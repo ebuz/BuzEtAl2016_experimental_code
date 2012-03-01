@@ -42,15 +42,6 @@
                     });
                 });
 
-                //$(':button#endsurvey').click(function(){
-                //    if (validateSurvey() || secondTimeThrough) {
-                //        $('#survey').hide();
-                //        wrapup();
-                //    } else {
-                //        alert('You didn\'t answer all questions. Please consider answering the questions highlighted in red. If this is deliberate, just press Done again.');
-                //    }
-                //});
-
                 $('.startrecord').on('click', function(e){
                     $(this).attr('disabled', 'disabled');
                     $(this).siblings('.stoprecord').removeAttr('disabled').focus();
@@ -144,10 +135,22 @@
                     }
                 });
 
-                $('#page4 button.next').on('click', function() {
+                $('#page4 button#endsurvey').on('click', function() {
+                    $('#page4 .survquest').css('color','black');
+                    var p4valid = true;
+                    $('#page4 .survquest').each(function() {
+                        var value = $(this).attr('id');
+                        var that = $(this);
+                        if ($('[name="' + value + '"]:checked')[0] === undefined) {
+                            $(that).css('color', 'red');
+                            p4valid = false;
+                       }
+                    });
+                    if (p4valid) {
+                        $('#page4').hide();
+                        wrapup();
+                    }
                 });
-
-
 
                 function wrapup() {
                     $('#debriefing').show();
