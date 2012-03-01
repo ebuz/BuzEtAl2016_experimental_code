@@ -49,7 +49,7 @@
                 margin-top: 2em;
                 padding: 1em;
             }
-            #exposure, #testintr, .testtrial, #surveychoice, #survey, #debriefing {display:none;}
+            #exposure, #testintr, .testtrial, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment {display:none;}
         </style>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script type="text/javascript" src="/iso8601shim.min.js"></script>
@@ -108,40 +108,14 @@
                     <div id="pic{{loop.index}}" class="testtrial">
                         <img src="/mturk/stimuli/socalign1/{{item.FileName}}" alt="" width="{{item.PictureWidth}}" height="{{item.PictureHeight}}"/>
                         <div class="wamibuttons" id="{{item.StimulusID}}" name="{{item.StimulusID}}" style="display:none;">
-                            <button class="startrecord" id="startrecord_{{item.StimulusID}}_input1">Record</button>
-                            <button class="stoprecord" id="stoprecord_{{item.StimulusID}}_input1" disabled='disabled'>Finish</button>
+                            <button type="button" class="startrecord" id="startrecord_{{item.StimulusID}}_input1">Record</button>
+                            <button type="button" class="stoprecord" id="stoprecord_{{item.StimulusID}}_input1" disabled='disabled'>Finish</button>
                         </div>
                         <input type="hidden" id="end_{{item.StimulusID}}" name="end_{{item.StimulusID}}" value="NA"/>
                     </div>
                 {% endfor %}
-                <div id="surveychoice">
-                    <p>Next up is the optional survey. Please remember that doing it
-                    will help us with our research, but it is optional.</p>
-                    <table>
-                        <tr>
-                            <td><button type="button" id="takeit" name="dosurvey">Take it.</button></td>
-                            <td><button type="button" id="skipit" name="dosurvey">Skip it.</button></td>
-                        </tr>
-                    </table>
-                </div>
+
 {% include 'survey.html' %}
-            <div id="debriefing">
-                <p>You may have wondered why we didn't actually ask you question about
-                the sentences you saw in part 1 of the experiment. This is because,
-                in this study we are actually interested in looking at 1) how the
-                syntactic structures that were comprehended in the first part of
-                the experiment influenced the structures that were produced in the
-                second part and 2) what effect social factors have on this
-                relationship. Thank you for participating!</p>
-                <p>Thank you for helping us understand how humans produce and
-                understand language. Your participation is appreciated. If you
-                felt that any parts of this study were inappropriate or in violation
-                of the <a target="_blank" href="http://www.hlp.rochester.edu/consent/English_2011-05-13.pdf">consent form</a>
-                you agreed to at the beginning, please contact us at 585-273-1015
-                or contact the University of Rochester's Human Subject Review
-                Board at 877-449-4441.</p>
-                <p>HLP/Jaeger Lab, Brain and Cognitive Sciences, University of Rochester.</p>
-            </div>
 
             <div id="hiddenfields">
                 <input type="hidden" id="starttime" name="starttime" value="NA"/>
@@ -155,7 +129,7 @@
                     <p>Feedback on this HIT (optional):</p>
                     <p><textarea id="commentarea" name="comment" cols="80" rows="3"></textarea></p>
                 </div>
-                <button type="submit" name="submit" id="submit">Submit</button>
+                <button type="submit" name="submit" id="submit" disabled="disabled">Submit</button>
             </form>
         </div>
         {% endif %}

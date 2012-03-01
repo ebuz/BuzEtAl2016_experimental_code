@@ -1,4 +1,5 @@
             $(document).ready( function() {
+                $(':checked').removeAttr('checked');
                 var finished = false;
                 $("#soundfile").flowplayer("/flowplayer/flowplayer-3.2.7.swf", {
                     plugins: {
@@ -40,24 +41,15 @@
                         });
                     });
                 });
-                $(':button[name="dosurvey"]').click(function(){
-                    $('#surveychoice').hide();
-                    if(this.id == 'takeit') {
-                        $('#survey').show();
-                    } else {
-                        wrapup();
-                    }
-                });
-                var secondTimeThrough = false;
-                $(':button#endsurvey').click(function(){
-                    if (validateSurvey() || secondTimeThrough) {
-                        $('#survey').hide();
-                        wrapup();
-                    } else {
-                        alert('You didn\'t answer all questions. Please consider answering the questions highlighted in red. If this is deliberate, just press Done again.');
-                    }
-                    secondTimeThrough = true;
-                });
+
+                //$(':button#endsurvey').click(function(){
+                //    if (validateSurvey() || secondTimeThrough) {
+                //        $('#survey').hide();
+                //        wrapup();
+                //    } else {
+                //        alert('You didn\'t answer all questions. Please consider answering the questions highlighted in red. If this is deliberate, just press Done again.');
+                //    }
+                //});
 
                 $('.startrecord').on('click', function(e){
                     $(this).attr('disabled', 'disabled');
@@ -78,59 +70,84 @@
                             $(this).children('.startrecord').removeAttr('disabled').focus();
                         });
                     });
-                    if($(this)[0] === $('.stimitem').last()[0]) {
-                        $('#surveychoice').show();
+                    if($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
+                        $('#page1').show();
                     }
                 });
 
-                function validateSurvey() {
-                    var formvalid = true;
-                    $.each(['q.speaker.conservative','q.speaker.liberal',
-                            'q.speaker.articulate','q.speaker.accented',
-                            'q.speaker.intelligent','q.speaker.educated',
-                            'q.speaker.self-centered','q.speaker.generous',
-                            'q.speaker.weak_arguments','q.speaker.shy',
-                            'q.speaker.enthusiastic','q.speaker.easy_to_understand',
-                            'q.participant.speaker_speaks_like_me',
-                            'q.participant.speaker_is_similar_to_me',
-                            'q.participant.speaker_would_understand_me',
-                            'q.participant.agree_with_speaker',
-                            'q.participant.want_speaker_as_friend','q.participant.education',
-                            'q.ideology.conservative','q.ideology.liberal',
-                            'q.ideology.republicans','q.ideology.democrats',
-                            'q.ideology.enjoy_accents','q.ideology.proper_english',
-                            'q.ideology.official_language',
-                            'q.ideology.importance_of_speaking_well',
-                            'q.ideology.accent_and_self-presentation',
-                            'q.ideology.accent_predicts_intelligence',
-                            'q.conflict.dominate.my_way_best','q.conflict.avoid.ignore',
-                            'q.conflict.integrate.meet_halfway',
-                            'q.conflict.dominate.insist_my_position_be_accepted',
-                            'q.conflict.avoid.pretend_nothing_happend',
-                            'q.conflict.avoid.pretend_no_conflict',
-                            'q.conflict.integrate.middle_course',
-                            'q.conflict.dominate.dominate_until_other_understands',
-                            'q.conflict.integrate.give_and_take']
-, function(index, value) {
+                $('#page1 button.next').on('click', function() {
+                    $('#page1 .survquest').css('color','black');
+                    var p1valid = true;
+                    $('#page1 .survquest').each(function() {
+                        var value = $(this).attr('id');
+                        var that = $(this);
                         if ($('[name="' + value + '"]:checked')[0] === undefined) {
-                            $('#'+ value).css('color', 'red');
-                            formvalid = false;
-                        }
+                            $(that).css('color', 'red');
+                            p1valid = false;
+                       }
                     });
+                    if (p1valid) {
+                        $('#page1').hide();
+                        $('#page2').show();
+                    }
+                });
+
+                $('#page2 button.next').on('click', function() {
+                    $('#page2 .survquest').css('color','black');
+                    var p2valid = true;
+                    $('#page2 .survquest').each(function() {
+                        var value = $(this).attr('id');
+                        var that = $(this);
+                        if ($('[name="' + value + '"]:checked')[0] === undefined) {
+                            $(that).css('color', 'red');
+                            p2valid = false;
+                       }
+                    });
+                    if (p2valid) {
+                        $('#page2').hide();
+                        $('#page3').show();
+                    }
+                });
+
+                $('#page3 button.next').on('click', function() {
+                    $('#page3 .survquest').css('color','black');
+                    var p3valid = true;
+
+                    if($('[name="q.participant.age"]').val() === '') {
+                        $(this).parents('.survquest').css('color', 'red');
+                        p3valid = false;
+                    }
+
+                    if($('[name="q.participant.education"]').val() === '') {
+                        $(this).parents('.survquest').css('color', 'red');
+                        p3valid = false;
+                    }
 
                     if($('[name="q.participant.gender"]:checked')[0] === undefined &&
                        $('[name="q.participant.gender.other"]').val() == '') {
-                        $('#q.participant.gender').css('color', 'red');
-                        $('#q.participant.gender.other').css('color', 'red');
-                        formvalid = false;
+                        $(this).parents('.survquest').css('color', 'red');
+                        p3valid = false;
                     }
 
-                    if($('[name="q.participant.age"]').val() === '') {
-                        $('#q.participant.age').css('color', 'red');
-                        formvalid = false;
+                    $('#ideology .survquest').each(function() {
+                        var value = $(this).attr('id');
+                        var that = $(this);
+                        if ($('[name="' + value + '"]:checked')[0] === undefined) {
+                            $(that).css('color', 'red');
+                            p3valid = false;
+                       }
+                    });
+
+                    if (p3valid) {
+                        $('#page3').hide();
+                        $('#page4').show();
                     }
-                    return formvalid;
-                }
+                });
+
+                $('#page4 button.next').on('click', function() {
+                });
+
+
 
                 function wrapup() {
                     $('#debriefing').show();
@@ -155,5 +172,4 @@
                     $("#submit").hide();
                     $("#comment").hide();
 
-                }
-            );
+            });
