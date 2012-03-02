@@ -36,30 +36,23 @@
                 $('button#starttest').click(function(){
                     $('#testintr').hide();
                     $('.testtrial').first().show(function() {
-                        $(this).children('.wamibuttons').show(function() {
-                            $(this).children('.startrecord').removeAttr('disabled').focus();
-                        });
-                    });
-                });
-
-                $('.startrecord').on('click', function(e){
-                    $(this).attr('disabled', 'disabled');
-                    $(this).siblings('.stoprecord').removeAttr('disabled').focus();
-                    Wami.startRecording("http://127.0.0.1:8181/wav_uploader/?workerId="
+                        Wami.startRecording("http://127.0.0.1:8181/wav_uploader/?workerId="
                         + workerId
                         + "&assignmentId=" + assignmentId
                         + "&hitId=" + hitId
-                        + "&filename=" + $(this).parent().attr('name'), "onRecordStart", "onRecordFinish", "onError");
+                        + "&filename=" + $(this).children(':button').attr('id'), "onRecordStart", "onRecordFinish", "onError");
+                    });
                 });
 
                 $('.stoprecord').on('click', function(e) {
                     Wami.stopRecording();
                     $(':input[name="end_' + $(this).parent().attr('id') + '"]').val(new Date().toISOString());
-                    $(this).parent().parent().hide();
-                    $(this).parent().parent().next().show(function() {
-                        $(this).children('.wamibuttons').show(function() {
-                            $(this).children('.startrecord').removeAttr('disabled').focus();
-                        });
+                    $(this).parent().hide().next().show(function() {
+                        Wami.startRecording("http://127.0.0.1:8181/wav_uploader/?workerId="
+                        + workerId
+                        + "&assignmentId=" + assignmentId
+                        + "&hitId=" + hitId
+                        + "&filename=" + $(this).children(':button').attr('id'), "onRecordStart", "onRecordFinish", "onError");
                     });
                     if($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
                         $('#page1').show();
@@ -105,18 +98,18 @@
                     var p3valid = true;
 
                     if($('[name="q.participant.age"]').val() === '') {
-                        $(this).parents('.survquest').css('color', 'red');
+                        $('#age').css('color', 'red');
                         p3valid = false;
                     }
 
                     if($('[name="q.participant.education"]').val() === '') {
-                        $(this).parents('.survquest').css('color', 'red');
+                        $('#education').css('color', 'red');
                         p3valid = false;
                     }
 
                     if($('[name="q.participant.gender"]:checked')[0] === undefined &&
                        $('[name="q.participant.gender.other"]').val() == '') {
-                        $(this).parents('.survquest').css('color', 'red');
+                        $('#gender').css('color', 'red');
                         p3valid = false;
                     }
 

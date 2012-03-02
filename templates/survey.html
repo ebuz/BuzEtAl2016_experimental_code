@@ -1,6 +1,6 @@
                     <div id="survey">
-
                         <div id="page1">
+                            <p>Phase 3: Survey</p>
                         {%if survey == 1 %}
                             {% set page1 = [("The speaker's arguments were politically conservative.", "q.speaker.conservative", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
                                             ("The speaker's arguments were politically liberal.", "q.speaker.liberal", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
@@ -20,7 +20,8 @@
                                             ("The speaker would have an easy time understanding me.", "q.participant.speaker_would_understand_me", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
                                             ("I agree with the speaker's arguments.", "q.participant.agree_with_speaker", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
                                             ("I would want the speaker as a friend.", "q.participant.want_speaker_as_friend", "1 not at all; 2; 3; 4; 5; 6 absolutely")] %}
-                            <p style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</p>
+                            <fieldset>
+                            <label style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</label>
                             {% for question, formname, scale in page1 %}
                             <table class="survquest" id="{{formname}}">
                                 <tr>
@@ -43,6 +44,7 @@
                                 </tr>
                             </table>
                             {% endfor %}
+                            </fieldset>
                         {% endif %}
                             <button type="button" class="next" id="end1">Next</button>
                         </div>
@@ -67,7 +69,8 @@
                                             ("The speaker sounded shy.", "q.speaker.shy", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
                                             ("The speaker sounded enthusiastic.", "q.speaker.enthusiastic", "1 not at all; 2; 3; 4; 5; 6 absolutely"),
                                             ("The speaker was easy to understand.", "q.speaker.easy_to_understand", "1 not at all; 2; 3; 4; 5; 6 absolutely")] %}
-                            <p style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</p>
+                            <fieldset>
+                            <label style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</label>
                             {% for question, formname, scale in page2 %}
                             <table class="survquest" id="{{formname}}">
                                 <tr>
@@ -90,6 +93,7 @@
                                 </tr>
                             </table>
                             {% endfor %}
+                            </fieldset>
                         {% endif %}
                             <button type="button" class="next" id="end2">Next</button>
                         </div>
@@ -97,10 +101,10 @@
                         <div id="page3">
                             <fieldset>
                                 <label style="font-weight:bold;">Demographics</label>
-                                <table class="survquest" id="q.participant.age">
+                                <table class="survquest" id="age">
                                     <tr><td>Age</td><td><input type="text" name="q.participant.age"/></td></tr>
                                 </table>
-                                <table class="survquest" id="q.participant.education">
+                                <table class="survquest" id="education">
                                     <tr>
                                         <td>Education</td>
                                         <td>
@@ -115,7 +119,7 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <table class="survquest" id="q.participant.gender">
+                                <table class="survquest" id="gender">
                                 <tr>
                                     <td colspan="2"><p class="sentence">Gender</p></td>
                                 </tr>
@@ -173,43 +177,45 @@
                         </div>
 
                         <div id="page4">
-                            <p style="font-weight:bold;">Please think of a specific,
+                            <fieldset>
+                            <label style="font-weight:bold;">Please think of a specific,
                             recent conflict you had with someone you did not know well.
                             For each sentence below, rate how well that sentence describes
-                            your feelings or actions during that conflict.</p>
+                            your feelings or actions during that conflict.</label>
 
-                        {% for question, formname, scale in [
-                            ('I tried to persuade the other person that my way was the best way. ', 'q.conflict.dominate.my_way_best', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
-                            ('I tried to ignore the conflict and behaved as if nothing happened. ', 'q.conflict.avoid.ignore', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
-                            ('I tried to meet the other person halfway.', 'q.conflict.integrate.meet_halfway', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
-                            ('I insisted my position be accepted during the conflict.', 'q.conflict.dominate.insist_my_position_be_accepted', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
-                            ("I tried to pretend that the conflict didn't happen.", 'q.conflict.avoid.pretend_nothing_happend', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
-                            ("I pretended as if the conflict didn't exist.", 'q.conflict.avoid.pretend_no_conflict', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
-                            ('I tried to find a middle course to resolve the situation.', 'q.conflict.integrate.middle_course', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
-                            ('I dominated the argument until the other person understood my position. ', 'q.conflict.dominate.dominate_until_other_understands', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
-                            ("I tried to use 'give and take' so that a compromise could be made.", 'q.conflict.integrate.give_and_take', '1 not at all; 2; 3; 4; 5; 6 absolutely')
-                        ] %}
-                        <table class="survquest" id="{{formname}}">
-                            <tr>
-                                <td colspan="6">
-                                    <p class="sentence">{{question}}</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                {% for x in range(1,7) %}
-                                <td><input type="radio" name="{{formname}}" value="{{x}}" class="likert"></input></td>
-                                {% endfor %}
-                            </tr>
-                            <tr>
-                                {% for x in range(1,7) %}
-                                <td>{{x}}</td>
-                                {% endfor %}
-                            </tr>
-                            <tr>
-                                <td colspan="6">{{scale}}</td>
-                            </tr>
-                        </table>
+                            {% for question, formname, scale in [
+                                ('I tried to persuade the other person that my way was the best way. ', 'q.conflict.dominate.my_way_best', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ('I tried to ignore the conflict and behaved as if nothing happened. ', 'q.conflict.avoid.ignore', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ('I tried to meet the other person halfway.', 'q.conflict.integrate.meet_halfway', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ('I insisted my position be accepted during the conflict.', 'q.conflict.dominate.insist_my_position_be_accepted', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ("I tried to pretend that the conflict didn't happen.", 'q.conflict.avoid.pretend_nothing_happend', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ("I pretended as if the conflict didn't exist.", 'q.conflict.avoid.pretend_no_conflict', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ('I tried to find a middle course to resolve the situation.', 'q.conflict.integrate.middle_course', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ('I dominated the argument until the other person understood my position. ', 'q.conflict.dominate.dominate_until_other_understands', '1 not at all; 2; 3; 4; 5; 6 absolutely'),
+                                ("I tried to use 'give and take' so that a compromise could be made.", 'q.conflict.integrate.give_and_take', '1 not at all; 2; 3; 4; 5; 6 absolutely')
+                            ] %}
+                            <table class="survquest" id="{{formname}}">
+                                <tr>
+                                    <td colspan="6">
+                                        <p class="sentence">{{question}}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    {% for x in range(1,7) %}
+                                    <td><input type="radio" name="{{formname}}" value="{{x}}" class="likert"></input></td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    {% for x in range(1,7) %}
+                                    <td>{{x}}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td colspan="6">{{scale}}</td>
+                                </tr>
+                            </table>
                         {% endfor %}
+                            </fieldset>
                         <button type="button" id="endsurvey">Done</button>
                         </div>
 
