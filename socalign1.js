@@ -1,6 +1,7 @@
             $(document).ready( function() {
                 $(':checked').removeAttr('checked');
                 var finished = false;
+                var recorder_url = "http://127.0.0.1:8181/wav_uploader/";
                 $("#soundfile").flowplayer("/flowplayer/flowplayer-3.2.7.swf", {
                     plugins: {
                         controls: {
@@ -36,11 +37,11 @@
                 $('button#starttest').click(function(){
                     $('#testintr').hide();
                     $('.testtrial').first().show(function() {
-                        Wami.startRecording("http://127.0.0.1:8181/wav_uploader/?workerId="
-                        + workerId
-                        + "&assignmentId=" + assignmentId
-                        + "&hitId=" + hitId
-                        + "&filename=" + $(this).children(':button').attr('id'), "onRecordStart", "onRecordFinish", "onError");
+                        Wami.startRecording(recorder_url + "?workerId=" +
+                        workerId +
+                        "&assignmentId=" + assignmentId +
+                        "&hitId=" + hitId +
+                        "&filename=" + $(this).children(':button').attr('id'), "onRecordStart", "onRecordFinish", "onError");
                     });
                 });
 
@@ -48,11 +49,11 @@
                     Wami.stopRecording();
                     $(':input[name="end_' + $(this).parent().attr('id') + '"]').val(new Date().toISOString());
                     $(this).parent().hide().next().show(function() {
-                        Wami.startRecording("http://127.0.0.1:8181/wav_uploader/?workerId="
-                        + workerId
-                        + "&assignmentId=" + assignmentId
-                        + "&hitId=" + hitId
-                        + "&filename=" + $(this).children(':button').attr('id'), "onRecordStart", "onRecordFinish", "onError");
+                        Wami.startRecording(recorder_url + "?workerId=" +
+                        workerId +
+                        "&assignmentId=" + assignmentId +
+                        "&hitId=" + hitId +
+                        "&filename=" + $(this).children(':button').attr('id'), "onRecordStart", "onRecordFinish", "onError");
                     });
                     if($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
                         $('#page1').show();
@@ -108,7 +109,7 @@
                     }
 
                     if($('[name="q.participant.gender"]:checked')[0] === undefined &&
-                       $('[name="q.participant.gender.other"]').val() == '') {
+                       $('[name="q.participant.gender.other"]').val() === '') {
                         $('#gender').css('color', 'red');
                         p3valid = false;
                     }
@@ -145,14 +146,28 @@
                     }
                 });
 
-                function wrapup() {
+                var wrapup = function() {
                     $('#debriefing').show();
                     $("#comment").show(function(){$('#commentarea').focus();});
                     $("#submit").show(function() {
                         $(this).removeAttr('disabled');
                         finished = true;
                     });
-                }
+                };
+
+                var onError = function(e) {
+                    alert(e);
+                };
+
+                var onRecordStart = function() {
+                    recordInterval = setInterval(function () {
+                        var level = Wami.getRecordingLevel();
+                    }, 200);
+                };
+
+                var onRecordFinish = function() {
+                    clearInterval(recordInterval);
+                };
 
                 $('#results').submit(function() {
                     if (!finished) {
@@ -163,9 +178,4 @@
                 });
 
                 setupRecorder();
-                    // disable submit and hide comment box until the end
-                    $("#submit").attr('disabled', 'disabled');
-                    $("#submit").hide();
-                    $("#comment").hide();
-
             });

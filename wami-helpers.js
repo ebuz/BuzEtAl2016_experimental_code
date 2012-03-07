@@ -1,6 +1,6 @@
 var setupRecorder = function() {
     Wami.setup("wami", function() {checkSecurity();});
-}
+};
 
 var checkSecurity = function() {
     var settings = Wami.getSettings();
@@ -10,7 +10,7 @@ var checkSecurity = function() {
     } else {
         Wami.showSecurity("privacy", "Wami.show", "checkSecurity", "zoomError");
     }
-}
+};
 
 var zoomError = function() {
 // The minimum size for the flash content is 214x137.
@@ -18,7 +18,7 @@ var zoomError = function() {
 // We could play the game of re-embedding the Flash in a
 // larger DIV here, but instead we just warn the user:
     alert("Your browser may be zoomed too far out to show the Flash security settings panel.  Zoom in, and refresh.");
-}
+};
 
 var listen = function() {
     Wami.startListening();
@@ -34,18 +34,4 @@ var listen = function() {
     $(window).blur(function() {
         Wami.stopListening();
     });
-}
-
-var onError = function(e) {
-    alert(e);
-}
-
-var onRecordStart = function() {
-    recordInterval = setInterval(function () {
-        var level = Wami.getRecordingLevel();
-    }, 200);
-}
-
-var onRecordFinish = function() {
-    clearInterval(recordInterval);
-}
+};
