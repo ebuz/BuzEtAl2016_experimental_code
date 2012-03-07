@@ -57,7 +57,6 @@
             var hitId = "{{amz.hitId}}";
             var workerId = "{{amz.workerId}}";
             var assignmentId = "{{amz.assignmentId}}";
-            var soundfile = "{{soundfile.FileName}}";
             var debugmode = {{debugmode}};
         </script>
         {% endif %}
@@ -111,7 +110,7 @@
                     <div id="pic{{loop.index}}" class="testtrial">
                         <img src="/mturk/stimuli/socalign1/{{item.FileName}}" alt="" width="{{item.PictureWidth}}" height="{{item.PictureHeight}}"/><br/>
                         <p style="color: red; text-decoration: blink">Recording...</p>
-                        <button type="button" class="stoprecord" id="{{item.StimulusID}}">Finish</button>
+                        <button type="button" class="stoprecord" id="{{item.StimulusID}}">Next</button>
                         <input type="hidden" id="end_{{item.StimulusID}}" name="end_{{item.StimulusID}}" value="NA"/>
                     </div>
                 {% endfor %}
