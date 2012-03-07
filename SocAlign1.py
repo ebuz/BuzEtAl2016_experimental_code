@@ -143,7 +143,7 @@ class SocAlign1Server(object):
             preview = in_preview)
 
         resp = Response()
-        resp.content_type='application/xhtml+xml'
+        resp.content_type='text/html'
         resp.unicode_body = t
         domain = cfg.get('host', 'domain')
         # set a cookie that lives 1 hour
@@ -155,12 +155,13 @@ if __name__ == '__main__':
     from paste import httpserver, fileapp, urlmap
 
     app = urlmap.URLMap()
-    app['/flowplayer'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'flowplayer'))
     app['/mturk/stimuli/socalign1'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'stimuli'))
+    app['/mturk/img'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'img'))
     app['/iso8601shim.min.js'] = fileapp.FileApp('iso8601shim.min.js')
     app['/mturk/recorder.js'] = fileapp.FileApp('recorder.js')
     app['/mturk/wami-helpers.js'] = fileapp.FileApp('wami-helpers.js')
     app['/mturk/socalign1.js'] = fileapp.FileApp('socalign1.js')
+    app['/mturk/modernizr.audioonly.js'] = fileapp.FileApp('modernizr.audioonly.js')
     app['/Wami.swf'] = fileapp.FileApp('Wami.swf')
     app['/expt'] = SocAlign1Server(app)
     httpserver.serve(app, host='127.0.0.1', port=8080)

@@ -41,13 +41,12 @@ var onError = function(e) {
 };
 
 var onRecordStart = function() {
-    console.log('Recording started!');
     recordInterval = setInterval(function () {
         var level = Wami.getRecordingLevel();
     }, 200);
 };
 
 var onRecordFinish = function() {
-    console.log('Recording finished');
     clearInterval(recordInterval);
+    //FIXME: this should fire something that causes the next item to show
 };

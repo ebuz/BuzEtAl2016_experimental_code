@@ -2,34 +2,35 @@ $(document).ready( function() {
     $(':checked').removeAttr('checked');
     var finished = false;
     var recorder_url = "http://127.0.0.1:8181/wav_uploader/";
-    $("#soundfile").flowplayer("/flowplayer/flowplayer-3.2.7.swf", {
-        plugins: {
-            controls: {
-                all: false, play: true, volume: true, time: true,
-                fullscreen: false, height: 30, autoHide: false,
-                scrubber: true, //FIXME: change to false before deployment
-                zIndex: 100
-                }
-            },
-        clip:
-            { title:'',
-              autoPlay: false },
-            // blocks pause from happening
-            onBeforePause: function () {return false;},
-            onLoad : function() {
-                this.setVolume(100);
-            },
-            onFinish: function() {
-                $(':input[name="endaudio"]').val(new Date().toISOString());
-                $('#exposure').hide();
-                $('#testintr').show();
-            }
-    });
+
+    if(Modernizr.audio) {
+        $('#instructions').show();
+        var aext = '';
+        Modernizr.audio.ogg ? aext = '.ogg' :
+        Modernizr.audio.mp3 ? aext = '.mp3' :
+        aext = '';
+        var context_audio = new Audio();
+        context_audio.src = '/mturk/stimuli/socalign1/' + soundfile + aext;
+        context_audio.addEventListener("play", function() {
+            if (typeof(console) !== undefined) {console.log('Audio playing');}
+        });
+        context_audio.addEventListener("ended", function() {
+            if (typeof(console) !== undefined) {console.log('Audio ended');}
+            $(':input[name="endaudio"]').val(new Date().toISOString());
+            $('#exposure').hide();
+            $('#testintr').show();
+        });
+    } else {
+        $('#oldBrowserMessage').show();
+    }
+
     $('button#endinstr').click(function(){
         if (Wami.getSettings().microphone.granted) {
             $(':input[name="starttime"]').val(new Date().toISOString());
             $('#instructions').hide();
-            $('#exposure').show();
+            $('#exposure').show(function() {
+                context_audio.play();
+            });
         } else {
             alert("You have to allow microphone access for this experiment!");
         }
