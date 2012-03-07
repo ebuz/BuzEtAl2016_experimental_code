@@ -127,7 +127,7 @@ class SocAlign1Server(object):
                 listid = forcelist
             else:
                 listid = worker.triallist.number
-            currlist = [x for x in stims if int(x['List']) == worker.triallist.number]
+            currlist = [x for x in stims if int(x['List']) == listid]
             soundtrials = [y for y in currlist if y['TrialType'] == 'EXPOSURE']
             pictrials = [z for z in currlist if z['TrialType'] == 'TEST']
             # cond is same for all pictrials in a list; grab from 1st
