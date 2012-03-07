@@ -97,6 +97,10 @@ class SocAlign1Server(object):
         if req.params.has_key('debug'):
             debug = True if req.params['debug'] == '1' else False
 
+        forcelist = None
+        if req.params.has_key('list'):
+            forcelist = int(req.params['list'])
+
         try:
             amz_dict['assignmentId'] = req.params['assignmentId']
             amz_dict['hitId'] = req.params['hitId']
@@ -117,8 +121,12 @@ class SocAlign1Server(object):
             worker = check_worker_exists(amz_dict['workerId'], session)
 
         currlist, soundtrials, pictrials = [[] for x in range(3)]
+        listid = 0
         if worker:
-            listid = worker.triallist.number
+            if (debug and forcelist):
+                listid = forcelist
+            else:
+                listid = worker.triallist.number
             currlist = [x for x in stims if int(x['List']) == worker.triallist.number]
             soundtrials = [y for y in currlist if y['TrialType'] == 'EXPOSURE']
             pictrials = [z for z in currlist if z['TrialType'] == 'TEST']
@@ -138,7 +146,7 @@ class SocAlign1Server(object):
             survey = survey,
             condition = condition,
             formtype = formtype,
-            debug = debug,
+            debugmode = 1 if debug else 0,
             # on preview, don't bother loading heavy flash assets
             preview = in_preview)
 

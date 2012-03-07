@@ -5,16 +5,18 @@ $(document).ready( function() {
 
     if(Modernizr.audio) {
         $('#instructions').show();
-        var aext = '';
-        Modernizr.audio.ogg ? aext = '.ogg' :
-        Modernizr.audio.mp3 ? aext = '.mp3' :
-        aext = '';
-        var context_audio = new Audio();
-        context_audio.src = '/mturk/stimuli/socalign1/' + soundfile + aext;
-        context_audio.addEventListener("play", function() {
+
+        if(debugmode) {
+            $('#exposure audio').attr('controls', true);
+        } else {
+            $('#exposure audio').attr('controls', false);
+        }
+
+        $('#exposure audio').on('play', function() {
             if (typeof(console) !== undefined) {console.log('Audio playing');}
         });
-        context_audio.addEventListener("ended", function() {
+
+        $('#exposure audio').on('ended', function() {
             if (typeof(console) !== undefined) {console.log('Audio ended');}
             $(':input[name="endaudio"]').val(new Date().toISOString());
             $('#exposure').hide();
@@ -29,7 +31,7 @@ $(document).ready( function() {
             $(':input[name="starttime"]').val(new Date().toISOString());
             $('#instructions').hide();
             $('#exposure').show(function() {
-                context_audio.play();
+                $('#exposure audio')[0].play();
             });
         } else {
             alert("You have to allow microphone access for this experiment!");

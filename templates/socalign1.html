@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
     <head>
         <title>SocAlign1</title>
         <meta charset=utf-8"/>
@@ -59,6 +58,7 @@
             var workerId = "{{amz.workerId}}";
             var assignmentId = "{{amz.assignmentId}}";
             var soundfile = "{{soundfile.FileName}}";
+            var debugmode = {{debugmode}};
         </script>
         {% endif %}
     </head>
@@ -86,6 +86,11 @@
 
         <div id="exposure">
             <p>Phase 1: Listen to a story</p>
+            <audio>
+                <source src="/mturk/stimuli/socalign1/{{soundfile.FileName}}.ogg" type="audio/ogg" />
+                <source src="/mturk/stimuli/socalign1/{{soundfile.FileName}}.mp3" type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
         </div>
 
         <div id="testing">
