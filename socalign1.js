@@ -155,20 +155,6 @@ $(document).ready( function() {
         });
     };
 
-    var onError = function(e) {
-        alert(e);
-    };
-
-    var onRecordStart = function() {
-        recordInterval = setInterval(function () {
-            var level = Wami.getRecordingLevel();
-        }, 200);
-    };
-
-    var onRecordFinish = function() {
-        clearInterval(recordInterval);
-    };
-
     $('#results').submit(function() {
         if (!finished) {
             return false;
