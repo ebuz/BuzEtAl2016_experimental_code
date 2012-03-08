@@ -22,7 +22,7 @@
                                             ("I would want the speaker as a friend.", "q.participant.want_speaker_as_friend", "1 not at all; 6 absolutely")] %}
                             <fieldset>
                             <label style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</label>
-                            {% for question, formname, scale in page1 %}
+                            {% for question, formname, scale in page1|shuffle %}
                             <table class="survquest" id="{{formname}}">
                                 <tr>
                                     <td colspan="6">
@@ -71,7 +71,7 @@
                                             ("The speaker was easy to understand.", "q.speaker.easy_to_understand", "1 not at all; 6 absolutely")] %}
                             <fieldset>
                             <label style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</label>
-                            {% for question, formname, scale in page2 %}
+                            {% for question, formname, scale in page2|shuffle %}
                             <table class="survquest" id="{{formname}}">
                                 <tr>
                                     <td colspan="6">
@@ -150,7 +150,7 @@
                                 ('Speaking well is important to me.', 'q.ideology.importance_of_speaking_well', '1 not at all; 6 absolutely'),
                                 ("One's accent is an important part of one's self-presentation.", 'q.ideology.accent_and_self-presentation', '1 not at all; 6 absolutely'),
                                 ('People with strong accents are just as likely to be smart as people without accents.', 'q.ideology.accent_predicts_intelligence', '1 not at all; 6 absolutely'),
-                            ] %}
+                            ]|shuffle %}
                             <table class="survquest" id="{{formname}}">
                                 <tr>
                                     <td colspan="6">
@@ -193,7 +193,7 @@
                                 ('I tried to find a middle course to resolve the situation.', 'q.conflict.integrate.middle_course', '1 not at all; 6 absolutely'),
                                 ('I dominated the argument until the other person understood my position. ', 'q.conflict.dominate.dominate_until_other_understands', '1 not at all; 6 absolutely'),
                                 ("I tried to use 'give and take' so that a compromise could be made.", 'q.conflict.integrate.give_and_take', '1 not at all; 6 absolutely')
-                            ] %}
+                            ]|shuffle %}
                             <table class="survquest" id="{{formname}}">
                                 <tr>
                                     <td colspan="6">

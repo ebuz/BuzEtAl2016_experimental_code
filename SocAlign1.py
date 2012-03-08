@@ -19,7 +19,7 @@
 #    If not, see <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>.
 #
 
-from random import choice
+from random import choice, shuffle
 import cPickle
 import ConfigParser
 import os.path
@@ -69,6 +69,10 @@ def random_lowest_list(session):
         # and return a random one from that subset
         return choice(all_lists[0:wk.count(wk[0])])
 
+def shuffle_filter(value):
+    shuffle(value)
+    return value
+
 class SocAlign1Server(object):
     """
     WSGI compatible class to dispatch pages for the experiment
@@ -88,6 +92,7 @@ class SocAlign1Server(object):
         req = Request(environ)
 
         env = Environment(loader=FileSystemLoader(os.path.join(basepath,'templates')))
+        env.filters['shuffle'] = shuffle_filter
         amz_dict = {'workerId': '', 'assignmentId': '', 'hitId': ''}
         templ, listid, condition, template, resp = [None for x in range(5)]
         required_keys = ['assignmentId', 'hitId']
