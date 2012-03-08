@@ -131,7 +131,6 @@ class SocAlign1Server(object):
                 listid = forcelist
             else:
                 listid = worker.triallist.number
-            print "worker list: {}, forcelist: {}, listid: {}".format(worker.triallist.number, forcelist, listid)
             currlist = [x for x in stims if int(x['List']) == listid]
             soundtrials = [y for y in currlist if y['TrialType'] == 'EXPOSURE']
             pictrials = [z for z in currlist if z['TrialType'] == 'TEST']
@@ -159,8 +158,8 @@ class SocAlign1Server(object):
         resp.content_type='text/html'
         resp.unicode_body = t
         domain = cfg.get('host', 'domain')
-        # set a cookie that lives 1 hour
-        resp.set_cookie('turkrecord', amz_dict['hash'], max_age=3600, path='/', domain=domain, secure=False)
+        # set a cookie that lives 2 hours
+        resp.set_cookie('turkrecord', amz_dict['hash'], max_age=7200, path='/', domain=domain, secure=False)
         return resp(environ, start_response)
 
 if __name__ == '__main__':
