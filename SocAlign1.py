@@ -126,12 +126,12 @@ class SocAlign1Server(object):
             worker = check_worker_exists(amz_dict['workerId'], session)
 
         currlist, soundtrials, pictrials = [[] for x in range(3)]
-        listid = 0
         if worker:
             if (debug and forcelist):
                 listid = forcelist
             else:
                 listid = worker.triallist.number
+            print "worker list: {}, forcelist: {}, listid: {}".format(worker.triallist.number, forcelist, listid)
             currlist = [x for x in stims if int(x['List']) == listid]
             soundtrials = [y for y in currlist if y['TrialType'] == 'EXPOSURE']
             pictrials = [z for z in currlist if z['TrialType'] == 'TEST']
