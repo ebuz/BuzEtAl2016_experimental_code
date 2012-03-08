@@ -102,7 +102,18 @@
                             <fieldset>
                                 <label style="font-weight:bold;">Demographics</label>
                                 <table class="survquest" id="age">
-                                    <tr><td>Age</td><td><input type="text" name="q.participant.age"/></td></tr>
+                                    <tr>
+                                        <td>Age</td>
+                                        <td>
+                                            <select name="q.participant.age">
+                                                <option value="" selected="selected">-----</option>
+                                            {% for a in range(13,85) %}
+                                                <option value="{{a}}">{{a}}</option>
+                                            {% endfor %}
+                                                <option value="85+">85+</option>
+                                            </select>
+                                        </td>
+                                    </tr>
                                 </table>
                                 <table class="survquest" id="education">
                                     <tr>
@@ -114,26 +125,27 @@
                                                 <option value="finished high school">finished high school</option>
                                                 <option value="attended college">attended college</option>
                                                 <option value="finished college">finished college</option>
-                                                <option value="attend graduate school">attend graduate school</option>
+                                                <option value="attend graduate school">started and/or finished graduate education</option>
                                             </select>
                                         </td>
                                     </tr>
                                 </table>
                                 <table class="survquest" id="gender">
                                 <tr>
-                                    <td colspan="2"><p class="sentence">Gender</p></td>
+                                    <td colspan="3"><p class="sentence">Gender</p></td>
                                 </tr>
                                 <tr>
-                                    <td><input type="radio" name="q.participant.gender" value="male"></input></td>
-                                    <td><input type="radio" name="q.participant.gender" value="female"></input></td>
-                                    <td><input type="radio" name="q.participant.gender" value="other"></input></td>
+                                    <td>
+                                        <select name="q.participant.gender">
+                                            <option value="" selected="selected">-----</option>
+                                            <option value="male">male</option>
+                                            <option value="female">female</option>
+                                            <option value="other">other</option>
+                                        </select>
+                                    </td>
+                                    <td>If Other:</td>
+                                    <td><input type="text" name="q.participant.gender.other"/></td>
                                 </tr>
-                                <tr>
-                                    <td>Male</td>
-                                    <td>Female</td>
-                                    <td>Other</td>
-                                </tr>
-                                <tr><td>If Other:</td><td><input type="text" name="q.participant.gender.other"/></td></tr>
                                 </table>
                             </fieldset>
 

@@ -31,6 +31,7 @@ $(document).ready( function() {
             $(':input[name="starttime"]').val(new Date().toISOString());
             $('#instructions').hide();
             $('#exposure').show(function() {
+                $('#exposure audio')[0].volume = 1;
                 $('#exposure audio')[0].play();
             });
         } else {
@@ -77,6 +78,8 @@ $(document).ready( function() {
         if (p1valid) {
             $('#page1').hide();
             $('#page2').show();
+        } else {
+            alert('Please answer all questions.');
         }
     });
 
@@ -94,6 +97,8 @@ $(document).ready( function() {
         if (p2valid) {
             $('#page2').hide();
             $('#page3').show();
+        } else {
+            alert('Please answer all questions.');
         }
     });
 
@@ -111,7 +116,7 @@ $(document).ready( function() {
             p3valid = false;
         }
 
-        if($('[name="q.participant.gender"]:checked')[0] === undefined &&
+        if($('[name="q.participant.gender"]').val() === '' &&
            $('[name="q.participant.gender.other"]').val() === '') {
             $('#gender').css('color', 'red');
             p3valid = false;
@@ -129,6 +134,8 @@ $(document).ready( function() {
         if (p3valid) {
             $('#page3').hide();
             $('#page4').show();
+        } else {
+            alert('Please answer all questions.');
         }
     });
 
@@ -146,6 +153,8 @@ $(document).ready( function() {
         if (p4valid) {
             $('#page4').hide();
             wrapup();
+        } else {
+            alert('Please answer all questions.');
         }
     });
 
