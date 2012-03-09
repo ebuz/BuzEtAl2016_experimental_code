@@ -18,7 +18,6 @@ $(document).ready( function() {
 
         $('#exposure audio').on('ended', function() {
             if (typeof(console) !== undefined) {console.log('Audio ended');}
-            $(':input[name="endaudio"]').val(new Date().toISOString());
             $('#exposure').hide();
             $('#testintr').show();
         });
@@ -51,7 +50,7 @@ $(document).ready( function() {
 
     $('.stoprecord').on('click', function(e) {
         Wami.stopRecording();
-        $(':input[name="end_' + $(this).parent().attr('id') + '"]').val(new Date().toISOString());
+        $(':input[name="end_' + $(this).attr('id') + '"]').val(new Date().toISOString());
         $(this).parent().hide().next().show(function() {
             Wami.startRecording(recorder_url + "?workerId=" +
             workerId +
