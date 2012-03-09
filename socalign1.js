@@ -18,6 +18,7 @@ $(document).ready( function() {
 
         $('#exposure audio').on('ended', function() {
             if (typeof(console) !== undefined) {console.log('Audio ended');}
+            $(':input[name="endaudio"]').val(new Date().toISOString());
             $('#exposure').hide();
             $('#testintr').show();
         });
