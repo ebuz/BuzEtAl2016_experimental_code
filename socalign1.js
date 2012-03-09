@@ -77,7 +77,7 @@ $(document).ready( function() {
         });
         if (p1valid) {
             $('#page1').hide();
-            $('#page2').show();
+            $('#page2').show(function() {$('label:visible')[0].scrollIntoView()});
         } else {
             alert('Please answer all questions.');
         }
@@ -96,7 +96,7 @@ $(document).ready( function() {
         });
         if (p2valid) {
             $('#page2').hide();
-            $('#page3').show();
+            $('#page3').show(function() {$('label:visible:first')[0].scrollIntoView()});
         } else {
             alert('Please answer all questions.');
         }
@@ -133,7 +133,7 @@ $(document).ready( function() {
 
         if (p3valid) {
             $('#page3').hide();
-            $('#page4').show();
+            $('#page4').show(function() {$('label:visible')[0].scrollIntoView()});
         } else {
             alert('Please answer all questions.');
         }
