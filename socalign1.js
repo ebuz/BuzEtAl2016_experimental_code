@@ -27,14 +27,18 @@ $(document).ready( function() {
     }
 
     $('button#startrecordtest').on('click', function() {
-        $(this).attr('disabled', 'disabled');
-        $('button#playbacktest').attr('disabled', 'disabled');
-        $('button#endrecordtest').removeAttr('disabled');
-        Wami.startRecording(recorder_url + "?workerId=" +
-            workerId +
-            "&assignmentId=" + assignmentId +
-            "&hitId=" + hitId +
-            "&filename=test", "onTestRecordStart", "onTestRecordFinish", "onError");
+        if (typeof(Wami.startRecording) === 'function') {
+            $(this).attr('disabled', 'disabled');
+            $('button#playbacktest').attr('disabled', 'disabled');
+            $('button#endrecordtest').removeAttr('disabled');
+            Wami.startRecording(recorder_url + "?workerId=" +
+                workerId +
+                "&assignmentId=" + assignmentId +
+                "&hitId=" + hitId +
+                "&filename=test", "onTestRecordStart", "onTestRecordFinish", "onError");
+        } else {
+            alert('Still waiting for recorder to become ready.')
+        }
     });
 
     $('button#endrecordtest').on('click', function() {
