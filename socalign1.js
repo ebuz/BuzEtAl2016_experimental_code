@@ -26,6 +26,22 @@ $(document).ready( function() {
         $('#oldBrowserMessage').show();
     }
 
+    $('button#startrecordtest').on('click', function() {
+        $(this).attr('disabled', 'disabled');
+        $('button#playbacktest').attr('disabled', 'disabled');
+        $('button#endrecordtest').removeAttr('disabled');
+
+    });
+
+    $('button#endrecordtest').on('click', function() {
+        $(this).attr('disabled', 'disabled');
+        $('button#startrecordtest').removeAttr('disabled');
+        $('button#playbacktest').removeAttr('disabled');
+    });
+
+    $('button#playbacktest').on('click', function() {
+    });
+
     $('button#endinstr').click(function(){
         if (Wami.getSettings().microphone.granted) {
             $(':input[name="starttime"]').val(new Date().toISOString());

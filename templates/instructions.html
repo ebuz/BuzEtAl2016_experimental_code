@@ -8,12 +8,14 @@
             you are participating in this experiment. Please select "Allow" and
             click "Close". We will always tell you when during the experiment we
             are recording.</p>
+            {% if not preview %}
             <p>Before we proceed, please adjust your volume settings based on the
             sound file below (and do not change them afterwards).</p>
             <p>[short sample sound file in same loudness as experimental stimuli]</p>
 
             <p>Now let's adjust your microphone settings.</p>
-            <p>[Sort out a feasible method for doing this]</p>
+            <p><button type="button" id="startrecordtest">Start Recording</button><button type="button" id="endrecordtest" disabled="disabled">Stop Recording</button><button type="button" id="playbacktest" disabled="disabled">Play</button></p>
+            {% endif %}
             <p>This experiment consists of three phases, followed by a short questionnaire.</p>
             <p>In <span style="font-weight:bold;">phase one</span>, you will listen to a short speech from an amateur debater.
             In this speech, the speaker will present his/her stance on a current political
