@@ -50,3 +50,86 @@ var onRecordFinish = function() {
     clearInterval(recordInterval);
     //FIXME: this should fire something that causes the next item to show
 };
+
+var miclevel = new Array();
+
+var onTestRecordStart = function() {
+    miclevel = [];
+    recordInterval = setInterval(function() {
+        miclevel.push(Wami.getRecordingLevel());
+    }, 100);
+}
+
+var onTestRecordFinish = function() {
+    clearInterval(recordInterval);
+    var canvas = document.getElementById('micgraph');
+    if (canvas.getContext){
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        var barwidth = canvas.width / miclevel.length;
+        var barx = 0;
+        // If I wanted to make a bar chart of level //
+        //for(i=0; i < miclevel.length; i++) {
+        //    //fillRect(x,y,width,height)
+        //    ctx.fillRect(barx, canvas.height - miclevel[i], barwidth, barwidth, miclevel[i]);
+        //    barx += barwidth;
+        //}
+
+        var grad = ctx.createLinearGradient(0,0, 0,canvas.height);
+        grad.addColorStop(0, 'rgba(255,0,0,0.5)'); // red
+        grad.addColorStop(1/3, 'rgba(255,255,0,0.5)'); // yellow
+        grad.addColorStop(1/2, 'rgba(0,255,0,0.5)'); // green
+        grad.addColorStop(9.7/10, 'rgba(255,255,0,0.5)'); //yellow
+        grad.addColorStop(9.8/10, 'rgba(255,0,0,0.5)'); // red
+        ctx.fillStyle=grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle="black";
+        // line chart of level //
+        ctx.beginPath();
+        ctx.moveTo(0,canvas.height);
+        for(i=0; i < miclevel.length; i++) {
+            ctx.lineTo(barx, canvas.height - miclevel[i]);
+            barx += barwidth;
+        }
+        ctx.moveTo(canvas.width, canvas.height);
+        ctx.closePath();
+        ctx.stroke();
+
+        ctx.fillStyle="black";
+        // Add legend
+        ctx.font = "8pt Helvetica"
+        ctx.fillText('100', 1, 8);
+        ctx.fillText('75', 1, (canvas.height/4) + 4);
+        ctx.fillText('50', 1, (canvas.height/2) + 4);
+        ctx.fillText('25', 1, (canvas.height / (4/3)) + 4);
+        ctx.fillText('0', 1, canvas.height);
+
+
+        //ctx.lineWidth = 1;
+        //for(j=0; j < miclevel.length; j+=5) {
+        //    ctx.moveTo(barwidth * j, 0);
+        //    ctx.lineTo(barwidth * j, canvas.height);
+        //    ctx.closePath();
+        //    ctx.stroke();
+        //}
+    } else {
+        // canvas-unsupported code here
+    }
+    //FIXME: this needs to be a global for this and socalign1.js
+    var recorder_url = "http://127.0.0.1:8181/wav_uploader/";
+    Wami.startPlaying(recorder_url + "?workerId=" +
+    workerId +
+    "&assignmentId=" + assignmentId +
+    "&hitId=" + hitId +
+    "&filename=test", "onPlayStart", "onPlayFinish", "onError");
+
+    //var micmean = miclevel.reduce(function(a,b) {return a+b;}) / miclevel.length;
+    //miclevel.sort(function(a,b) {return a-b;});
+    //var micmax = miclevel[miclevel.length-1];
+    //var micmin = miclevel[0];
+    //$('#miclevel').html("Samples: " + ''.concat(miclevel) + " Mean level: " + micmean + " Max level: " + micmax + " Min level: " + micmin);
+};
+
+var onPlayStart = function() {};
+var onPlayFinish = function() {};

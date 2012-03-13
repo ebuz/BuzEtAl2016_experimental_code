@@ -14,7 +14,11 @@
             <p>[short sample sound file in same loudness as experimental stimuli]</p>
 
             <p>Now let's adjust your microphone settings.</p>
-            <p><button type="button" id="startrecordtest">Start Recording</button><button type="button" id="endrecordtest" disabled="disabled">Stop Recording</button><button type="button" id="playbacktest" disabled="disabled">Play</button></p>
+            <div id="micsetup">
+                <button type="button" id="startrecordtest">Start Recording</button><button type="button" id="endrecordtest" disabled="disabled">Stop and Play back</button>
+                <p id="miclevel"></p>
+                <canvas id="micgraph" width="250" height="100"></canvas>
+            </div>
             {% endif %}
             <p>This experiment consists of three phases, followed by a short questionnaire.</p>
             <p>In <span style="font-weight:bold;">phase one</span>, you will listen to a short speech from an amateur debater.

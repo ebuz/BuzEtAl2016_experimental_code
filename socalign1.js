@@ -30,16 +30,18 @@ $(document).ready( function() {
         $(this).attr('disabled', 'disabled');
         $('button#playbacktest').attr('disabled', 'disabled');
         $('button#endrecordtest').removeAttr('disabled');
-
+        Wami.startRecording(recorder_url + "?workerId=" +
+            workerId +
+            "&assignmentId=" + assignmentId +
+            "&hitId=" + hitId +
+            "&filename=test", "onTestRecordStart", "onTestRecordFinish", "onError");
     });
 
     $('button#endrecordtest').on('click', function() {
+        Wami.stopRecording();
         $(this).attr('disabled', 'disabled');
         $('button#startrecordtest').removeAttr('disabled');
         $('button#playbacktest').removeAttr('disabled');
-    });
-
-    $('button#playbacktest').on('click', function() {
     });
 
     $('button#endinstr').click(function(){
