@@ -3,6 +3,11 @@ $(document).ready( function() {
     var finished = false;
     var recorder_url = "http://127.0.0.1:8181/wav_uploader/";
 
+    Modernizr.load({
+        test: Modernizr.canvas,
+        nope: 'excanvas.js'
+    });
+
     if(Modernizr.audio) {
         $('#instructions').show();
 

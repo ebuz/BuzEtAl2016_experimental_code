@@ -47,7 +47,7 @@
         </style>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script type="text/javascript" src="/iso8601shim.min.js"></script>
-        <script type="text/javascript" src="/mturk/modernizr.audioonly.js"></script>
+        <script type="text/javascript" src="/mturk/modernizr.audiocanvas.js"></script>
         {% if not preview %}
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
         <script type="text/javascript" src="/mturk/recorder.js"></script>
@@ -111,6 +111,7 @@
                         <img src="/mturk/stimuli/socalign1/{{item.FileName}}" alt="" width="{{item.PictureWidth}}" height="{{item.PictureHeight}}"/><br/>
                         <p style="color: red; text-decoration: blink">Recording...</p>
                         <button type="button" class="stoprecord" id="{{item.StimulusID}}">Next</button>
+                        <button type="button" class="hiddennext"></button>
                         <input type="hidden" id="end_{{item.StimulusID}}" name="end_{{item.StimulusID}}" value="NA"/>
                     </div>
                 {% endfor %}

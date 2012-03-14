@@ -62,8 +62,13 @@ var onTestRecordStart = function() {
 
 var onTestRecordFinish = function() {
     clearInterval(recordInterval);
+    var G_vmlCanvasManager; // For IE < 9
     var canvas = document.getElementById('micgraph');
-    if (canvas.getContext){
+    if (G_vmlCanvasManager !== undefined) { // for IE < 9
+        G_vmlCanvasManager.initElement(canvas);
+    }
+
+    if (canvas.getContext){ // still test, just in case excanvas failed to init
         var ctx = canvas.getContext('2d');
         ctx.clearRect(0,0,canvas.width,canvas.height);
         var barwidth = canvas.width / miclevel.length;
@@ -96,14 +101,16 @@ var onTestRecordFinish = function() {
         ctx.closePath();
         ctx.stroke();
 
-        ctx.fillStyle="black";
-        // Add legend
-        ctx.font = "8pt Helvetica"
-        ctx.fillText('100', 1, 8);
-        ctx.fillText('75', 1, (canvas.height/4) + 4);
-        ctx.fillText('50', 1, (canvas.height/2) + 4);
-        ctx.fillText('25', 1, (canvas.height / (4/3)) + 4);
-        ctx.fillText('0', 1, canvas.height);
+        if (Modernizr.canvastext) {
+            // Add legend
+            ctx.fillStyle="black";
+            ctx.font = "8pt Helvetica"
+            ctx.fillText('100', 1, 8);
+            ctx.fillText('75', 1, (canvas.height/4) + 4);
+            ctx.fillText('50', 1, (canvas.height/2) + 4);
+            ctx.fillText('25', 1, (canvas.height / (4/3)) + 4);
+            ctx.fillText('0', 1, canvas.height);
+        }
 
 
         //ctx.lineWidth = 1;

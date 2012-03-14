@@ -174,6 +174,8 @@ if __name__ == '__main__':
     app['/mturk/wami-helpers.js'] = fileapp.FileApp('wami-helpers.js')
     app['/mturk/socalign1.js'] = fileapp.FileApp('socalign1.js')
     app['/mturk/modernizr.audioonly.js'] = fileapp.FileApp('modernizr.audioonly.js')
+    app['/mturk/modernizr.audiocanvas.js'] = fileapp.FileApp('modernizr.audiocanvas.js')
+    app['/mturk/excanvas.js'] = fileapp.FileApp('excanvas.js')
     app['/Wami.swf'] = fileapp.FileApp('Wami.swf')
     app['/expt'] = SocAlign1Server(app)
     httpserver.serve(app, host='127.0.0.1', port=8080)
