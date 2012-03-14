@@ -48,7 +48,7 @@ var onRecordStart = function() {
 
 var onRecordFinish = function() {
     clearInterval(recordInterval);
-    //FIXME: this should fire something that causes the next item to show
+    $('button.hiddennext:visible').click();
 };
 
 var miclevel = new Array();

@@ -72,19 +72,22 @@ $(document).ready( function() {
             workerId +
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
-            "&filename=" + $(this).children(':button').attr('id'), "onRecordStart", "onRecordFinish", "onError");
+            "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinish", "onError");
         });
     });
 
-    $('.stoprecord').on('click', function(e) {
+    $('.stoprecord').on('click', function() {
         Wami.stopRecording();
-        $(':input[name="end_' + $(this).attr('id') + '"]').val(new Date().toISOString());
+    });
+
+    $('button.hiddennext').on('click', function() {
+        $(':input[name="end_' + $(this).siblings('.stoprecord').attr('id') + '"]').val(new Date().toISOString());
         $(this).parent().hide().next().show(function() {
             Wami.startRecording(recorder_url + "?workerId=" +
             workerId +
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
-            "&filename=" + $(this).children(':button').attr('id'), "onRecordStart", "onRecordFinish", "onError");
+            "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinish", "onError");
         });
         if($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
             $('#page1').show();
