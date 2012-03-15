@@ -1,7 +1,6 @@
 $(document).ready( function() {
     $(':checked').removeAttr('checked');
     var finished = false;
-    var recorder_url = "http://127.0.0.1:8181/wav_uploader/";
 
     Modernizr.load({
         test: Modernizr.canvas,

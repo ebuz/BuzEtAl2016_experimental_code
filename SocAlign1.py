@@ -34,11 +34,15 @@ from models import Worker, TrialList
 
 basepath = os.path.dirname(__file__)
 
-cfg = ConfigParser.SafeConfigParser({'domain': '127.0.0.1'})
+cfg = ConfigParser.SafeConfigParser({'domain': '127.0.0.1', 'port': '', 'path': 'wav_uploader'})
 cfg.read(os.path.join(basepath, 'expt.cfg'))
 engine_string = cfg.get('db', 'engine_string')
 
-formtype = cfg.get('form', 'type').strip("'")
+formtype = cfg.get('form', 'type')
+
+domain = cfg.get('host', 'domain')
+port = cfg.get('host', 'port')
+urlpath = cfg.get('host', 'path')
 
 # read in the stimuli via cPickle.
 stims = []
@@ -142,6 +146,11 @@ class SocAlign1Server(object):
                                                   req.params['hitId'],
                                                   req.params['assignmentId'])).hexdigest()
 
+        recorder_url = 'http://' + domain
+        if port != '':
+            recorder_url += ':' + port
+        recorder_url += '/' + urlpath
+
         template = env.get_template('socalign1.html')
         t = template.render(soundfile = soundtrials[0], #only one sound file
             pictrials = pictrials,
@@ -150,6 +159,7 @@ class SocAlign1Server(object):
             survey = survey,
             condition = condition,
             formtype = formtype,
+            recorder_url = recorder_url,
             debugmode = 1 if debug else 0,
             # on preview, don't bother loading heavy flash assets
             preview = in_preview)
@@ -157,7 +167,6 @@ class SocAlign1Server(object):
         resp = Response()
         resp.content_type='text/html'
         resp.unicode_body = t
-        domain = cfg.get('host', 'domain')
         # set a cookie that lives 2 hours
         resp.set_cookie('turkrecord', amz_dict['hash'], max_age=7200, path='/', domain=domain, secure=False)
         return resp(environ, start_response)

@@ -58,6 +58,7 @@
             var workerId = "{{amz.workerId}}";
             var assignmentId = "{{amz.assignmentId}}";
             var debugmode = {{debugmode}};
+            var recorder_url = "{{recorder_url}}";
         </script>
         {% endif %}
     </head>
@@ -111,7 +112,7 @@
                         <img src="/mturk/stimuli/socalign1/{{item.FileName}}" alt="" width="{{item.PictureWidth}}" height="{{item.PictureHeight}}"/><br/>
                         <p style="color: red; text-decoration: blink">Recording...</p>
                         <button type="button" class="stoprecord" id="{{item.StimulusID}}">Next</button>
-                        <button type="button" class="hiddennext"></button>
+                        <button type="button" class="hiddennext" style="display: none !important"></button>
                         <input type="hidden" id="end_{{item.StimulusID}}" name="end_{{item.StimulusID}}" value="NA"/>
                     </div>
                 {% endfor %}
