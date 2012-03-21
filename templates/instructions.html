@@ -11,7 +11,11 @@
             {% if not preview %}
             <p>Before we proceed, please adjust your volume settings based on the
             sound file below (and do not change them afterwards).</p>
-            <p>[short sample sound file in same loudness as experimental stimuli]</p>
+            <audio controls='controls'>
+                <source src="/mturk/stimuli/socalign1/instructions_adjustVolume.ogg" type="audio/ogg" />
+                <source src="/mturk/stimuli/socalign1/instructions_adjustVolume.mp3" type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
 
             <p>Now let's adjust your microphone settings.</p>
             <div id="micsetup">
