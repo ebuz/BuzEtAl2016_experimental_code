@@ -10,6 +10,8 @@ $(document).ready( function() {
     if(Modernizr.audio) {
         $('#instructions').show();
 
+        $('#voladjust').on('play', function() {this.volume = 1;});
+
         if(debugmode) {
             $('#exposure audio').attr('controls', true);
         } else {
@@ -33,6 +35,7 @@ $(document).ready( function() {
     $('button#startrecordtest').on('click', function() {
         if (typeof(Wami.startRecording) === 'function') {
             $(this).attr('disabled', 'disabled');
+            $('button#replaytest').attr('disabled', 'disabled');
             $('button#playbacktest').attr('disabled', 'disabled');
             $('button#endrecordtest').removeAttr('disabled');
             Wami.startRecording(recorder_url + "?workerId=" +
@@ -49,7 +52,15 @@ $(document).ready( function() {
         Wami.stopRecording();
         $(this).attr('disabled', 'disabled');
         $('button#startrecordtest').removeAttr('disabled');
-        $('button#playbacktest').removeAttr('disabled');
+        $('button#replaytest').removeAttr('disabled');
+    });
+
+    $('button#replaytest').on('click', function() {
+        Wami.startPlaying(recorder_url + "?workerId=" +
+            workerId +
+            "&assignmentId=" + assignmentId +
+            "&hitId=" + hitId +
+            "&filename=test", "onPlayStart", "onPlayFinish", "onError");
     });
 
     $('button#endinstr').click(function(){
