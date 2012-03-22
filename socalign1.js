@@ -11,6 +11,7 @@ $(document).ready( function() {
         $('#instructions').show();
 
         $('#voladjust').on('play', function() {this.volume = 1;});
+        $('#voladjust').on('volumechange', function() {this.volume = 1;});
 
         if(debugmode) {
             $('#exposure audio').attr('controls', true);
@@ -53,6 +54,7 @@ $(document).ready( function() {
         $(this).attr('disabled', 'disabled');
         $('button#startrecordtest').removeAttr('disabled');
         $('button#replaytest').removeAttr('disabled');
+        $('#teststate').html('Loading...');
     });
 
     $('button#replaytest').on('click', function() {

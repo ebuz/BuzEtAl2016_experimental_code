@@ -137,5 +137,5 @@ var onTestRecordFinish = function() {
     //$('#miclevel').html("Samples: " + ''.concat(miclevel) + " Mean level: " + micmean + " Max level: " + micmax + " Min level: " + micmin);
 };
 
-var onPlayStart = function() {};
+var onPlayStart = function() {$('#teststate').html('');};
 var onPlayFinish = function() {};
