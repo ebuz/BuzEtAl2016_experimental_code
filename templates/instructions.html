@@ -2,16 +2,18 @@
             <h2>Picture Description</h2>
             <p style="font-weight:bold;">In this experiment you will listen to
             audio and describe pictures. You need a working head set and microphone.
-            This experiment requires Flash and javascript to be enabled. If this
-            is the first time you're visiting this page, you might see a dialogue
-            asking you to give us permission to record from your microphone while
-            you are participating in this experiment. Please select "Allow" and
-            click "Close". We will always tell you when during the experiment we
-            are recording.</p>
+            This experiment requires Flash and javascript to be enabled.
+            <span style="color:red;">If this is the first time you're visiting
+            this page, you might see a dialogue asking you to give us permission
+            to record from your microphone while you are participating in this
+            experiment.</span> Depending on your browser, this dialogue may show
+            up at the very bottom of this page. Make sure to scroll down before
+            you start recording. Please select "Allow" and click "Close". We will
+            always tell you when during the experiment we are recording.</p>
             {% if not preview %}
             <p>Before we proceed, please adjust your volume settings based on the
             sound file below (and do not change them afterwards).</p>
-            <audio controls='controls'>
+            <audio id="voladjust" controls='controls'>
                 <source src="/mturk/stimuli/socalign1/instructions_adjustVolume.ogg" type="audio/ogg" />
                 <source src="/mturk/stimuli/socalign1/instructions_adjustVolume.mp3" type="audio/mpeg" />
                 Your browser does not support the audio element.
@@ -19,7 +21,9 @@
 
             <p>Now let's adjust your microphone settings.</p>
             <div id="micsetup">
-                <button type="button" id="startrecordtest">Start Recording</button><button type="button" id="endrecordtest" disabled="disabled">Stop and Play back</button>
+                <button type="button" id="startrecordtest">Start Recording</button>
+                <button type="button" id="endrecordtest" disabled="disabled">Stop and Play back</button>
+                <button type="button" id="replaytest" disabled="disabled">Replay</button>
                 <p id="miclevel"></p>
                 <canvas id="micgraph" width="250" height="100">Your browser needs to support &lt;canvas&gt; to see the volume chart.</canvas>
             </div>

@@ -123,8 +123,7 @@ var onTestRecordFinish = function() {
     } else {
         // canvas-unsupported code here
     }
-    //FIXME: this needs to be a global for this and socalign1.js
-    var recorder_url = "http://127.0.0.1:8181/wav_uploader/";
+
     Wami.startPlaying(recorder_url + "?workerId=" +
     workerId +
     "&assignmentId=" + assignmentId +
