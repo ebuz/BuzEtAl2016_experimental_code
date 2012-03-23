@@ -51,10 +51,11 @@ $(document).ready( function() {
 
     $('button#endrecordtest').on('click', function() {
         Wami.stopRecording();
+        $('#micwarning').show();
         $(this).attr('disabled', 'disabled');
         $('button#startrecordtest').removeAttr('disabled');
         $('button#replaytest').removeAttr('disabled');
-        $('#teststate').html('Loading...');
+        $('#teststate').html('Transferring recorded file ... Thank you for your patience.');
     });
 
     $('button#replaytest').on('click', function() {
@@ -63,6 +64,11 @@ $(document).ready( function() {
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
             "&filename=test", "onPlayStart", "onPlayFinish", "onError");
+    });
+
+    $('button#endsetup').on('click', function() {
+        $('#audiosetup').hide();
+        $('#realinstructions').show();
     });
 
     $('button#endinstr').click(function(){
