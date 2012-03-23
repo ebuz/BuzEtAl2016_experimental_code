@@ -97,6 +97,7 @@ var onTestRecordFinish = function() {
         ctx.beginPath();
         ctx.moveTo(0,canvas.height);
         for(i=0; i < miclevel.length; i++) {
+            if (miclevel[i] === -1) miclevel[i] = 0;
             ctx.lineTo(barx, canvas.height - miclevel[i]);
             barx += barwidth;
         }
