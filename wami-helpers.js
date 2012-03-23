@@ -57,7 +57,7 @@ var onTestRecordStart = function() {
     miclevel = [];
     recordInterval = setInterval(function() {
         miclevel.push(Wami.getRecordingLevel());
-    }, 100);
+    }, 25);
 }
 
 var onTestRecordFinish = function() {
@@ -73,12 +73,6 @@ var onTestRecordFinish = function() {
         ctx.clearRect(0,0,canvas.width,canvas.height);
         var barwidth = canvas.width / miclevel.length;
         var barx = 0;
-        // If I wanted to make a bar chart of level //
-        //for(i=0; i < miclevel.length; i++) {
-        //    //fillRect(x,y,width,height)
-        //    ctx.fillRect(barx, canvas.height - miclevel[i], barwidth, barwidth, miclevel[i]);
-        //    barx += barwidth;
-        //}
 
         var grad = ctx.createLinearGradient(0,0, 0,canvas.height);
         grad.addColorStop(0, 'rgba(255,0,0,0.5)'); // red
@@ -89,8 +83,17 @@ var onTestRecordFinish = function() {
         ctx.fillStyle=grad;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.strokeStyle="black";
+        ctx.fillStyle="rgba(0,0,0,1.0)";
+        ctx.strokeStyle="rgba(0,0,0,1.0)";
+        // bar chart of level //
+        //for(i=0; i < miclevel.length; i++) {
+        //    //fillRect(x,y,width,height)
+        //    ctx.fillRect(barx, canvas.height - miclevel[i], barwidth, miclevel[i]);
+        //    barx += barwidth;
+        //}
+
         // line chart of level //
+        //barx = 0; // uncomment line if bar chart is done first
         ctx.beginPath();
         ctx.moveTo(0,canvas.height);
         for(i=0; i < miclevel.length; i++) {
@@ -99,7 +102,8 @@ var onTestRecordFinish = function() {
         }
         ctx.moveTo(canvas.width, canvas.height);
         ctx.closePath();
-        ctx.stroke();
+        //ctx.stroke();
+        ctx.fill();
 
         if (Modernizr.canvastext) {
             // Add legend
@@ -111,15 +115,6 @@ var onTestRecordFinish = function() {
             ctx.fillText('25', 1, (canvas.height / (4/3)) + 4);
             ctx.fillText('0', 1, canvas.height);
         }
-
-
-        //ctx.lineWidth = 1;
-        //for(j=0; j < miclevel.length; j+=5) {
-        //    ctx.moveTo(barwidth * j, 0);
-        //    ctx.lineTo(barwidth * j, canvas.height);
-        //    ctx.closePath();
-        //    ctx.stroke();
-        //}
     } else {
         // canvas-unsupported code here
     }
