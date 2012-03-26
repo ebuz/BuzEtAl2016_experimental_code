@@ -103,8 +103,8 @@ var onTestRecordFinish = function() {
         }
         ctx.moveTo(canvas.width, canvas.height);
         ctx.closePath();
-        //ctx.stroke();
-        ctx.fill();
+        ctx.stroke();
+        //ctx.fill();
 
         if (Modernizr.canvastext) {
             // Add legend
@@ -124,6 +124,7 @@ var onTestRecordFinish = function() {
     workerId +
     "&assignmentId=" + assignmentId +
     "&hitId=" + hitId +
+    "&hash=" + amzhash +
     "&filename=test", "onPlayStart", "onPlayFinish", "onError");
 
     //var micmean = miclevel.reduce(function(a,b) {return a+b;}) / miclevel.length;

@@ -1,5 +1,6 @@
 $(document).ready( function() {
     $(':checked').removeAttr('checked');
+    $('input[name="browserid"]').val(navigator.userAgent);
     var finished = false;
 
     Modernizr.load({
@@ -43,7 +44,14 @@ $(document).ready( function() {
                 workerId +
                 "&assignmentId=" + assignmentId +
                 "&hitId=" + hitId +
+                "&hash=" + amzhash +
                 "&filename=test", "onTestRecordStart", "onTestRecordFinish", "onError");
+            console.log(recorder_url + "?workerId=" +
+                workerId +
+                "&assignmentId=" + assignmentId +
+                "&hitId=" + hitId +
+                "&hash=" + amzhash +
+                "&filename=test");
         } else {
             alert('Still waiting for recorder to become ready.')
         }
@@ -63,6 +71,7 @@ $(document).ready( function() {
             workerId +
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
+            "&hash=" + amzhash +
             "&filename=test", "onPlayStart", "onPlayFinish", "onError");
     });
 
@@ -90,6 +99,7 @@ $(document).ready( function() {
             workerId +
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
+            "&hash=" + amzhash +
             "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinish", "onError");
         });
     });
@@ -105,6 +115,7 @@ $(document).ready( function() {
             workerId +
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
+            "&hash=" + amzhash +
             "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinish", "onError");
         });
         if($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
