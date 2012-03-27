@@ -1,72 +1,90 @@
         <div id="instructions">
             <h2>Picture Description</h2>
-            <p style="font-weight:bold;">In this experiment you will listen to
-            audio and describe pictures. You need a working head set and microphone.
-            This experiment requires Flash and javascript to be enabled.
-            <span style="color:red;">If this is the first time you're visiting
-            this page, you might see a dialogue asking you to give us permission
-            to record from your microphone while you are participating in this
-            experiment.</span> Depending on your browser, this dialogue may show
-            up at the very bottom of this page. Make sure to scroll down before
-            you start recording. Please select "Allow" and click "Close". We will
-            always tell you when during the experiment we are recording.</p>
-            {% if not preview %}
-            <p>Before we proceed, please adjust your volume settings based on the
-            sound file below (and do not change them afterwards).</p>
-            <audio id="voladjust" controls='controls'>
-                <source src="/mturk/stimuli/socalign1/instructions_adjustVolume.ogg" type="audio/ogg" />
-                <source src="/mturk/stimuli/socalign1/instructions_adjustVolume.mp3" type="audio/mpeg" />
-                Your browser does not support the audio element.
-            </audio>
+            <div id="audiosetup">
+                <p style="font-weight:bold;">In this experiment you will listen to
+                audio and describe pictures. You need a working head set and microphone.
+                This experiment requires Flash and javascript to be enabled.
+                <span style="color:red;">If this is the first time you're visiting
+                this page, you might see a dialogue asking you to give us permission
+                to record from your microphone while you are participating in this
+                experiment.</span> Depending on your browser, this dialogue may show
+                up at the very bottom of this page. Make sure to scroll down before
+                you start recording. Please select "Allow" and "Remember" and then
+                click "Close". We will always tell you when during the experiment
+                we are recording.</p>
+                {% if not preview %}
+                <p>Before we proceed, please adjust your volume settings so that you
+                can easily understand the sound file below. Please use your system
+                volume settings, not the volume control on the audio file below
+                (and do not change them afterwards).</p>
+                <audio id="voladjust" controls='controls'>
+                    <source src="/mturk/stimuli/socalign1/instructions_adjustVolume.ogg" type="audio/ogg" />
+                    <source src="/mturk/stimuli/socalign1/instructions_adjustVolume.mp3" type="audio/mpeg" />
+                    Your browser does not support the audio element.
+                </audio>
 
-            <p>Now let's adjust your microphone settings.</p>
-            <div id="micsetup">
-                <button type="button" id="startrecordtest">Start Recording</button>
-                <button type="button" id="endrecordtest" disabled="disabled">Stop and Play back</button>
-                <button type="button" id="replaytest" disabled="disabled">Replay</button>
-                <p id="teststate"></p>
-                <canvas id="micgraph" width="250" height="100">Your browser needs to support &lt;canvas&gt; to see the volume chart.</canvas>
+                <p>Now let's adjust your microphone settings.</p>
+                <div id="micsetup">
+                    <button type="button" id="startrecordtest">Start Recording</button>
+                    <button type="button" id="endrecordtest" disabled="disabled">Stop and Play back</button>
+                    <button type="button" id="replaytest" disabled="disabled">Replay</button>
+                    <p id="teststate"></p>
+                    <canvas id="micgraph" width="250" height="100">Your browser needs to support &lt;canvas&gt; to see the volume chart.</canvas>
+                    <p id="micwarning" style="color: red;">If you see no plot of
+                    volume intensity in black in the plot above, you either have not given
+                    Flash permissions to record sound from your microphone (see
+                    the pop-up that might show up at the bottom of this page) or
+                    your microphone is muted or not working. Please do not continue
+                    with the experiment if you cannot resolve this issue. We won't
+                    be able to use your recordings and you will not be paid.</p>
+                    <p>By clicking the 'Continue to instructions' button below, I
+                    confirm that I adjusted my volume and recording settings and that
+                    the recording was clearly understandable</p>
+                    <button type="button" id="endsetup">Continue to instructions</button>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
-            <p>This experiment consists of three phases, followed by a short questionnaire.</p>
-            <p>In <span style="font-weight:bold;">phase one</span>, you will listen to a short speech from an amateur debater.
-            In this speech, the speaker will present his/her stance on a current political
-            issue. Listen carefully to the speech, and form an impression of the speaker and
-            their argument. You will be asked to describe them later.</p>
-            <p>In <span style="font-weight:bold;">phase two</span>, you will be presented with ten pictures, one at a time.
-            When each picture is displayed it will automatically start recording audio. Please describe what is
-            happening in each picture using <span style="font-weight:bold;">one sentence</span>.
-            Then press "Finish" to advance to the next picture.
-            Also, please avoid pronouns (words like he/she, him/her, etc). For example,
-            if the picture was of a boy smiling at a girl, you could say "The boy is smiling at the girl" but not
-            "He is smiling at her."</p>
-            <p><span style="font-weight:bold;">Phase three</span> is a brief survey. This survey consists of questions about the
-            speech that you heard in <span style="font-weight:bold;">phase one</span> and questions about you as a participant.
-            The data we collect with the survey will be non-identifying. It is
-            very important to us that you try to answer the questions in the survey
-            to the best of your abilities. Rushing through the survey will make
-            your data completely useless for our research purpose.</p>
-            <p>All together the experiment will take about 20-25 minutes. Thank
-            you for your participation </p>
-            <p>Please do not take breaks in the middle of the experiment. It is
-            important that you do the experiment in one go.</p>
-            <div id="consent">
-                By accepting this HIT, you confirm that you have read and understood the
-                <a target="_blank" href="http://www.hlp.rochester.edu/consent/English_2011-05-13.pdf">consent form</a>,
-                that you are willing to participate in this experiment, and that you
-                agree that the data you provide by participating can be used in
-                scientific publications (no identifying information will be used).
-                Sometimes it is necessary to share the data elicited from you
-                &mdash; including sound files &mdash; with other researchers for scientific
-                purposes (for replication purposes). That is the only reason for
-                which we will share data and we will only share data with other
-                researchers and only if it is for non-commercial use. Identifying
-                information will <span style="font-weight:bold;">never</span> be shared (your MTurk ID will be replaced
-                with an arbitrary alphanumeric code).
+            <div id="realinstructions">
+                <p>This experiment consists of three phases, followed by a short questionnaire.</p>
+                <p>In <span style="font-weight:bold;">phase one</span>, you will listen to a short speech from an amateur debater.
+                In this speech, the speaker will present his/her stance on a current political
+                issue. Listen carefully to the speech, and form an impression of the speaker and
+                their argument. You will be asked to describe them later.</p>
+                <p>In <span style="font-weight:bold;">phase two</span>, you will be presented with ten pictures, one at a time.
+                When each picture is displayed it will automatically start recording audio. Please describe what is
+                happening in each picture using <span style="font-weight:bold;">one sentence</span>.
+                Then press "Finish" to advance to the next picture.
+                Also, please avoid pronouns (words like he/she, him/her, etc). For example,
+                if the picture was of a boy smiling at a girl, you could say "The boy is smiling at the girl" but not
+                "He is smiling at her."</p>
+                <p><span style="font-weight:bold;">Phase three</span> is a brief survey. This survey consists of questions about the
+                speech that you heard in <span style="font-weight:bold;">phase one</span> and questions about you as a participant.
+                The data we collect with the survey will be non-identifying. It is
+                very important to us that you try to answer the questions in the survey
+                to the best of your abilities. Rushing through the survey will make
+                your data completely useless for our research purpose.</p>
+                <p>All together the experiment will take about 20-25 minutes. Thank
+                you for your participation </p>
+                <p>Please do not take breaks in the middle of the experiment. It is
+                important that you do the experiment in one go.</p>
+                <div id="consent">
+                    By accepting this HIT, you confirm that you have read and understood the
+                    <a target="_blank" href="http://www.hlp.rochester.edu/consent/English_2011-05-13.pdf">consent form</a>,
+                    that you are willing to participate in this experiment, and that you
+                    agree that the data you provide by participating can be used in
+                    scientific publications (no identifying information will be used).
+                    Sometimes it is necessary to share the data elicited from you
+                    &mdash; including sound files &mdash; with other researchers for scientific
+                    purposes (for replication purposes). That is the only reason for
+                    which we will share data and we will only share data with other
+                    researchers and only if it is for non-commercial use. Identifying
+                    information will <span style="font-weight:bold;">never</span> be shared (your MTurk ID will be replaced
+                    with an arbitrary alphanumeric code).
+                </div>
+                <p style="font-weight:bold;">Once you press Start, these instructions
+                will disappear, so make sure you understand them fully before you start.
+                A sound file will start playing automatically. Please make sure that
+                your volume settings are adjusted (see above).</p>
+                <button type="button" id="endinstr">Start</button>
             </div>
-            <p style="font-weight:bold;">Once you press Start, these instructions
-            will disappear, so make sure you understand them fully before you start.
-            A sound file will start playing automatically. Please make sure that
-            your volume settings are adjusted (see above).</p>
-            <button type="button" id="endinstr">Start</button>
         </div>

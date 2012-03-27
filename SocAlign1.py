@@ -168,7 +168,8 @@ class SocAlign1Server(object):
         resp.content_type='text/html'
         resp.unicode_body = t
         # set a cookie that lives 2 hours
-        resp.set_cookie('turkrecord', amz_dict['hash'], max_age=7200, path='/', domain=domain, secure=False)
+        # IE (uggggghhhh!) won't allow the cookie.
+        #resp.set_cookie('turkrecord', amz_dict['hash'], max_age=7200, path='/', domain=domain, secure=False)
         return resp(environ, start_response)
 
 if __name__ == '__main__':

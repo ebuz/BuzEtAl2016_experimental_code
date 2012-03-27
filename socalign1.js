@@ -1,5 +1,6 @@
 $(document).ready( function() {
     $(':checked').removeAttr('checked');
+    $('input[name="browserid"]').val(navigator.userAgent);
     var finished = false;
 
     Modernizr.load({
@@ -44,7 +45,14 @@ $(document).ready( function() {
                 workerId +
                 "&assignmentId=" + assignmentId +
                 "&hitId=" + hitId +
+                "&hash=" + amzhash +
                 "&filename=test", "onTestRecordStart", "onTestRecordFinish", "onError");
+            console.log(recorder_url + "?workerId=" +
+                workerId +
+                "&assignmentId=" + assignmentId +
+                "&hitId=" + hitId +
+                "&hash=" + amzhash +
+                "&filename=test");
         } else {
             alert('Still waiting for recorder to become ready.')
         }
@@ -52,10 +60,11 @@ $(document).ready( function() {
 
     $('button#endrecordtest').on('click', function() {
         Wami.stopRecording();
+        $('#micwarning').show();
         $(this).attr('disabled', 'disabled');
         $('button#startrecordtest').removeAttr('disabled');
         $('button#replaytest').removeAttr('disabled');
-        $('#teststate').html('Loading...');
+        $('#teststate').html('Transferring recorded file ... Thank you for your patience.');
     });
 
     $('button#replaytest').on('click', function() {
@@ -63,7 +72,13 @@ $(document).ready( function() {
             workerId +
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
+            "&hash=" + amzhash +
             "&filename=test", "onPlayStart", "onPlayFinish", "onError");
+    });
+
+    $('button#endsetup').on('click', function() {
+        $('#audiosetup').hide();
+        $('#realinstructions').show();
     });
 
     $('button#endinstr').click(function(){
@@ -85,6 +100,7 @@ $(document).ready( function() {
             workerId +
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
+            "&hash=" + amzhash +
             "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinish", "onError");
         });
     });
@@ -100,6 +116,7 @@ $(document).ready( function() {
             workerId +
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
+            "&hash=" + amzhash +
             "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinish", "onError");
         });
         if($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
