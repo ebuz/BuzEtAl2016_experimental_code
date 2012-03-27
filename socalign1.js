@@ -12,6 +12,7 @@ $(document).ready( function() {
 
         $('#voladjust').on('play', function() {this.volume = 1;});
         $('#voladjust').on('volumechange', function() {this.volume = 1;});
+        $('#voladjust').on('ended', function() {this.currentTime = 0; this.pause();});
 
         if(debugmode) {
             $('#exposure audio').attr('controls', true);
