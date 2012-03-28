@@ -47,12 +47,6 @@ $(document).ready( function() {
                 "&hitId=" + hitId +
                 "&hash=" + amzhash +
                 "&filename=test", "onTestRecordStart", "onTestRecordFinish", "onError");
-            console.log(recorder_url + "?workerId=" +
-                workerId +
-                "&assignmentId=" + assignmentId +
-                "&hitId=" + hitId +
-                "&hash=" + amzhash +
-                "&filename=test");
         } else {
             alert('Still waiting for recorder to become ready.')
         }
