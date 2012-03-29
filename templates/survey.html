@@ -21,7 +21,7 @@
                                             ("I agree with the speaker's arguments.", "q.participant.agree_with_speaker", "1 not at all; 6 absolutely"),
                                             ("I would want the speaker as a friend.", "q.participant.want_speaker_as_friend", "1 not at all; 6 absolutely")] %}
                             <fieldset>
-                            <label style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</label>
+                            <label>Please indicate the extent to which you agree with the following statements.</label>
                             {% for question, formname, scale in page1|shuffle %}
                             <table class="survquest" id="{{formname}}">
                                 <tr>
@@ -70,7 +70,7 @@
                                             ("The speaker sounded enthusiastic.", "q.speaker.enthusiastic", "1 not at all; 6 absolutely"),
                                             ("The speaker was easy to understand.", "q.speaker.easy_to_understand", "1 not at all; 6 absolutely")] %}
                             <fieldset>
-                            <label style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</label>
+                            <label>Please indicate the extent to which you agree with the following statements.</label>
                             {% for question, formname, scale in page2|shuffle %}
                             <table class="survquest" id="{{formname}}">
                                 <tr>
@@ -100,7 +100,7 @@
 
                         <div id="page3">
                             <fieldset>
-                                <label style="font-weight:bold;">Demographics</label>
+                                <label>Demographics</label>
                                 <table class="survquest" id="age">
                                     <tr>
                                         <td>Age</td>
@@ -150,7 +150,7 @@
                             </fieldset>
 
                             <fieldset id="ideology">
-                            <label style="font-weight:bold;">Please indicate the extent to which you agree with the following statements.</label>
+                            <label>Please indicate the extent to which you agree with the following statements.</label>
                             {% for question, formname, scale in [
                                 ('My political views are usually conservative.', 'q.ideology.conservative', '1 not at all; 6 absolutely'),
                                 ('My political views are usually liberal.', 'q.ideology.liberal', '1 not at all; 6 absolutely'),
@@ -190,7 +190,7 @@
 
                         <div id="page4">
                             <fieldset>
-                            <label style="font-weight:bold;">Please think of a specific,
+                            <label>Please think of a specific,
                             recent conflict you had with someone you did not know well.
                             For each sentence below, rate how well that sentence describes
                             your feelings or actions during that conflict.</label>

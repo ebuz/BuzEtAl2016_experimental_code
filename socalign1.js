@@ -150,7 +150,7 @@ $(document).ready( function() {
         });
         if (p2valid) {
             $('#page2').hide();
-            $('#page3').show(function() {$('label:visible:first')[0].scrollIntoView()});
+            $('#page3').show(function() {$('label:visible:first')[0].scrollIntoView();});
         } else {
             alert('Please answer all questions.');
         }
