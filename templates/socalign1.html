@@ -48,7 +48,10 @@
                 margin-top: 2em;
                 padding: 1em;
             }
-            #instructions, #micwarning, #realinstructions, #exposure, #testintr, #oldBrowserMessage, .testtrial, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment {display:none;}
+            #micwarning, #exposure, #testintr, #oldBrowserMessage, .testtrial, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment {display:none;}
+            {% if not preview %}
+            #instructions, #realinstructions {display:none;}
+            {% endif %}
         </style>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script type="text/javascript" src="/iso8601shim.min.js"></script>

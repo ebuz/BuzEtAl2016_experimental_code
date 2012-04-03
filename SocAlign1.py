@@ -131,7 +131,12 @@ class SocAlign1Server(object):
                 return resp(environ, start_response)
             worker = check_worker_exists(amz_dict['workerId'], session)
 
+            amz_dict['hash'] = sha224("{}{}{}".format(req.params['workerId'],
+                                                  req.params['hitId'],
+                                                  req.params['assignmentId'])).hexdigest()
+
         currlist, soundtrials, pictrials = [[] for x in range(3)]
+        condition, survey = None, None
         if worker:
             if (debug and forcelist):
                 listid = forcelist
@@ -143,10 +148,8 @@ class SocAlign1Server(object):
             # cond is same for all pictrials in a list; grab from 1st
             condition = pictrials[0]['ExposureCondition']
             survey = pictrials[0]['SurveyList']
-
-        amz_dict['hash'] = sha224("{}{}{}".format(req.params['workerId'],
-                                                  req.params['hitId'],
-                                                  req.params['assignmentId'])).hexdigest()
+        else:
+            soundtrials.append(None)
 
         recorder_url = 'http://' + domain
         if port != '':
