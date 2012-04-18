@@ -5,7 +5,7 @@ $(document).ready( function() {
 
     Modernizr.load({
         test: Modernizr.canvas,
-        nope: 'excanvas.js'
+        nope: '/mturk/excanvas.js'
     });
 
     if(Modernizr.audio) {
@@ -77,6 +77,8 @@ $(document).ready( function() {
 
     $('button#endinstr').click(function(){
         if (Wami.getSettings().microphone.granted) {
+            $('object').attr('height',0);
+            $('object').attr('width',0);
             $(':input[name="starttime"]').val(new Date().toISOString());
             $('#instructions').hide();
             $('#exposure').show(function() {
