@@ -60,9 +60,9 @@ def check_worker_exists(workerid, session):
         return worker
 
 def random_lowest_list(session):
-    #all_lists = session.query(TrialList).all()
+    all_lists = session.query(TrialList).all()
     # Starting by piloting lists NATACC.GOV.LEFT.DO and NATACC.GOV.LEFT.PO, aka 1 and 3
-    all_lists = session.query(TrialList).filter(TrialList.number.in_([1,3])).all()
+    #all_lists = session.query(TrialList).filter(TrialList.number.in_([1,3])).all()
     # sort the lists from least assigned workers to most
     all_lists.sort(key = lambda x: len(x.workers))
 

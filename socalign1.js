@@ -46,6 +46,7 @@ $(document).ready( function() {
                 "&assignmentId=" + assignmentId +
                 "&hitId=" + hitId +
                 "&hash=" + amzhash +
+                "&experiment=SocAlign.1" +
                 "&filename=test", "onTestRecordStart", "onTestRecordFinish", "onError");
         } else {
             alert('Still waiting for recorder to become ready.')
@@ -67,6 +68,7 @@ $(document).ready( function() {
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
             "&hash=" + amzhash +
+            "&experiment=SocAlign.1" +
             "&filename=test", "onPlayStart", "onPlayFinish", "onError");
     });
 
@@ -97,6 +99,7 @@ $(document).ready( function() {
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
             "&hash=" + amzhash +
+            "&experiment=SocAlign.1" +
             "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinish", "onError");
         });
     });
@@ -113,6 +116,7 @@ $(document).ready( function() {
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
             "&hash=" + amzhash +
+            "&experiment=SocAlign.1" +
             "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinish", "onError");
         });
         if($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
