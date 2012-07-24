@@ -49,6 +49,10 @@ stims = []
 with open(os.path.join(basepath,'stims.pickle'),'r') as p:
     stims = cPickle.load(p)
 
+oldworkers = []
+with open(os.path.join(basepath,'oldworkers.pickle'),'r') as p2:
+    oldworkers = cPickle.load(p2)
+
 def check_worker_exists(workerid, session):
     try:
         worker = session.query(Worker).filter_by(workerid = workerid).one()
@@ -74,6 +78,9 @@ def random_lowest_list(session):
         # find out how many lists are the same length as the smallest
         # and return a random one from that subset
         return choice(all_lists[0:wk.count(wk[0])])
+
+def static_list(session, listno):
+    return session.query(TrialList).filter(TrialList.number == listno).one()
 
 def shuffle_filter(value):
     shuffle(value)
@@ -156,25 +163,27 @@ class SocAlign1Server(object):
             recorder_url += ':' + port
         recorder_url += '/' + urlpath
 
-        template = env.get_template('socalign1.html')
-        t = template.render(soundfile = soundtrials[0], #only one sound file
-            pictrials = pictrials,
-            amz = amz_dict,
-            listid = listid,
-            survey = survey,
-            condition = condition,
-            formtype = formtype,
-            recorder_url = recorder_url,
-            debugmode = 1 if debug else 0,
-            # on preview, don't bother loading heavy flash assets
-            preview = in_preview)
+        t = None
+        if (type(worker) != type(None) and worker.workerid in oldworkers):
+            template = env.get_template('sorry.html')
+            t = template.render()
+        else:
+            template = env.get_template('socalign1.html')
+            t = template.render(soundfile = soundtrials[0], #only one sound file
+                pictrials = pictrials,
+                amz = amz_dict,
+                listid = listid,
+                survey = survey,
+                condition = condition,
+                formtype = formtype,
+                recorder_url = recorder_url,
+                debugmode = 1 if debug else 0,
+                # on preview, don't bother loading heavy flash assets
+                preview = in_preview)
 
         resp = Response()
         resp.content_type='text/html'
         resp.unicode_body = t
-        # set a cookie that lives 2 hours
-        # IE (uggggghhhh!) won't allow the cookie.
-        #resp.set_cookie('turkrecord', amz_dict['hash'], max_age=7200, path='/', domain=domain, secure=False)
         return resp(environ, start_response)
 
 if __name__ == '__main__':
