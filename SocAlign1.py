@@ -192,5 +192,5 @@ if __name__ == '__main__':
     app['/mturk/modernizr.audiocanvas.js'] = fileapp.FileApp('modernizr.audiocanvas.js')
     app['/mturk/excanvas.js'] = fileapp.FileApp('excanvas.js')
     app['/Wami.swf'] = fileapp.FileApp('Wami.swf')
-    app['/expt'] = SocAlign1Server(app)
+    app['/mturk/experiments/socalign1'] = SocAlign1Server(app)
     httpserver.serve(app, host='127.0.0.1', port=8080)

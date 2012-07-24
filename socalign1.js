@@ -77,7 +77,7 @@ $(document).ready( function() {
         $('#realinstructions').show();
     });
 
-    $('button#endinstr').click(function(){
+    $('button#endinstr').on('click', function(){
         if (Wami.getSettings().microphone.granted) {
             $('object').attr('height',0);
             $('object').attr('width',0);
@@ -91,7 +91,7 @@ $(document).ready( function() {
             alert("You have to allow microphone access for this experiment!");
         }
     });
-    $('button#starttest').click(function(){
+    $('button#starttest').on('click', function(){
         $('#testintr').hide();
         $('.testtrial').first().show(function() {
             Wami.startRecording(recorder_url + "?workerId=" +
