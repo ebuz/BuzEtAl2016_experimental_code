@@ -46,6 +46,7 @@ $(document).ready( function() {
                 "&assignmentId=" + assignmentId +
                 "&hitId=" + hitId +
                 "&hash=" + amzhash +
+                "&experiment=SocAlign.1" +
                 "&filename=test", "onTestRecordStart", "onTestRecordFinish", "onError");
         } else {
             alert('Still waiting for recorder to become ready.')
@@ -67,6 +68,7 @@ $(document).ready( function() {
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
             "&hash=" + amzhash +
+            "&experiment=SocAlign.1" +
             "&filename=test", "onPlayStart", "onPlayFinish", "onError");
     });
 
@@ -75,7 +77,7 @@ $(document).ready( function() {
         $('#realinstructions').show();
     });
 
-    $('button#endinstr').click(function(){
+    $('button#endinstr').on('click', function(){
         if (Wami.getSettings().microphone.granted) {
             $('object').attr('height',0);
             $('object').attr('width',0);
@@ -89,7 +91,7 @@ $(document).ready( function() {
             alert("You have to allow microphone access for this experiment!");
         }
     });
-    $('button#starttest').click(function(){
+    $('button#starttest').on('click', function(){
         $('#testintr').hide();
         $('.testtrial').first().show(function() {
             Wami.startRecording(recorder_url + "?workerId=" +
@@ -97,6 +99,7 @@ $(document).ready( function() {
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
             "&hash=" + amzhash +
+            "&experiment=SocAlign.1" +
             "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinish", "onError");
         });
     });
@@ -113,6 +116,7 @@ $(document).ready( function() {
             "&assignmentId=" + assignmentId +
             "&hitId=" + hitId +
             "&hash=" + amzhash +
+            "&experiment=SocAlign.1" +
             "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinish", "onError");
         });
         if($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
