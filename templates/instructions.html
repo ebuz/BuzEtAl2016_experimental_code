@@ -1,28 +1,15 @@
         <div id="instructions">
             <h2>Picture Description</h2>
             <div id="audiosetup">
-                <p style="font-weight:bold;">In this experiment you will listen to
-                audio and describe pictures. You need a working head set and microphone.
-                This experiment requires Flash and javascript to be enabled.
-                <span style="color:red;">If this is the first time you're visiting
-                this page, you might see a dialogue asking you to give us permission
-                to record from your microphone while you are participating in this
-                experiment.</span> Depending on your browser, this dialogue may show
-                up at the very bottom of this page. Make sure to scroll down before
-                you start recording. Please select "Allow" and "Remember" and then
-                click "Close". We will always tell you when during the experiment
-                we are recording.</p>
+                <p>This experiment requires Flash and JavaScript to be enabled.
+                <span style="color:red;">If this is the first time you're visiting this page,
+                you might see a dialogue asking you to give us permission to record from your
+                microphone while you are participating in this experiment.</span> Depending
+                on your browser, this dialogue may show up at the very bottom of this page.
+                Make sure to scroll down before you start recording. Please select "Allow"
+                and "Remember" and then click "Close". We will always tell you when during
+                the experiment we are recording.</p>
                 {% if not preview %}
-                <p>Before we proceed, please adjust your volume settings so that you
-                can easily understand the sound file below. Please use your system
-                volume settings, not the volume control on the audio file below
-                (and do not change them afterwards).</p>
-                <audio id="voladjust" controls='controls'>
-                    <source src="/mturk/stimuli/socalign1/instructions_adjustVolume.ogg" type="audio/ogg" />
-                    <source src="/mturk/stimuli/socalign1/instructions_adjustVolume.mp3" type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                </audio>
-
                 <p>Now let's adjust your microphone settings.</p>
                 <div id="micsetup">
                     <button type="button" id="startrecordtest">Start Recording</button>
@@ -45,20 +32,16 @@
                 {% endif %}
             </div>
             <div id="realinstructions">
-                <p>This experiment consists of three phases, followed by a short questionnaire.</p>
-                <p>In <span style="font-weight:bold;">phase one</span>, you will listen to a short speech from an amateur debater.
-                In this speech, the speaker will present his/her stance on a current political
-                issue. Listen carefully to the speech, and form an impression of the speaker and
-                their argument. You will be asked to describe them later.</p>
-                <p>In <span style="font-weight:bold;">phase two</span>, you will be presented with ten pictures, one at a time.
+                <p>This experiment consists of a picture description task, followed by a short questionnaire.</p>
+                <p>In <span style="font-weight:bold;">phase one</span>, you will be presented with ten pictures, one at a time.
                 When each picture is displayed it will automatically start recording audio. Please describe what is
                 happening in each picture using <span style="font-weight:bold;">one sentence</span>.
                 Then press "Finish" to advance to the next picture.
                 Also, please avoid pronouns (words like he/she, him/her, etc). For example,
                 if the picture was of a boy smiling at a girl, you could say "The boy is smiling at the girl" but not
                 "He is smiling at her."</p>
-                <p><span style="font-weight:bold;">Phase three</span> is a brief survey. This survey consists of questions about the
-                speech that you heard in <span style="font-weight:bold;">phase one</span> and questions about you as a participant.
+                <p><span style="font-weight:bold;">Phase two</span> is a brief survey.
+                This survey consists of questions about you as a participant.
                 The data we collect with the survey will be non-identifying. It is
                 very important to us that you try to answer the questions in the survey
                 to the best of your abilities. Rushing through the survey will make
@@ -67,6 +50,15 @@
                 you for your participation </p>
                 <p>Please do not take breaks in the middle of the experiment. It is
                 important that you do the experiment in one go.</p>
+                <p>Sometimes it can happen that technical difficulties cause experimental
+                scripts to freeze so that you will not be able to submit a HIT. We are trying
+                our best to avoid these problems. Should they nevertheless occur, we urge
+                you to contact us.</p>
+                <p>If you are interested in hearing how the experiments you are participating
+                in help us to understand the human brain, feel free to subscribe to our
+                <a href="http://hlplab.wordpress.com/">lab blog</a> on which we announce
+                new findings. Note that typically about one year passes before an experiment
+                is published.</p>
                 <div id="consent">
                     By accepting this HIT, you confirm that you have read and understood the
                     <a target="_blank" href="http://www.hlp.rochester.edu/consent/English_2013-05-13.pdf">consent form</a>,
@@ -85,6 +77,6 @@
                 will disappear, so make sure you understand them fully before you start.
                 A sound file will start playing automatically. Please make sure that
                 your volume settings are adjusted (see above).</p>
-                <button type="button" id="endinstr">Start</button>
+                <button type="button" id="endinstr">I confirm that I have read and understood the instructions and want to start the experiment</button>
             </div>
         </div>

@@ -22,13 +22,18 @@
 Database models for Kathryn Campbell-Kibler, Kodi Weatherholtz, and T. Florian
 Jaeger's experiment. Based onCamber Hansen-Karr's EmoPrm1 experiment
 """
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base, declared_attr
+import datetime
 
 Base = declarative_base()
 
 class MyMixin(object):
+
+    @declared_attr
+    def __tablename__(cls):
+        return cls.__name__.lower()
 
     __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8'}
 
@@ -42,12 +47,12 @@ class Worker(Base, MyMixin):
     __tablename__ = 'worker'
 
     workerid = Column(String(32), unique=True)
+    abandoned = Column(Boolean, default = False)
+    lastitem = Column(Integer, default = 0)
+    firstseen = Column(DateTime, default = datetime.datetime.now, nullable = False)
+    lastseen = Column(DateTime, default = datetime.datetime.now, nullable = False)
     list_id = Column(Integer, ForeignKey('triallist.id'))
     triallist = relationship('TrialList', backref = 'workers')
-
-    def __init__(self, workerid, triallist):
-        self.workerid = workerid
-        self.triallist = triallist
 
     def __repr__(self):
         return '<Worker: "%s">' % (self.workerid)
@@ -61,8 +66,9 @@ class TrialList(Base, MyMixin):
 
     number = Column(Integer)
 
-    def __init__(self, number):
-        self.number = number
-
     def __repr__(self):
         return '<TrialGroup: "%d">' % (self.number)
+
+    @property
+    def active_workers(self):
+        return filter(lambda x: x.abandoned == False, self.workers)

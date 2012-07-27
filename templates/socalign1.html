@@ -48,14 +48,13 @@
                 margin-top: 2em;
                 padding: 1em;
             }
-            #micwarning, #exposure, #testintr, #oldBrowserMessage, .testtrial, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment {display:none;}
+            #micwarning, #exposure, #testintr, #oldBrowserMessage, #reloadResume, .testtrial, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment {display:none;}
             {% if not preview %}
             #instructions, #realinstructions {display:none;}
             {% endif %}
         </style>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-        <script type="text/javascript" src="/iso8601shim.min.js"></script>
-        <script type="text/javascript" src="/mturk/modernizr.audiocanvas.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="/mturk/modernizr.canvas.js"></script>
         {% if not preview %}
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
         <script type="text/javascript" src="/mturk/recorder.js"></script>
@@ -68,6 +67,7 @@
             var amzhash = "{{amz.hash}}"
             var debugmode = {{debugmode}};
             var recorder_url = "{{recorder_url}}";
+            var itemno = {{startitem}};
         </script>
         {% endif %}
     </head>
@@ -81,30 +81,17 @@
         {% if not preview %}
         <div id="wami"></div>
 
-        <div id="oldBrowserMessage">
-            <p>Your browser does not appear to be compatible with the audio elements used in this HIT. </p>
-            <p>Please <strong>do not accept this HIT</strong>, your results will be automatically rejected.  </p>
-            <p>If you'd like to do this HIT, download an up-to-date version of one of these browsers and try again:</p>
-            <div id="browserIcons">
-                <a target="_blank" href="http://www.google.com/chrome"><img src="/mturk/img/64-chrome.png" alt=""/></a>
-                <a target="_blank" href="http://www.mozilla.com/en-US/firefox/new/"><img src="/mturk/img/64-firefox.png" alt=""/></a>
-                <a target="_blank" href="http://www.opera.com/"><img src="/mturk/img/64-opera.png" alt=""/></a>
-                <a target="_blank" href="http://www.apple.com/safari/"><img src="/mturk/img/64-safari.png" alt=""/></a>
-            </div>
-        </div>
-
-        <div id="exposure">
-            <p>Phase 1: Listen to a story</p>
-            <audio>
-                <source src="/mturk/stimuli/socalign1/{{soundfile.FileName}}.ogg" type="audio/ogg" />
-                <source src="/mturk/stimuli/socalign1/{{soundfile.FileName}}.mp3" type="audio/mpeg" />
-                Your browser does not support the audio element.
-            </audio>
+        <div id="reloadResume">
+            <p>You have already started this experiment. Resuming where you left off.</p>
+            <button type="button" id="resume">Resume</button>
+            {% if debugmode == 1 -%}
+            <button type="button" id="reset">Reset</button>
+            {%- endif %}
         </div>
 
         <div id="testing">
             <div id="testintr">
-                <p>Phase 2: Picture description.</p>
+                <p>Picture description.</p>
                 <button type="button" id="starttest">Start</button>
             </div>
             {% if formtype == 'sandbox' %}
@@ -120,20 +107,17 @@
                     <div id="pic{{loop.index}}" class="testtrial">
                         <img src="/mturk/stimuli/socalign1/{{item.FileName}}" alt="" width="{{item.PictureWidth}}" height="{{item.PictureHeight}}"/><br/>
                         <p style="color: red; text-decoration: blink">Recording...</p>
-                        <button type="button" class="stoprecord" id="{{item.StimulusID}}">Next</button>
+                        <button type="button" class="stoprecord" id="{{item.ItemID}}">Next</button>
                         <button type="button" class="hiddennext" style="display: none !important"></button>
-                        <input type="hidden" id="end_{{item.StimulusID}}" name="end_{{item.StimulusID}}" value="NA"/>
                     </div>
                 {% endfor %}
 
 {% include 'survey.html' %}
 
             <div id="hiddenfields">
-                <input type="hidden" id="starttime" name="starttime" value="NA"/>
-                <input type="hidden" id="endaudio" name="endaudio" value="NA"/>
-                <input type="hidden" id="experiment" name="experiment" value="SocAlign1"/>
+                <input type="hidden" id="experiment" name="experiment" value="SocAlign1.NoContext"/>
                 <input type="hidden" id="list" name="List" value="{{listid}}"/>
-                <input type="hidden" id="exposurecondition" name="ExposureCondition" value="{{condition}}"/>
+                <input type="hidden" id="exposurecondition" name="ExposureCondition" value="NoContext"/>
                 <input type="hidden" id="assignmentId" name="assignmentId" value="{{amz.assignmentId}}"/>
                 <input type="hidden" id="browserid" name="browserid" value="NA"/>
             </div>
