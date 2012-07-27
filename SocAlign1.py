@@ -60,7 +60,8 @@ def check_worker_exists(workerid, session):
         worker = session.query(Worker).filter_by(workerid = workerid).one()
         return worker
     except NoResultFound:
-        worker = Worker(workerid = workerid, triallist = random_lowest_list(session))
+        #worker = Worker(workerid = workerid, triallist = random_lowest_list(session))
+        worker = Worker(workerid = workerid, triallist = static_list(session, 25))
         session.add(worker)
         session.commit()
         return worker
@@ -122,7 +123,7 @@ class SocAlign1Server(object):
             if req.params.has_key('ItemNumber'):
                 worker.lastseen = datetime.now()
                 worker.lastitem = req.params['ItemNumber']
-                print("Setting {} to {} at {}".format(worker.workerid, worker.lastitem, worker.lastseen))
+                #print("Setting {} to {} at {}".format(worker.workerid, worker.lastitem, worker.lastseen))
 
             if req.params.has_key('Abandoned'):
                 if req.params['Abandoned'] == "true":
