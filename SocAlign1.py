@@ -198,25 +198,30 @@ class SocAlign1Server(object):
                 recorder_url += ':' + port
             recorder_url += '/' + urlpath
 
-            template = env.get_template('socalign1.html')
-            t = template.render(soundfile = soundtrials[0], #only one sound file
-                pictrials = pictrials,
-                amz = amz_dict,
-                listid = listid,
-                survey = survey,
-                condition = condition,
-                formtype = formtype,
-                recorder_url = recorder_url,
-                debugmode = 1 if debug else 0,
-                # on preview, don't bother loading heavy flash assets
-                preview = in_preview)
+            t = None
+            if (type(worker) != type(None) and worker.workerid in oldworkers):
+                template = env.get_template('sorry.html')
+                t = template.render()
+            else:
+                startitem = 0
+                if (type(worker) != type(None)):
+                    startitem = worker.lastitem
+                template = env.get_template('socalign1.html')
+                t = template.render(soundfile = soundtrials[0], #only one sound file
+                    pictrials = pictrials,
+                    amz = amz_dict,
+                    listid = listid,
+                    survey = survey,
+                    condition = condition,
+                    formtype = formtype,
+                    recorder_url = recorder_url,
+                    debugmode = 1 if debug else 0,
+                    # on preview, don't bother loading heavy flash assets
+                    preview = in_preview)
 
             resp = Response()
             resp.content_type='text/html'
             resp.unicode_body = t
-            # set a cookie that lives 2 hours
-            # IE (uggggghhhh!) won't allow the cookie.
-            #resp.set_cookie('turkrecord', amz_dict['hash'], max_age=7200, path='/', domain=domain, secure=False)
             return resp(environ, start_response)
 
 if __name__ == '__main__':
@@ -232,7 +237,8 @@ if __name__ == '__main__':
     app['/mturk/socalign1.js'] = fileapp.FileApp('socalign1.js')
     app['/mturk/modernizr.audioonly.js'] = fileapp.FileApp('modernizr.audioonly.js')
     app['/mturk/modernizr.audiocanvas.js'] = fileapp.FileApp('modernizr.audiocanvas.js')
+    app['/mturk/modernizr.canvas.js'] = fileapp.FileApp('modernizr.canvas.js')
     app['/mturk/excanvas.js'] = fileapp.FileApp('excanvas.js')
-    app['/Wami.swf'] = fileapp.FileApp('Wami.swf')
+    app['/mturk/Wami.swf'] = fileapp.FileApp('Wami.swf')
     app['/mturk/experiments/socalign1'] = SocAlign1Server(app)
     httpserver.serve(app, host='127.0.0.1', port=8080)

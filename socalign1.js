@@ -35,6 +35,40 @@ $(document).ready( function() {
         $('#oldBrowserMessage').show();
     }
 
+    $('button#reset').on('click', function() {
+        $.ajax({
+            type: 'POST',
+            url: '/mturk/experiments/socalign1',
+            data: {'ItemNumber': 0, 'Abandoned': false, 'WorkerId': workerId},
+            datatype: 'json'
+        }).done(function() {
+            alert("Reset to zero. Reload the page to start from scratch.");
+        }).fail(function() {
+            alert("Failed to reset to zero.");
+        });
+    });
+
+    $('button#resume').on('click', function() {
+        if (typeof(Wami.startRecording) === 'function') {
+            $('#reloadResume').hide();
+            if(itemno == $('.testtrial').length) {
+                $('#page1').show();
+            } else {
+                $($('.testtrial')[itemno]).show(function() {
+                    Wami.startRecording(recorder_url + "?workerId=" +
+                    workerId +
+                    "&assignmentId=" + assignmentId +
+                    "&hitId=" + hitId +
+                    "&hash=" + amzhash +
+                    "&experiment=" + experiment +
+                    "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinishUpdate", "onError");
+                });
+            }
+        } else {
+            alert('Still waiting for recorder to become ready.');
+        }
+    });
+
     $('button#startrecordtest').on('click', function() {
         if (typeof(Wami.startRecording) === 'function') {
             $(this).attr('disabled', 'disabled');
@@ -100,7 +134,7 @@ $(document).ready( function() {
             "&hitId=" + hitId +
             "&hash=" + amzhash +
             "&experiment=SocAlign.1" +
-            "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinish", "onError");
+            "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinishUpdate", "onError");
         });
     });
 
@@ -117,7 +151,7 @@ $(document).ready( function() {
             "&hitId=" + hitId +
             "&hash=" + amzhash +
             "&experiment=SocAlign.1" +
-            "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinish", "onError");
+            "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinishUpdate", "onError");
         });
         if($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
             $('#page1').show();
@@ -236,4 +270,25 @@ $(document).ready( function() {
     });
 
     setupRecorder();
+    if (itemno === 0) { // this should happen only if starting from the beginning
+        $('#instructions').show();
+        } else { // and this should only happen if we're starting from after the 1st item
+            $('#instructions').hide();
+            $('#reloadResume').show();
+        }
 });
+
+var onRecordFinishUpdate = function() {
+    clearInterval(recordInterval);
+    $('button.stoprecord:visible').siblings('.hiddennext').click();
+    $.ajax({
+            type: 'POST',
+            url: '/mturk/experiments/socalign1',
+            data: {'ItemNumber': ++itemno, 'WorkerId': workerId},
+            datatype: 'json'
+        }).done(function(msg) {
+            if(debugmode) {
+                console.log("Updated to " + JSON.stringify(msg));
+            }
+    });
+};

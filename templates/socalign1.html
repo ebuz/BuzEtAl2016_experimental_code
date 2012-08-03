@@ -48,12 +48,12 @@
                 margin-top: 2em;
                 padding: 1em;
             }
-            #micwarning, #exposure, #testintr, #oldBrowserMessage, .testtrial, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment {display:none;}
+            #micwarning, #exposure, #testintr, #oldBrowserMessage, #reloadResume, .testtrial, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment {display:none;}
             {% if not preview %}
             #instructions, #realinstructions {display:none;}
             {% endif %}
         </style>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script type="text/javascript" src="/iso8601shim.min.js"></script>
         <script type="text/javascript" src="/mturk/modernizr.audiocanvas.js"></script>
         {% if not preview %}
@@ -68,6 +68,8 @@
             var amzhash = "{{amz.hash}}"
             var debugmode = {{debugmode}};
             var recorder_url = "{{recorder_url}}";
+            var itemno = {{startitem}};
+            var experiment = "SocAlign.1.NoContext";
         </script>
         {% endif %}
     </head>
@@ -91,6 +93,14 @@
                 <a target="_blank" href="http://www.opera.com/"><img src="/mturk/img/64-opera.png" alt=""/></a>
                 <a target="_blank" href="http://www.apple.com/safari/"><img src="/mturk/img/64-safari.png" alt=""/></a>
             </div>
+        </div>
+
+        <div id="reloadResume">
+            <p>You have already started this experiment. Resuming where you left off.</p>
+            <button type="button" id="resume">Resume</button>
+            {% if debugmode == 1 -%}
+            <button type="button" id="reset">Reset</button>
+            {%- endif %}
         </div>
 
         <div id="exposure">
