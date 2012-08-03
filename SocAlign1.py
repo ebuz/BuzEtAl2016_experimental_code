@@ -24,12 +24,14 @@ import cPickle
 import ConfigParser
 import os.path
 from hashlib import sha224
+from datetime import datetime
 from webob import Request, Response
 from webob.exc import HTTPForbidden, HTTPBadRequest
 from jinja2 import Environment, FileSystemLoader
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
+from simplejson import loads, dumps
 from models import Worker, TrialList
 
 basepath = os.path.dirname(__file__)
@@ -49,12 +51,17 @@ stims = []
 with open(os.path.join(basepath,'stims.pickle'),'r') as p:
     stims = cPickle.load(p)
 
+oldworkers = []
+with open(os.path.join(basepath,'oldworkers.pickle'),'r') as p2:
+    oldworkers = cPickle.load(p2)
+
 def check_worker_exists(workerid, session):
     try:
         worker = session.query(Worker).filter_by(workerid = workerid).one()
         return worker
     except NoResultFound:
-        worker = Worker(workerid = workerid, triallist = random_lowest_list(session))
+        #worker = Worker(workerid = workerid, triallist = random_lowest_list(session))
+        worker = Worker(workerid = workerid, triallist = static_list(session, 25))
         session.add(worker)
         session.commit()
         return worker
@@ -74,6 +81,9 @@ def random_lowest_list(session):
         # find out how many lists are the same length as the smallest
         # and return a random one from that subset
         return choice(all_lists[0:wk.count(wk[0])])
+
+def static_list(session, listno):
+    return session.query(TrialList).filter(TrialList.number == listno).one()
 
 def shuffle_filter(value):
     shuffle(value)
@@ -97,85 +107,117 @@ class SocAlign1Server(object):
 
         req = Request(environ)
 
-        env = Environment(loader=FileSystemLoader(os.path.join(basepath,'templates')))
-        env.filters['shuffle'] = shuffle_filter
-        amz_dict = {'workerId': '', 'assignmentId': '', 'hitId': ''}
-        templ, listid, condition, template, resp = [None for x in range(5)]
-        required_keys = ['assignmentId', 'hitId']
-        key_error_msg = 'Missing parameter: {0}. Required keys: {1}'
+        if req.is_xhr:
+            if not req.method == 'POST':
+                raise HTTPMethodNotAllowed("Only POST allowed", allowed='POST')
 
-        debug = False
-        if req.params.has_key('debug'):
-            debug = True if req.params['debug'] == '1' else False
+            if not req.params.has_key('WorkerId'):
+                raise HTTPBadRequest('Missing key: WorkerId')
 
-        forcelist = None
-        if req.params.has_key('list'):
-            forcelist = int(req.params['list'])
-
-        try:
-            amz_dict['assignmentId'] = req.params['assignmentId']
-            amz_dict['hitId'] = req.params['hitId']
-        except KeyError as e:
-            resp = HTTPBadRequest(key_error_msg.format(e, required_keys))
-            return resp(environ, start_response)
-
-        in_preview = True if amz_dict['assignmentId'] == 'ASSIGNMENT_ID_NOT_AVAILABLE' else False
-
-        worker = None
-        if not in_preview:
+            worker = None
             try:
-                amz_dict['workerId'] = req.params['workerId']
+                worker = session.query(Worker).filter_by(workerid = req.params['WorkerId']).one()
+            except NoResultFound:
+                raise HTTPBadRequest('Worker {} does not exist'.format(req.params['WorkerId']))
+
+            if req.params.has_key('ItemNumber'):
+                worker.lastseen = datetime.now()
+                worker.lastitem = req.params['ItemNumber']
+                #print("Setting {} to {} at {}".format(worker.workerid, worker.lastitem, worker.lastseen))
+
+            if req.params.has_key('Abandoned'):
+                if req.params['Abandoned'] == "true":
+                    worker.abandoned = True
+                    #print("{} has abandoned the hit".format(worker.workerid))
+                else:
+                    worker.abandoned = False
+
+            session.commit()
+
+            resp = Response(charset='utf8')
+            resp.content_type = 'application/json'
+            resp.text = unicode(dumps({'timestamp': worker.lastseen.isoformat(), 'item': worker.lastitem}))
+            return resp(environ, start_response)
+        else:
+            env = Environment(loader=FileSystemLoader(os.path.join(basepath,'templates')))
+            env.filters['shuffle'] = shuffle_filter
+            amz_dict = {'workerId': '', 'assignmentId': '', 'hitId': ''}
+            templ, listid, condition, template, resp = [None for x in range(5)]
+            required_keys = ['assignmentId', 'hitId']
+            key_error_msg = 'Missing parameter: {0}. Required keys: {1}'
+
+            debug = False
+            if req.params.has_key('debug'):
+                debug = True if req.params['debug'] == '1' else False
+
+            forcelist = None
+            if req.params.has_key('list'):
+                forcelist = int(req.params['list'])
+
+            try:
+                amz_dict['assignmentId'] = req.params['assignmentId']
+                amz_dict['hitId'] = req.params['hitId']
             except KeyError as e:
-                required_keys.append('workerId')
                 resp = HTTPBadRequest(key_error_msg.format(e, required_keys))
                 return resp(environ, start_response)
-            worker = check_worker_exists(amz_dict['workerId'], session)
 
-            amz_dict['hash'] = sha224("{}{}{}".format(req.params['workerId'],
-                                                  req.params['hitId'],
-                                                  req.params['assignmentId'])).hexdigest()
+            in_preview = True if amz_dict['assignmentId'] == 'ASSIGNMENT_ID_NOT_AVAILABLE' else False
 
-        currlist, soundtrials, pictrials = [[] for x in range(3)]
-        condition, survey = None, None
-        if worker:
-            if (debug and forcelist):
-                listid = forcelist
+            worker = None
+            if not in_preview:
+                try:
+                    amz_dict['workerId'] = req.params['workerId']
+                except KeyError as e:
+                    required_keys.append('workerId')
+                    resp = HTTPBadRequest(key_error_msg.format(e, required_keys))
+                    return resp(environ, start_response)
+                worker = check_worker_exists(amz_dict['workerId'], session)
+
+                amz_dict['hash'] = sha224("{}{}{}".format(req.params['workerId'],
+                                                      req.params['hitId'],
+                                                      req.params['assignmentId'])).hexdigest()
+
+            currlist, soundtrials, pictrials = [[] for x in range(3)]
+            condition, survey = None, None
+            if worker:
+                if (debug and forcelist):
+                    listid = forcelist
+                else:
+                    listid = worker.triallist.number
+                currlist = [x for x in stims if int(x['List']) == listid]
+                soundtrials = [y for y in currlist if y['TrialType'] == 'EXPOSURE']
+                pictrials = [z for z in currlist if z['TrialType'] == 'TEST']
+                # cond is same for all pictrials in a list; grab from 1st
+                condition = pictrials[0]['ExposureCondition']
+                survey = pictrials[0]['SurveyList']
             else:
-                listid = worker.triallist.number
-            currlist = [x for x in stims if int(x['List']) == listid]
-            soundtrials = [y for y in currlist if y['TrialType'] == 'EXPOSURE']
-            pictrials = [z for z in currlist if z['TrialType'] == 'TEST']
-            # cond is same for all pictrials in a list; grab from 1st
-            condition = pictrials[0]['ExposureCondition']
-            survey = pictrials[0]['SurveyList']
-        else:
-            soundtrials.append(None)
+                soundtrials.append(None)
 
-        recorder_url = 'http://' + domain
-        if port != '':
-            recorder_url += ':' + port
-        recorder_url += '/' + urlpath
+            recorder_url = 'http://' + domain
+            if port != '':
+                recorder_url += ':' + port
+            recorder_url += '/' + urlpath
 
-        template = env.get_template('socalign1.html')
-        t = template.render(soundfile = soundtrials[0], #only one sound file
-            pictrials = pictrials,
-            amz = amz_dict,
-            listid = listid,
-            survey = survey,
-            condition = condition,
-            formtype = formtype,
-            recorder_url = recorder_url,
-            debugmode = 1 if debug else 0,
-            # on preview, don't bother loading heavy flash assets
-            preview = in_preview)
+            template = env.get_template('socalign1.html')
+            t = template.render(soundfile = soundtrials[0], #only one sound file
+                pictrials = pictrials,
+                amz = amz_dict,
+                listid = listid,
+                survey = survey,
+                condition = condition,
+                formtype = formtype,
+                recorder_url = recorder_url,
+                debugmode = 1 if debug else 0,
+                # on preview, don't bother loading heavy flash assets
+                preview = in_preview)
 
-        resp = Response()
-        resp.content_type='text/html'
-        resp.unicode_body = t
-        # set a cookie that lives 2 hours
-        # IE (uggggghhhh!) won't allow the cookie.
-        #resp.set_cookie('turkrecord', amz_dict['hash'], max_age=7200, path='/', domain=domain, secure=False)
-        return resp(environ, start_response)
+            resp = Response()
+            resp.content_type='text/html'
+            resp.unicode_body = t
+            # set a cookie that lives 2 hours
+            # IE (uggggghhhh!) won't allow the cookie.
+            #resp.set_cookie('turkrecord', amz_dict['hash'], max_age=7200, path='/', domain=domain, secure=False)
+            return resp(environ, start_response)
 
 if __name__ == '__main__':
     import os
