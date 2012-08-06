@@ -132,15 +132,15 @@
                         <p style="color: red; text-decoration: blink">Recording...</p>
                         <button type="button" class="stoprecord" id="{{item.StimulusID}}">Next</button>
                         <button type="button" class="hiddennext" style="display: none !important"></button>
-                        <input type="hidden" id="end_{{item.StimulusID}}" name="end_{{item.StimulusID}}" value="NA"/>
+                        <!--<input type="hidden" id="end_{{item.StimulusID}}" name="end_{{item.StimulusID}}" value="NA"/>-->
                     </div>
                 {% endfor %}
 
 {% include 'survey.html' %}
 
             <div id="hiddenfields">
-                <input type="hidden" id="starttime" name="starttime" value="NA"/>
-                <input type="hidden" id="endaudio" name="endaudio" value="NA"/>
+                <!--<input type="hidden" id="starttime" name="starttime" value="NA"/>
+                <input type="hidden" id="endaudio" name="endaudio" value="NA"/>-->
                 <input type="hidden" id="experiment" name="experiment" value="SocAlign1"/>
                 <input type="hidden" id="list" name="List" value="{{listid}}"/>
                 <input type="hidden" id="exposurecondition" name="ExposureCondition" value="{{condition}}"/>

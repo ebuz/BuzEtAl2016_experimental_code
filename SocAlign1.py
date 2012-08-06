@@ -60,8 +60,8 @@ def check_worker_exists(workerid, session):
         worker = session.query(Worker).filter_by(workerid = workerid).one()
         return worker
     except NoResultFound:
-        #worker = Worker(workerid = workerid, triallist = random_lowest_list(session))
-        worker = Worker(workerid = workerid, triallist = static_list(session, 25))
+        worker = Worker(workerid = workerid, triallist = random_lowest_list(session))
+        #worker = Worker(workerid = workerid, triallist = static_list(session, 25))
         session.add(worker)
         session.commit()
         return worker
@@ -70,6 +70,8 @@ def random_lowest_list(session):
     all_lists = session.query(TrialList).all()
     # Starting by piloting lists NATACC.GOV.LEFT.DO and NATACC.GOV.LEFT.PO, aka 1 and 3
     #all_lists = session.query(TrialList).filter(TrialList.number.in_([1,3])).all()
+    target_lists = range(1,25) # we don't want list 25, which has no sound (aka 'EXPOSURE') trial
+    all_lists = session.query(TrialList).filter(TrialList.number.in_(target_lists)).all()
     # sort the lists from least assigned workers to most
     all_lists.sort(key = lambda x: len(x.workers))
 
@@ -216,6 +218,7 @@ class SocAlign1Server(object):
                     formtype = formtype,
                     recorder_url = recorder_url,
                     debugmode = 1 if debug else 0,
+                    startitem = startitem,
                     # on preview, don't bother loading heavy flash assets
                     preview = in_preview)
 

@@ -27,7 +27,7 @@ $(document).ready( function() {
 
         $('#exposure audio').on('ended', function() {
             if (typeof(console) !== undefined) {console.log('Audio ended');}
-            $(':input[name="endaudio"]').val(new Date().toISOString());
+            //$(':input[name="endaudio"]').val(new Date().toISOString());
             $('#exposure').hide();
             $('#testintr').show();
         });
@@ -115,7 +115,7 @@ $(document).ready( function() {
         if (Wami.getSettings().microphone.granted) {
             $('object').attr('height',0);
             $('object').attr('width',0);
-            $(':input[name="starttime"]').val(new Date().toISOString());
+            //$(':input[name="starttime"]').val(new Date().toISOString());
             $('#instructions').hide();
             $('#exposure').show(function() {
                 $('#exposure audio')[0].volume = 1;
@@ -143,7 +143,7 @@ $(document).ready( function() {
     });
 
     $('button.hiddennext').on('click', function() {
-        $(':input[name="end_' + $(this).siblings('.stoprecord').attr('id') + '"]').val(new Date().toISOString());
+        //$(':input[name="end_' + $(this).siblings('.stoprecord').attr('id') + '"]').val(new Date().toISOString());
         $(this).parent().hide().next().show(function() {
             Wami.startRecording(recorder_url + "?workerId=" +
             workerId +
