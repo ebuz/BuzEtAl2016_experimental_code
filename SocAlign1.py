@@ -67,7 +67,7 @@ def check_worker_exists(workerid, session):
         return worker
 
 def random_lowest_list(session):
-    all_lists = session.query(TrialList).all()
+    #all_lists = session.query(TrialList).all()
     # Starting by piloting lists NATACC.GOV.LEFT.DO and NATACC.GOV.LEFT.PO, aka 1 and 3
     #all_lists = session.query(TrialList).filter(TrialList.number.in_([1,3])).all()
     target_lists = range(1,25) # we don't want list 25, which has no sound (aka 'EXPOSURE') trial
