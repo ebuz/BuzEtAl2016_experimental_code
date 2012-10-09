@@ -1,4 +1,4 @@
-$(document).ready( function() {
+$(document).ready(function() {
     $(':checked').removeAttr('checked');
     $('input[name="browserid"]').val(navigator.userAgent);
     var finished = false;
@@ -8,14 +8,14 @@ $(document).ready( function() {
         nope: '/mturk/excanvas.js'
     });
 
-    if(Modernizr.audio) {
+    if (Modernizr.audio) {
         $('#instructions').show();
 
         $('#voladjust').on('play', function() {this.volume = 1;});
         $('#voladjust').on('volumechange', function() {this.volume = 1;});
         $('#voladjust').on('ended', function() {this.currentTime = 0; this.pause();});
 
-        if(debugmode) {
+        if (debugmode) {
             $('#exposure audio').attr('controls', true);
         } else {
             $('#exposure audio').attr('controls', false);
@@ -42,26 +42,26 @@ $(document).ready( function() {
             data: {'ItemNumber': 0, 'Abandoned': false, 'WorkerId': workerId},
             datatype: 'json'
         }).done(function() {
-            alert("Reset to zero. Reload the page to start from scratch.");
+            alert('Reset to zero. Reload the page to start from scratch.');
         }).fail(function() {
-            alert("Failed to reset to zero.");
+            alert('Failed to reset to zero.');
         });
     });
 
     $('button#resume').on('click', function() {
         if (typeof(Wami.startRecording) === 'function') {
             $('#reloadResume').hide();
-            if(itemno == $('.testtrial').length) {
+            if (itemno == $('.testtrial').length) {
                 $('#page1').show();
             } else {
                 $($('.testtrial')[itemno]).show(function() {
-                    Wami.startRecording(recorder_url + "?workerId=" +
+                    Wami.startRecording(recorder_url + '?workerId=' +
                     workerId +
-                    "&assignmentId=" + assignmentId +
-                    "&hitId=" + hitId +
-                    "&hash=" + amzhash +
-                    "&experiment=" + experiment +
-                    "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinishUpdate", "onError");
+                    '&assignmentId=' + assignmentId +
+                    '&hitId=' + hitId +
+                    '&hash=' + amzhash +
+                    '&experiment=' + experiment +
+                    '&filename=' + $(this).children(':button.stoprecord').attr('id'), 'onRecordStart', 'onRecordFinishUpdate', 'onError');
                 });
             }
         } else {
@@ -75,15 +75,15 @@ $(document).ready( function() {
             $('button#replaytest').attr('disabled', 'disabled');
             $('button#playbacktest').attr('disabled', 'disabled');
             $('button#endrecordtest').removeAttr('disabled');
-            Wami.startRecording(recorder_url + "?workerId=" +
+            Wami.startRecording(recorder_url + '?workerId=' +
                 workerId +
-                "&assignmentId=" + assignmentId +
-                "&hitId=" + hitId +
-                "&hash=" + amzhash +
-                "&experiment=SocAlign.1" +
-                "&filename=test", "onTestRecordStart", "onTestRecordFinish", "onError");
+                '&assignmentId=' + assignmentId +
+                '&hitId=' + hitId +
+                '&hash=' + amzhash +
+                '&experiment=SocAlign.1' +
+                '&filename=test', 'onTestRecordStart', 'onTestRecordFinish', 'onError');
         } else {
-            alert('Still waiting for recorder to become ready.')
+            alert('Still waiting for recorder to become ready.');
         }
     });
 
@@ -97,13 +97,13 @@ $(document).ready( function() {
     });
 
     $('button#replaytest').on('click', function() {
-        Wami.startPlaying(recorder_url + "?workerId=" +
+        Wami.startPlaying(recorder_url + '?workerId=' +
             workerId +
-            "&assignmentId=" + assignmentId +
-            "&hitId=" + hitId +
-            "&hash=" + amzhash +
-            "&experiment=SocAlign.1" +
-            "&filename=test", "onPlayStart", "onPlayFinish", "onError");
+            '&assignmentId=' + assignmentId +
+            '&hitId=' + hitId +
+            '&hash=' + amzhash +
+            '&experiment=SocAlign.1' +
+            '&filename=test', 'onPlayStart', 'onPlayFinish', 'onError');
     });
 
     $('button#endsetup').on('click', function() {
@@ -111,10 +111,10 @@ $(document).ready( function() {
         $('#realinstructions').show();
     });
 
-    $('button#endinstr').on('click', function(){
+    $('button#endinstr').on('click', function() {
         if (Wami.getSettings().microphone.granted) {
-            $('object').attr('height',0);
-            $('object').attr('width',0);
+            $('object').attr('height', 0);
+            $('object').attr('width', 0);
             //$(':input[name="starttime"]').val(new Date().toISOString());
             $('#instructions').hide();
             $('#exposure').show(function() {
@@ -122,19 +122,19 @@ $(document).ready( function() {
                 $('#exposure audio')[0].play();
             });
         } else {
-            alert("You have to allow microphone access for this experiment!");
+            alert('You have to allow microphone access for this experiment!');
         }
     });
-    $('button#starttest').on('click', function(){
+    $('button#starttest').on('click', function() {
         $('#testintr').hide();
         $('.testtrial').first().show(function() {
-            Wami.startRecording(recorder_url + "?workerId=" +
+            Wami.startRecording(recorder_url + '?workerId=' +
             workerId +
-            "&assignmentId=" + assignmentId +
-            "&hitId=" + hitId +
-            "&hash=" + amzhash +
-            "&experiment=SocAlign.1" +
-            "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinishUpdate", "onError");
+            '&assignmentId=' + assignmentId +
+            '&hitId=' + hitId +
+            '&hash=' + amzhash +
+            '&experiment=SocAlign.1' +
+            '&filename=' + $(this).children(':button.stoprecord').attr('id'), 'onRecordStart', 'onRecordFinishUpdate', 'onError');
         });
     });
 
@@ -145,21 +145,21 @@ $(document).ready( function() {
     $('button.hiddennext').on('click', function() {
         //$(':input[name="end_' + $(this).siblings('.stoprecord').attr('id') + '"]').val(new Date().toISOString());
         $(this).parent().hide().next().show(function() {
-            Wami.startRecording(recorder_url + "?workerId=" +
+            Wami.startRecording(recorder_url + '?workerId=' +
             workerId +
-            "&assignmentId=" + assignmentId +
-            "&hitId=" + hitId +
-            "&hash=" + amzhash +
-            "&experiment=SocAlign.1" +
-            "&filename=" + $(this).children(':button.stoprecord').attr('id'), "onRecordStart", "onRecordFinishUpdate", "onError");
+            '&assignmentId=' + assignmentId +
+            '&hitId=' + hitId +
+            '&hash=' + amzhash +
+            '&experiment=SocAlign.1' +
+            '&filename=' + $(this).children(':button.stoprecord').attr('id'), 'onRecordStart', 'onRecordFinishUpdate', 'onError');
         });
-        if($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
+        if ($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
             $('#page1').show();
         }
     });
 
     $('#page1 button.next').on('click', function() {
-        $('#page1 .survquest').css('color','black');
+        $('#page1 .survquest').css('color', 'black');
         var p1valid = true;
         $('#page1 .survquest').each(function() {
             var value = $(this).attr('id');
@@ -178,7 +178,7 @@ $(document).ready( function() {
     });
 
     $('#page2 button.next').on('click', function() {
-        $('#page2 .survquest').css('color','black');
+        $('#page2 .survquest').css('color', 'black');
         var p2valid = true;
         $('#page2 .survquest').each(function() {
             var value = $(this).attr('id');
@@ -197,20 +197,20 @@ $(document).ready( function() {
     });
 
     $('#page3 button.next').on('click', function() {
-        $('#page3 .survquest').css('color','black');
+        $('#page3 .survquest').css('color', 'black');
         var p3valid = true;
 
-        if($('[name="q.participant.age"]').val() === '') {
+        if ($('[name="q.participant.age"]').val() === '') {
             $('#age').css('color', 'red');
             p3valid = false;
         }
 
-        if($('[name="q.participant.education"]').val() === '') {
+        if ($('[name="q.participant.education"]').val() === '') {
             $('#education').css('color', 'red');
             p3valid = false;
         }
 
-        if($('[name="q.participant.gender"]').val() === '' &&
+        if ($('[name="q.participant.gender"]').val() === '' &&
            $('[name="q.participant.gender.other"]').val() === '') {
             $('#gender').css('color', 'red');
             p3valid = false;
@@ -234,7 +234,7 @@ $(document).ready( function() {
     });
 
     $('#page4 button#endsurvey').on('click', function() {
-        $('#page4 .survquest').css('color','black');
+        $('#page4 .survquest').css('color', 'black');
         var p4valid = true;
         $('#page4 .survquest').each(function() {
             var value = $(this).attr('id');
@@ -254,8 +254,8 @@ $(document).ready( function() {
 
     var wrapup = function() {
         $('#debriefing').show();
-        $("#comment").show(function(){$('#commentarea').focus();});
-        $("#submit").show(function() {
+        $('#comment').show(function() {$('#commentarea').focus();});
+        $('#submit').show(function() {
             $(this).removeAttr('disabled');
             finished = true;
         });
@@ -287,8 +287,8 @@ var onRecordFinishUpdate = function() {
             data: {'ItemNumber': ++itemno, 'WorkerId': workerId},
             datatype: 'json'
         }).done(function(msg) {
-            if(debugmode) {
-                console.log("Updated to " + JSON.stringify(msg));
+            if (debugmode) {
+                console.log('Updated to ' + JSON.stringify(msg));
             }
     });
 };
