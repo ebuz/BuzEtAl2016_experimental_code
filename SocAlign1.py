@@ -2,7 +2,7 @@
 
 #Author: Andrew Watts
 #
-#    Copyright 2009-2011 Andrew Watts and
+#    Copyright 2009-2012 Andrew Watts and
 #        the University of Rochester BCS Department
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -234,13 +234,13 @@ if __name__ == '__main__':
     app = urlmap.URLMap()
     app['/mturk/stimuli/socalign1'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'stimuli'))
     app['/mturk/img'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'img'))
-    app['/iso8601shim.min.js'] = fileapp.FileApp('iso8601shim.min.js')
+    #app['/iso8601shim.min.js'] = fileapp.FileApp('iso8601shim.min.js')
     app['/mturk/recorder.js'] = fileapp.FileApp('recorder.js')
     app['/mturk/wami-helpers.js'] = fileapp.FileApp('wami-helpers.js')
     app['/mturk/socalign1.js'] = fileapp.FileApp('socalign1.js')
-    app['/mturk/modernizr.audioonly.js'] = fileapp.FileApp('modernizr.audioonly.js')
+    #app['/mturk/modernizr.audioonly.js'] = fileapp.FileApp('modernizr.audioonly.js')
     app['/mturk/modernizr.audiocanvas.js'] = fileapp.FileApp('modernizr.audiocanvas.js')
-    app['/mturk/modernizr.canvas.js'] = fileapp.FileApp('modernizr.canvas.js')
+    #app['/mturk/modernizr.canvas.js'] = fileapp.FileApp('modernizr.canvas.js')
     app['/mturk/excanvas.js'] = fileapp.FileApp('excanvas.js')
     app['/mturk/Wami.swf'] = fileapp.FileApp('Wami.swf')
     app['/mturk/experiments/socalign1'] = SocAlign1Server(app)
