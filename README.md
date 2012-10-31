@@ -46,7 +46,7 @@ preview version of the experiment a worker browsing on MTurk would see instead
 of the real thing.
 
 To make it work, you also need to run a copy of WavUploader. If you check out a
-copy of it and run 'python wavuploader.py`, it will serve at 
+copy of it and run `python wavuploader.py`, it will serve at 
 <http://127.0.0.1:8181/wav_uploader>
 
 ### Apache ###
