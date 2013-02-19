@@ -1,160 +1,274 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>SocAlign1</title>
-        <meta charset=utf-8"/>
-        <style type="text/css">
-            body {
-                width: 800px;
-            }
-            div.testtrial {
-                text-align: center;
-                width: 750px;
-                border: 1px solid black;
-                margin: 2em;
-            }
-            div#exposure div {
-                margin-top: 1ex;
-                margin-left: 1em;
-            }
-            table.survquest {
-                width: 400px;
-                border: solid 1px;
-                margin: 2em;
-            }
-            table.survquest td {
-                text-align: center;
-                vertical-align:top;
-                width: 14%;
-            }
-            table.survquest p.sentence, #textqs span {
-                width: 400px;
-                font-size: large;
-                font-weight: bold;
-                text-align: center;
-            }
-            label {
-                font-weight: bold;
-                font-size: 175%;
-                border: 1px dashed black;
-            }
-            #survey ul {
-                list-style: none;
-            }
-            #textqs li {
-                width: 400px;
-                border: 1px solid black;
-                margin-right: -1em;
-                margin-top: 2em;
-                padding: 1em;
-            }
-            #micwarning, #exposure, #testintr, #oldBrowserMessage, #reloadResume, .testtrial, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment {display:none;}
-            {% if not preview %}
-            #instructions, #realinstructions {display:none;}
-            {% endif %}
-        </style>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-        <script type="text/javascript" src="/iso8601shim.min.js"></script>
-        <script type="text/javascript" src="/mturk/modernizr.audiocanvas.js"></script>
-        {% if not preview %}
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
-        <script type="text/javascript" src="/mturk/recorder.js"></script>
-        <script type="text/javascript" src="/mturk/wami-helpers.js"></script>
-        <script type="text/javascript" src="/mturk/socalign1.js"></script>
-        <script type="text/javascript">
-            var hitId = "{{amz.hitId}}";
-            var workerId = "{{amz.workerId}}";
-            var assignmentId = "{{amz.assignmentId}}";
-            var amzhash = "{{amz.hash}}"
-            var debugmode = {{debugmode}};
-            var recorder_url = "{{recorder_url}}";
-            var itemno = {{startitem}};
-            var experiment = "SocAlign.1";
-        </script>
-        {% endif %}
+  <head>
+    <title>SocAlign1</title>
+    <meta charset=utf-8"/>
+    <style type="text/css">
+      body {
+        width: 100%;
+        margin:0;
+        padding:6;
+        text-align:center;
+        border: 3px double black;
+      }
+      div#testing {
+        position:relative;
+        width: 98%;
+        height: 600px;
+        text-align: center;
+        border: 2px solid black;
+        margin: 0 auto;
+      }
+      div#startmessage {
+        position:relative;
+        width: 98%;
+        height: 400px;
+        text-align: center;
+        border: 2px dotted black;
+        margin: 0 auto;
+      }
+      div.testtrial {
+        position:relative;
+        width: 80%;
+        height: 400px;
+        text-align: center;
+        border: 2px dashed black;
+        float:0 auto;
+        margin: 0 auto;
+        top: -50%;
+      }
+      div.stimuliframe {
+        position: relative;
+        top: 50%;
+        width: 70%;
+        text-align: center;
+        float:0 auto;
+        margin: 0 auto;
+        border: 2px solid black;
+      }
+      div.position1{
+        float:left;
+        text-align: center;
+        width:30%;
+        border: 2px solid white;
+      }
+      div.position2{
+        display: inline-block;
+        text-align: center;
+        float:0 auto;
+        width:30%;
+        border: 2px solid white;
+      }
+      div.position3{
+        float:right;
+        text-align: center;
+        width:30%;
+        border: 2px solid white;
+      }
+      div.recordingindicator {
+        width: 5%;
+        text-align: center;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        border: 2px solid black;
+      }
+      div.timerbar {
+        position: absolute;
+        width: 100%;
+        height: 5%;
+        bottom: 0%;
+        right: 0%;
+        background-color: red;
+      }
+      div.correctmsg {
+        position: relative;
+        top: 50%;
+        width: 70%;
+        text-align: center;
+        float:0 auto;
+        margin: 0 auto;
+      }
+      div.tooslowmsg {
+        position: relative;
+        top: 50%;
+        width: 70%;
+        text-align: center;
+        float:0 auto;
+        margin: 0 auto;
+      }
+      div.pickedwrongmsg {
+        position: relative;
+        top: 50%;
+        width: 70%;
+        text-align: center;
+        float:0 auto;
+        margin: 0 auto;
+      }
+      div#exposure div {
+        margin-top: 1ex;
+        margin-left: 1em;
+      }
+      table.survquest {
+        width: 400px;
+        border: solid 1px;
+        margin: 2em;
+      }
+      table.survquest td {
+        text-align: center;
+        vertical-align:top;
+        width: 14%;
+      }
+      table.survquest p.sentence, #textqs span {
+        width: 400px;
+        font-size: large;
+        font-weight: bold;
+        text-align: center;
+      }
+      label {
+        font-weight: bold;
+        font-size: 175%;
+        border: 1px dashed black;
+      }
+      #survey ul {
+        list-style: none;
+      }
+      #textqs li {
+        width: 400px;
+        border: 1px solid black;
+        margin-right: -1em;
+        margin-top: 2em;
+        padding: 1em;
+      }
+      #micwarning, #exposure, #startmessage, #oldBrowserMessage, #reloadResume, .testtrial, .correctmsg, .tooslowmsg, .pickedwrongmsg, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment {display:none;}
+      {% if not preview %}
+      #instructions, #realinstructions {display:none;}
+      {% endif %}
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/mturk/iso8601shim.min.js"></script>
+    <script type="text/javascript" src="/mturk/jquery.timers-1.2.js"></script>
+    <script type="text/javascript" src="/mturk/modernizr.audiocanvas.js"></script>
+    {% if not preview %}
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+    <script type="text/javascript" src="/mturk/recorder.js"></script>
+    <script type="text/javascript" src="/mturk/wami-helpers.js"></script>
+    <script type="text/javascript" src="/mturk/socalign1.js"></script>
+    <script type="text/javascript">
+      var hitId = "{{amz.hitId}}";
+      var workerId = "{{amz.workerId}}";
+      var assignmentId = "{{amz.assignmentId}}";
+      var amzhash = "{{amz.hash}}"
+      var debugmode = {{debugmode}};
+      var recorder_url = "{{recorder_url}}";
+      var itemno = {{startitem}};
+      var experiment = "SocAlign.1";
+    </script>
+    {% endif %}
     </head>
 
     <body>
-{% include 'instructions.html' %}
-        {#
-            Loading items is not necessary on preview. In fact, the flash in
-            particular takes a *long* time to load.
-        #}
-        {% if not preview %}
-        <div id="wami"></div>
+      {% include 'instructions.html' %}
+      {#
+      Loading items is not necessary on preview. In fact, the flash in
+      particular takes a *long* time to load.
+      #}
+      {% if not preview %}
+      <div id="wami"></div>
 
-        <div id="oldBrowserMessage">
-            <p>Your browser does not appear to be compatible with the audio elements used in this HIT. </p>
-            <p>Please <strong>do not accept this HIT</strong>, your results will be automatically rejected.  </p>
-            <p>If you'd like to do this HIT, download an up-to-date version of one of these browsers and try again:</p>
-            <div id="browserIcons">
-                <a target="_blank" href="http://www.google.com/chrome"><img src="/mturk/img/64-chrome.png" alt=""/></a>
-                <a target="_blank" href="http://www.mozilla.com/en-US/firefox/new/"><img src="/mturk/img/64-firefox.png" alt=""/></a>
-                <a target="_blank" href="http://www.opera.com/"><img src="/mturk/img/64-opera.png" alt=""/></a>
-                <a target="_blank" href="http://www.apple.com/safari/"><img src="/mturk/img/64-safari.png" alt=""/></a>
-            </div>
+      <div id="oldBrowserMessage">
+        <p>Your browser does not appear to be compatible with the audio elements used in this HIT. </p>
+        <p>Please <strong>do not accept this HIT</strong>, your results will be automatically rejected.  </p>
+        <p>If you'd like to do this HIT, download an up-to-date version of one of these browsers and try again:</p>
+        <div id="browserIcons">
+          <a target="_blank" href="http://www.google.com/chrome"><img src="/mturk/img/64-chrome.png" alt=""/></a>
+          <a target="_blank" href="http://www.mozilla.com/en-US/firefox/new/"><img src="/mturk/img/64-firefox.png" alt=""/></a>
+          <a target="_blank" href="http://www.opera.com/"><img src="/mturk/img/64-opera.png" alt=""/></a>
+          <a target="_blank" href="http://www.apple.com/safari/"><img src="/mturk/img/64-safari.png" alt=""/></a>
         </div>
+      </div>
 
-        <div id="reloadResume">
-            <p>You have already started this experiment. Resuming where you left off.</p>
-            <button type="button" id="resume">Resume</button>
-            {% if debugmode == 1 -%}
-            <button type="button" id="reset">Reset</button>
-            {%- endif %}
+      <div id="reloadResume">
+        <p>You have already started this experiment. Resuming where you left off.</p>
+        <button type="button" id="resume">Resume</button>
+        {% if debugmode == 1 -%}
+        <button type="button" id="reset">Reset</button>
+        {%- endif %}
+      </div>
+
+      <div id="exposure">
+        <p>Phase 1: Listen to a story</p>
+        <audio>
+        <source src="/mturk/stimuli/socalign1/{{soundfile.FileName}}.ogg" type="audio/ogg" />
+        <source src="/mturk/stimuli/socalign1/{{soundfile.FileName}}.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+        </audio>
+      </div>
+
+      <div id="testing">
+        <div id="startmessage">
+          <div id="partnersync">
+            <p>Please wait a moment while we sync you with a partner, this generally takes 30 second to 2 minutes.</p>
+            <p id="partnersynstatus"></p><img src="/mturk/img/loading_circle.gif" alt=""/>
+          </div>
+          <button type="button" id="starttest" disabled>Start</button>
         </div>
-
-        <div id="exposure">
-            <p>Phase 1: Listen to a story</p>
-            <audio>
-                <source src="/mturk/stimuli/socalign1/{{soundfile.FileName}}.ogg" type="audio/ogg" />
-                <source src="/mturk/stimuli/socalign1/{{soundfile.FileName}}.mp3" type="audio/mpeg" />
-                Your browser does not support the audio element.
-            </audio>
-        </div>
-
-        <div id="testing">
-            <div id="testintr">
-                <p>Phase 2: Picture description.</p>
-                <button type="button" id="starttest">Start</button>
-            </div>
-            {% if formtype == 'sandbox' %}
-            <form id="results" method="post" action="https://workersandbox.mturk.com/mturk/externalSubmit">
-            {% elif formtype == 'live' %}
-            <form id="results" method="post" action="https://www.mturk.com/mturk/externalSubmit">
-            {% elif formtype == 'testing' %}
-            <form id="results" method="post" action="http://www.hlp.rochester.edu/cgi-bin/postdetails.pl">
-            {% else %}
-            <form id="results" method="post" action="">
-            {% endif %}
-                {% for item in pictrials %}
-                    <div id="pic{{loop.index}}" class="testtrial">
-                        <img src="/mturk/stimuli/socalign1/{{item.FileName}}" alt="" width="{{item.PictureWidth}}" height="{{item.PictureHeight}}"/><br/>
-                        <p style="color: red; text-decoration: blink">Recording...</p>
-                        <button type="button" class="stoprecord" id="{{item.StimulusID}}">Next</button>
-                        <button type="button" class="hiddennext" style="display: none !important"></button>
-                        <!--<input type="hidden" id="end_{{item.StimulusID}}" name="end_{{item.StimulusID}}" value="NA"/>-->
-                    </div>
-                {% endfor %}
-
-{% include 'survey.html' %}
-
-            <div id="hiddenfields">
-                <!--<input type="hidden" id="starttime" name="starttime" value="NA"/>
-                <input type="hidden" id="endaudio" name="endaudio" value="NA"/>-->
-                <input type="hidden" id="experiment" name="experiment" value="SocAlign1"/>
-                <input type="hidden" id="list" name="List" value="{{listid}}"/>
-                <input type="hidden" id="exposurecondition" name="ExposureCondition" value="{{condition}}"/>
-                <input type="hidden" id="assignmentId" name="assignmentId" value="{{amz.assignmentId}}"/>
-                <input type="hidden" id="browserid" name="browserid" value="NA"/>
-            </div>
-                <div id="comment">
-                    <p>Feedback on this HIT (optional):</p>
-                    <p><textarea id="commentarea" name="comment" cols="80" rows="3"></textarea></p>
-                </div>
-                <button type="submit" name="submit" id="submit" disabled="disabled">Submit</button>
-            </form>
-        </div>
+        {% if formtype == 'sandbox' %}
+        <form id="results" method="post" action="https://workersandbox.mturk.com/mturk/externalSubmit">
+        {% elif formtype == 'live' %}
+        <form id="results" method="post" action="https://www.mturk.com/mturk/externalSubmit">
+        {% elif formtype == 'testing' %}
+        <form id="results" method="post" action="http://www.hlp.rochester.edu/cgi-bin/postdetails.pl">
+        {% else %}
+        <form id="results" method="post" action="">
         {% endif %}
+        {% for item in pictrials %}
+        <div id="trial{{loop.index}}" class="testtrial">
+            <div class="recordingindicator">
+              <p style="color: red; text-decoration: blink; font-size: 3em">&#149;</p>
+            </div>
+            <div class="stimuliframe">
+              <div class="position1">{{item.Position1}}</div>
+              <div class="position2">{{item.Position2}}</div>
+              <div class="position3">{{item.Position3}}</div>
+            </div>
+            <div class="timerbar"></div>
+            <div class="correctmsg">
+              <p>good job</p>
+            </div>
+            <div class="tooslowmsg">
+              <p>too slow</p>
+            </div>
+            <div class="pickedwrongmsg">
+              <p>partner was wrong</p>
+            </div>
+            <button type="button" class="stoprecord" id="{{item.ItemID}}">Next</button>
+            <button type="button" class="hiddennext" style="display: none !important"></button>
+            <input type="hidden" class = "targetposition", id="targetposition_{{item.ItemID}}" name="targetposition_{{item.ItemID}}" value="{{item.TargetCompetitorPositions}}"/>
+            <input type="hidden" class = "partnerresponsetime", id="partnerresponsetime_{{item.ItemID}}" name="partnerresponsetime_{{item.ItemID}}" value="{{item.ResponseTime}}"/>
+            <input type="hidden" class = "partnerfeedback", id="partnerfeedback_{{item.ResponseCorrect}}" name="partnerfeedback_{{item.ItemID}}" value="{{item.PartnerFeedback}}"/>
+          </div>
+        {% endfor %}
+
+        {% include 'survey.html' %}
+
+          <div id="hiddenfields">
+            <!--<input type="hidden" id="starttime" name="starttime" value="NA"/>
+            <input type="hidden" id="endaudio" name="endaudio" value="NA"/>-->
+            <input type="hidden" id="experiment" name="experiment" value="SocAlign1"/>
+            <input type="hidden" id="list" name="List" value="{{ListID}}"/>
+            <input type="hidden" id="exposurecondition" name="ExposureCondition" value="{{Condition}}"/>
+            <input type="hidden" id="assignmentId" name="assignmentId" value="{{amz.assignmentId}}"/>
+            <input type="hidden" id="browserid" name="browserid" value="NA"/>
+          </div>
+          <div id="comment">
+            <p>Feedback on this HIT (optional):</p>
+            <p><textarea id="commentarea" name="comment" cols="80" rows="3"></textarea></p>
+          </div>
+          <button type="submit" name="submit" id="submit" disabled="disabled">Submit</button>
+        </form>
+      </div>
+      {% endif %}
     </body>
 
-</html>
+  </html>

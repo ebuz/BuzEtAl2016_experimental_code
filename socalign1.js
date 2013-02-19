@@ -29,11 +29,23 @@ $(document).ready(function() {
             if (typeof(console) !== undefined) {console.log('Audio ended');}
             //$(':input[name="endaudio"]').val(new Date().toISOString());
             $('#exposure').hide();
-            $('#testintr').show();
+            partner_sync_start();
         });
     } else {
         $('#oldBrowserMessage').show();
     }
+
+    var partner_sync_start function () {
+      $('#startmessage').show();
+      $('#partnerstatus').text("Waiting for next available partner");
+      $('#partnerstatus').oneTime(11520, function(){
+          $(this).text("Found partner, syncing software with eachother");
+          $(this).oneTime(9250, function(){
+            $(this).text("Synced! Partner is ready, click start");
+            $('#starttest').removeAttr("disabled");
+          });
+      });
+    };
 
     $('button#reset').on('click', function() {
         $.ajax({
@@ -125,8 +137,9 @@ $(document).ready(function() {
             alert('You have to allow microphone access for this experiment!');
         }
     });
+
     $('button#starttest').on('click', function() {
-        $('#testintr').hide();
+        $('#startmessage').hide();
         $('.testtrial').first().show(function() {
             Wami.startRecording(recorder_url + '?workerId=' +
             workerId +

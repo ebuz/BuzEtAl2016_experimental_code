@@ -1,4 +1,4 @@
-# SocAlign1 #
+# VisualConfusabilityMturk #
 
 ## External Python dependancies: ##
 All of these should be installable with easy\_install or pip
