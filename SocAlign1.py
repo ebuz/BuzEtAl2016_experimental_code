@@ -20,6 +20,7 @@
 #
 
 from random import choice, shuffle
+import sys
 import cPickle
 import ConfigParser
 import os.path
@@ -52,8 +53,11 @@ with open(os.path.join(basepath,'stims.pickle'),'r') as p:
     stims = cPickle.load(p)
 
 oldworkers = []
-with open(os.path.join(basepath,'oldworkers.pickle'),'r') as p2:
-    oldworkers = cPickle.load(p2)
+try:
+  with open(os.path.join(basepath,'oldworkers.pickle'),'r') as p2:
+      oldworkers = cPickle.load(p2)
+except IOError:
+  pass
 
 def check_worker_exists(workerid, session):
     try:
@@ -70,7 +74,7 @@ def random_lowest_list(session):
     #all_lists = session.query(TrialList).all()
     # Starting by piloting lists NATACC.GOV.LEFT.DO and NATACC.GOV.LEFT.PO, aka 1 and 3
     #all_lists = session.query(TrialList).filter(TrialList.number.in_([1,3])).all()
-    target_lists = range(1,25) # we don't want list 25, which has no sound (aka 'EXPOSURE') trial
+    target_lists = range(1,3) # we don't want list 25, which has no sound (aka 'EXPOSURE') trial
     all_lists = session.query(TrialList).filter(TrialList.number.in_(target_lists)).all()
     # sort the lists from least assigned workers to most
     all_lists.sort(key = lambda x: len(x.workers))
@@ -179,21 +183,22 @@ class SocAlign1Server(object):
                                                       req.params['hitId'],
                                                       req.params['assignmentId'])).hexdigest()
 
-            currlist, soundtrials, pictrials = [[] for x in range(3)]
+            currlist, pictrials = [[] for x in range(2)]
             condition, survey = None, None
             if worker:
                 if (debug and forcelist):
                     listid = forcelist
                 else:
                     listid = worker.triallist.number
-                currlist = [x for x in stims if int(x['List']) == listid]
-                soundtrials = [y for y in currlist if y['TrialType'] == 'EXPOSURE']
-                pictrials = [z for z in currlist if z['TrialType'] == 'TEST']
-                # cond is same for all pictrials in a list; grab from 1st
-                condition = pictrials[0]['ExposureCondition']
-                survey = pictrials[0]['SurveyList']
+                listid = 0
+                currlist = [x for x in stims if int(x['ListID']) == listid]
+                testtrials = [z for z in currlist if z['TrialType'] == 'TEST']
+                # feedback condition is the same for a given list
+                feedbackcondition = testtrials[0]['PartnerFeedbackCondition']
+                # feedback condition is the same for a given list
+                survey = testtrials[0]['SurveyList']
             else:
-                soundtrials.append(None)
+                pass
 
             recorder_url = 'http://' + domain
             if port != '':
@@ -209,12 +214,12 @@ class SocAlign1Server(object):
                 if (type(worker) != type(None)):
                     startitem = worker.lastitem
                 template = env.get_template('socalign1.html')
-                t = template.render(soundfile = soundtrials[0], #only one sound file
-                    pictrials = pictrials,
+                t = template.render(
+                    testtrials = testtrials,
                     amz = amz_dict,
                     listid = listid,
                     survey = survey,
-                    condition = condition,
+                    feedbackcondition = feedbackcondition,
                     formtype = formtype,
                     recorder_url = recorder_url,
                     debugmode = 1 if debug else 0,
@@ -243,6 +248,6 @@ if __name__ == '__main__':
     app['/mturk/modernizr.audiocanvas.js'] = fileapp.FileApp('modernizr.audiocanvas.js')
     #app['/mturk/modernizr.canvas.js'] = fileapp.FileApp('modernizr.canvas.js')
     app['/mturk/excanvas.js'] = fileapp.FileApp('excanvas.js')
-    app['/mturk/Wami.swf'] = fileapp.FileApp('Wami.swf')
+    app['/mturk/experiments/Wami.swf'] = fileapp.FileApp('Wami.swf')
     app['/mturk/experiments/socalign1'] = SocAlign1Server(app)
     httpserver.serve(app, host='127.0.0.1', port=8080)

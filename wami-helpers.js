@@ -125,7 +125,7 @@ var onTestRecordFinish = function() {
     "&assignmentId=" + assignmentId +
     "&hitId=" + hitId +
     "&hash=" + amzhash +
-    "&experiment=" + experiment +
+    "&experiment=SocAlign.1" +
     "&filename=test", "onPlayStart", "onPlayFinish", "onError");
 
     //var micmean = miclevel.reduce(function(a,b) {return a+b;}) / miclevel.length;

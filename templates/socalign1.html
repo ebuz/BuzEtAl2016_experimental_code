@@ -9,14 +9,12 @@
         margin:0;
         padding:6;
         text-align:center;
-        border: 3px double black;
       }
       div#testing {
         position:relative;
         width: 98%;
         height: 600px;
         text-align: center;
-        border: 2px solid black;
         margin: 0 auto;
       }
       div#startmessage {
@@ -24,7 +22,6 @@
         width: 98%;
         height: 400px;
         text-align: center;
-        border: 2px dotted black;
         margin: 0 auto;
       }
       div.testtrial {
@@ -32,7 +29,6 @@
         width: 80%;
         height: 400px;
         text-align: center;
-        border: 2px dashed black;
         float:0 auto;
         margin: 0 auto;
         top: -50%;
@@ -44,7 +40,6 @@
         text-align: center;
         float:0 auto;
         margin: 0 auto;
-        border: 2px solid black;
       }
       div.position1{
         float:left;
@@ -71,7 +66,6 @@
         position: absolute;
         right: 0px;
         top: 0px;
-        border: 2px solid black;
       }
       div.timerbar {
         position: absolute;
@@ -81,23 +75,14 @@
         right: 0%;
         background-color: red;
       }
-      div.correctmsg {
-        position: relative;
+      div.feedback {
+        position: absolute;
         top: 50%;
         width: 70%;
         text-align: center;
-        float:0 auto;
-        margin: 0 auto;
+        right: 15%;
       }
-      div.tooslowmsg {
-        position: relative;
-        top: 50%;
-        width: 70%;
-        text-align: center;
-        float:0 auto;
-        margin: 0 auto;
-      }
-      div.pickedwrongmsg {
+      #partnersyncstatus {
         position: relative;
         top: 50%;
         width: 70%;
@@ -140,7 +125,7 @@
         margin-top: 2em;
         padding: 1em;
       }
-      #micwarning, #exposure, #startmessage, #oldBrowserMessage, #reloadResume, .testtrial, .correctmsg, .tooslowmsg, .pickedwrongmsg, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment {display:none;}
+      #micwarning, #testing, #startmessage, #oldBrowserMessage, #reloadResume, .testtrial, .feedback, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment {display:none;}
       {% if not preview %}
       #instructions, #realinstructions {display:none;}
       {% endif %}
@@ -196,20 +181,11 @@
         {%- endif %}
       </div>
 
-      <div id="exposure">
-        <p>Phase 1: Listen to a story</p>
-        <audio>
-        <source src="/mturk/stimuli/socalign1/{{soundfile.FileName}}.ogg" type="audio/ogg" />
-        <source src="/mturk/stimuli/socalign1/{{soundfile.FileName}}.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-        </audio>
-      </div>
-
       <div id="testing">
         <div id="startmessage">
           <div id="partnersync">
             <p>Please wait a moment while we sync you with a partner, this generally takes 30 second to 2 minutes.</p>
-            <p id="partnersynstatus"></p><img src="/mturk/img/loading_circle.gif" alt=""/>
+            <p id="partnersyncstatus"></p><img id="syncicon" src="/mturk/img/loading_circle.gif" alt=""/>
           </div>
           <button type="button" id="starttest" disabled>Start</button>
         </div>
@@ -222,10 +198,13 @@
         {% else %}
         <form id="results" method="post" action="">
         {% endif %}
-        {% for item in pictrials %}
+        {% for item in testtrials %}
         <div id="trial{{loop.index}}" class="testtrial">
             <div class="recordingindicator">
               <p style="color: red; text-decoration: blink; font-size: 3em">&#149;</p>
+            </div>
+            <div class="feedback">
+              <p class="feedbackmsg">You and your partner were too slow</p>
             </div>
             <div class="stimuliframe">
               <div class="position1">{{item.Position1}}</div>
@@ -233,19 +212,10 @@
               <div class="position3">{{item.Position3}}</div>
             </div>
             <div class="timerbar"></div>
-            <div class="correctmsg">
-              <p>good job</p>
-            </div>
-            <div class="tooslowmsg">
-              <p>too slow</p>
-            </div>
-            <div class="pickedwrongmsg">
-              <p>partner was wrong</p>
-            </div>
-            <button type="button" class="stoprecord" id="{{item.ItemID}}">Next</button>
+            <button type="button" class="stoprecord" id="{{item.ItemID}}" style="display: none !important">Next</button>
             <button type="button" class="hiddennext" style="display: none !important"></button>
             <input type="hidden" class = "targetposition", id="targetposition_{{item.ItemID}}" name="targetposition_{{item.ItemID}}" value="{{item.TargetCompetitorPositions}}"/>
-            <input type="hidden" class = "partnerresponsetime", id="partnerresponsetime_{{item.ItemID}}" name="partnerresponsetime_{{item.ItemID}}" value="{{item.ResponseTime}}"/>
+            <input type="hidden" class = "partnerresponsetime", id="partnerresponsetime_{{item.ItemID}}" name="partnerresponsetime_{{item.ItemID}}" value="{{item.PartnerResponseTime}}"/>
             <input type="hidden" class = "partnerfeedback", id="partnerfeedback_{{item.ResponseCorrect}}" name="partnerfeedback_{{item.ItemID}}" value="{{item.PartnerFeedback}}"/>
           </div>
         {% endfor %}
@@ -256,8 +226,8 @@
             <!--<input type="hidden" id="starttime" name="starttime" value="NA"/>
             <input type="hidden" id="endaudio" name="endaudio" value="NA"/>-->
             <input type="hidden" id="experiment" name="experiment" value="SocAlign1"/>
-            <input type="hidden" id="list" name="List" value="{{ListID}}"/>
-            <input type="hidden" id="exposurecondition" name="ExposureCondition" value="{{Condition}}"/>
+            <input type="hidden" id="list" name="ListID" value="{{ListID}}"/>
+            <input type="hidden" id="exposurecondition" name="PartnerFeedbackCondition" value="{{feedbackcondition}}"/>
             <input type="hidden" id="assignmentId" name="assignmentId" value="{{amz.assignmentId}}"/>
             <input type="hidden" id="browserid" name="browserid" value="NA"/>
           </div>

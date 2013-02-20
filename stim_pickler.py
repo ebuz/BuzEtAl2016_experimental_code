@@ -22,7 +22,7 @@ import cPickle
 from csv import DictReader
 
 stims = []
-with open('socalign1.csv', 'r') as stimfile:
+with open('stimuli.csv', 'rUb') as stimfile:
     stims = list(DictReader(stimfile))
 
 with open('stims.pickle', 'w') as picklefile:
