@@ -2,7 +2,7 @@
 
 #Author: Andrew Watts
 #
-#    Copyright 2009-2012 Andrew Watts and
+#    Copyright 2009-2013 Andrew Watts and
 #        the University of Rochester BCS Department
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,9 +19,13 @@
 #    If not, see <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>.
 #
 
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from __future__ import print_function
+
+from six.moves import cPickle
+from six.moves import configparser
 from random import choice, shuffle
-import cPickle
-import ConfigParser
 import os.path
 from hashlib import sha224
 from datetime import datetime
@@ -36,7 +40,7 @@ from models import Worker, TrialList
 
 basepath = os.path.dirname(__file__)
 
-cfg = ConfigParser.SafeConfigParser({'domain': '127.0.0.1', 'port': '', 'path': 'wav_uploader'})
+cfg = configparser.SafeConfigParser({'domain': '127.0.0.1', 'port': '', 'path': 'wav_uploader'})
 cfg.read(os.path.join(basepath, 'expt.cfg'))
 engine_string = cfg.get('db', 'engine_string')
 
@@ -48,7 +52,7 @@ urlpath = cfg.get('host', 'path')
 
 # read in the stimuli via cPickle.
 stims = []
-with open(os.path.join(basepath,'stims.pickle'),'r') as p:
+with open(os.path.join(basepath,'stims.pickle'),'rb') as p:
     stims = cPickle.load(p)
 
 oldworkers = []
@@ -70,7 +74,7 @@ def random_lowest_list(session):
     #all_lists = session.query(TrialList).all()
     # Starting by piloting lists NATACC.GOV.LEFT.DO and NATACC.GOV.LEFT.PO, aka 1 and 3
     #all_lists = session.query(TrialList).filter(TrialList.number.in_([1,3])).all()
-    target_lists = range(1,25) # we don't want list 25, which has no sound (aka 'EXPOSURE') trial
+    target_lists = list(range(1,25)) # we don't want list 25, which has no sound (aka 'EXPOSURE') trial
     all_lists = session.query(TrialList).filter(TrialList.number.in_(target_lists)).all()
     # sort the lists from least assigned workers to most
     all_lists.sort(key = lambda x: len(x.workers))
@@ -113,7 +117,7 @@ class SocAlign1Server(object):
             if not req.method == 'POST':
                 raise HTTPMethodNotAllowed("Only POST allowed", allowed='POST')
 
-            if not req.params.has_key('WorkerId'):
+            if 'WorkerId' not in req.params:
                 raise HTTPBadRequest('Missing key: WorkerId')
 
             worker = None
@@ -122,12 +126,12 @@ class SocAlign1Server(object):
             except NoResultFound:
                 raise HTTPBadRequest('Worker {} does not exist'.format(req.params['WorkerId']))
 
-            if req.params.has_key('ItemNumber'):
+            if 'ItemNumber' in req.params:
                 worker.lastseen = datetime.now()
                 worker.lastitem = req.params['ItemNumber']
                 #print("Setting {} to {} at {}".format(worker.workerid, worker.lastitem, worker.lastseen))
 
-            if req.params.has_key('Abandoned'):
+            if 'Abandoned' in req.params:
                 if req.params['Abandoned'] == "true":
                     worker.abandoned = True
                     #print("{} has abandoned the hit".format(worker.workerid))
@@ -149,11 +153,11 @@ class SocAlign1Server(object):
             key_error_msg = 'Missing parameter: {0}. Required keys: {1}'
 
             debug = False
-            if req.params.has_key('debug'):
+            if 'debug' in req.params:
                 debug = True if req.params['debug'] == '1' else False
 
             forcelist = None
-            if req.params.has_key('list'):
+            if 'list' in req.params:
                 forcelist = int(req.params['list'])
 
             try:
