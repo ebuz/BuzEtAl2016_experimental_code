@@ -6,66 +6,123 @@
     <style type="text/css">
       body {
         width: 100%;
+        height: auto;
         margin:0;
-        padding:6;
+        padding:0;
         text-align:center;
       }
       div#testing {
-        position:relative;
+        position:absolute;
         width: 98%;
-        height: 600px;
+        top: 1%;
+        left: 1%;
+        height: 500px;
         text-align: center;
         margin: 0 auto;
       }
       div#startmessage {
-        position:relative;
+        position:absolute;
         width: 98%;
-        height: 400px;
-        text-align: center;
-        margin: 0 auto;
-      }
-      div.testtrial {
-        position:relative;
-        width: 80%;
-        height: 400px;
+        height: 80%;
+        top: 1%;
+        left: 1%;
         text-align: center;
         float:0 auto;
         margin: 0 auto;
-        top: -50%;
+      }
+      div.testtrial {
+        position:absolute;
+        width: 98%;
+        height: 80%;
+        top: 1%;
+        left: 1%;
+        text-align: center;
+        float:0 auto;
+        margin: 0 auto;
       }
       div.stimuliframe {
-        position: relative;
-        top: 50%;
-        width: 70%;
+        position: absolute;
+        top: 25%;
+        width: 90%;
+        height: 50%;
+        left: 5%;
+        text-align: center;
+        float:0 auto;
+        margin: 0 auto;
+      }
+      div.pretrialsync {
+        position: absolute;
+        top: 25%;
+        width: 90%;
+        height: 50%;
+        left: 5%;
+        text-align: center;
+        float:0 auto;
+        margin: 0 auto;
+      }
+      div.fixation {
+        position: absolute;
+        top: 0%;
+        width: 90%;
+        height: 100%;
+        left: 5%;
+        text-align: center;
+        float:0 auto;
+        margin: 0 auto;
+      }
+      div.posttrialwait {
+        position: absolute;
+        top: 25%;
+        width: 90%;
+        height: 50%;
+        left: 5%;
         text-align: center;
         float:0 auto;
         margin: 0 auto;
       }
       div.position1{
-        float:left;
+        position: absolute;
+        top: 39.5%;
+        width: 30%;
+        height: 20%;
+        left: 3%;
         text-align: center;
-        width:30%;
+        float:0 auto;
+        margin: 0 auto;
         border: 2px solid white;
       }
       div.position2{
-        display: inline-block;
+        position: absolute;
+        top: 39.5%;
+        width: 30%;
+        height: 20%;
+        left: 34.5%;
         text-align: center;
         float:0 auto;
-        width:30%;
+        margin: 0 auto;
         border: 2px solid white;
       }
       div.position3{
-        float:right;
+        position: absolute;
+        top: 39.5%;
+        width: 30%;
+        height: 20%;
+        right: 3%;
         text-align: center;
-        width:30%;
+        float:0 auto;
+        margin: 0 auto;
         border: 2px solid white;
       }
-      div.recordingindicator {
-        width: 5%;
-        text-align: center;
+      div.stimulus {
         position: absolute;
-        right: 0px;
-        top: 0px;
+        top: 0%;
+        width: 100%;
+        height: 100%;
+        left: 0%;
+        text-align: center;
+        float:0 auto;
+        margin: 0 auto;
+        font-size: 2em;
       }
       div.timerbar {
         position: absolute;
@@ -73,26 +130,41 @@
         height: 5%;
         bottom: 0%;
         right: 0%;
-        background-color: red;
+        background-color: gray;
       }
-      div.feedback {
-        position: absolute;
-        top: 50%;
-        width: 70%;
-        text-align: center;
-        right: 15%;
-      }
-      #partnersyncstatus {
+      img.fixationcross{
         position: relative;
-        top: 50%;
-        width: 70%;
+        top: 25.5%;
+        height: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+      }
+      img.speakercue{
+        position: absolute;
+        top: -50%;
+        left: 10%;
+        height: 50%;
+        width: auto;
+        display: none;
+      }
+      img.partnercue{
+        position: absolute;
+        top: -50%;
+        right: 10%;
+        height: 50%;
+        width: auto;
+        display: none;
+      }
+      #partnersync {
+        position: absolute;
+        top: 25%;
+        width: 90%;
+        height: 50%;
+        left: 5%;
         text-align: center;
         float:0 auto;
         margin: 0 auto;
-      }
-      div#exposure div {
-        margin-top: 1ex;
-        margin-left: 1em;
       }
       table.survquest {
         width: 400px;
@@ -125,7 +197,7 @@
         margin-top: 2em;
         padding: 1em;
       }
-      #micwarning, #testing, #startmessage, #oldBrowserMessage, #reloadResume, .testtrial, .feedback, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment {display:none;}
+      #micwarning, #oldBrowserMessage, #reloadResume, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment, #testing, .testtrial, .fixation, .stimuliframe, .timerbar, .posttrialwait {display:none;}
       {% if not preview %}
       #instructions, #realinstructions {display:none;}
       {% endif %}
@@ -184,8 +256,14 @@
       <div id="testing">
         <div id="startmessage">
           <div id="partnersync">
-            <p>Please wait a moment while we sync you with a partner, this generally takes 30 second to 2 minutes.</p>
-            <p id="partnersyncstatus"></p><img id="syncicon" src="/mturk/img/loading_circle.gif" alt=""/>
+            <p id="partnersyncmsg">Please wait a moment while we sync you with a partner, this initial connection generally takes 30 second to 2 minutes. Each trial will have a much shorter sync screen as well, usually not longer than 2 seconds. You've been waiting <span id="synctimer">0</span> seconds</p>
+            <div id="initialsync">
+                <img src="/mturk/img/microphone.png">
+                <img src="/mturk/img/arrow.png">
+                <img src="/mturk/img/internet.png">
+                <img src="/mturk/img/arrow.png">
+                <img src="/mturk/img/headphone.png">
+            </div>
           </div>
           <button type="button" id="starttest" disabled>Start</button>
         </div>
@@ -199,21 +277,45 @@
         <form id="results" method="post" action="">
         {% endif %}
         {% for item in testtrials %}
-        <div id="trial{{loop.index}}" class="testtrial">
-            <div class="recordingindicator">
-              <p style="color: red; text-decoration: blink; font-size: 3em">&#149;</p>
+          <div id="trial{{loop.index}}" class="testtrial">
+            <div class="pretrialsync">
+                <img src="/mturk/img/microphone.png">
+                <img src="/mturk/img/arrow.png">
+                <img src="/mturk/img/internet.png">
+                <img src="/mturk/img/arrow.png">
+                <img src="/mturk/img/headphone.png">
             </div>
-            <div class="feedback">
-              <p class="feedbackmsg">You and your partner were too slow</p>
+            <div class="fixation">
+              <img class="fixationcross" src="/mturk/img/fixation.png">
             </div>
             <div class="stimuliframe">
-              <div class="position1">{{item.Position1}}</div>
-              <div class="position2">{{item.Position2}}</div>
-              <div class="position3">{{item.Position3}}</div>
+              <div class="position1">
+                <img class="speakercue" src="/mturk/img/microphone.png">
+                <img class="partnercue" src="/mturk/img/headphone.png">
+                <div class="stimulus">
+                  {{item.Position1}}
+                </div>
+              </div>
+              <div class="position2">
+                <img class="speakercue" src="/mturk/img/microphone.png">
+                <img class="partnercue" src="/mturk/img/headphone.png">
+                <div class="stimulus">
+                  {{item.Position2}}
+                </div>
+              </div>
+              <div class="position3">
+                <img class="speakercue" src="/mturk/img/microphone.png">
+                <img class="partnercue" src="/mturk/img/headphone.png">
+                <div class="stimulus">
+                  {{item.Position3}}
+                </div>
+              </div>
             </div>
             <div class="timerbar"></div>
-            <button type="button" class="stoprecord" id="{{item.ItemID}}" style="display: none !important">Next</button>
-            <button type="button" class="hiddennext" style="display: none !important"></button>
+            <div class="posttrialwait">
+              <p class="posttrialmsg">Please click the button or press the space bar in the next 30 seconds</p>
+              <button type="button" class="nexttrialbutton">30</button>
+            </div>
             <input type="hidden" class = "targetposition", id="targetposition_{{item.ItemID}}" name="targetposition_{{item.ItemID}}" value="{{item.TargetCompetitorPositions}}"/>
             <input type="hidden" class = "partnerresponsetime", id="partnerresponsetime_{{item.ItemID}}" name="partnerresponsetime_{{item.ItemID}}" value="{{item.PartnerResponseTime}}"/>
             <input type="hidden" class = "partnerfeedback", id="partnerfeedback_{{item.ResponseCorrect}}" name="partnerfeedback_{{item.ItemID}}" value="{{item.PartnerFeedback}}"/>
