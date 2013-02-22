@@ -184,7 +184,7 @@ class BaeseberkGoldrickRep1Server(object):
                                                       req.params['assignmentId'])).hexdigest()
 
             currlist = [[] for x in range(1)]
-            condition, survey = None, None
+            condition, experimentname, survey = None, None
             if worker:
                 if (debug and forcelist is not None):
                     listid = forcelist
@@ -193,6 +193,7 @@ class BaeseberkGoldrickRep1Server(object):
                 currlist = [x for x in stims if int(x['ListID']) == listid]
                 testtrials = [z for z in currlist if z['TrialType'] == 'TEST']
                 survey = testtrials[0]['SurveyList']
+                experimentname = testtrials[0]['ExperimentName']
             else:
                 pass
 
@@ -215,6 +216,7 @@ class BaeseberkGoldrickRep1Server(object):
                     amz = amz_dict,
                     listid = listid,
                     survey = survey,
+                    experimentname = experimentname,
                     formtype = formtype,
                     recorder_url = recorder_url,
                     debugmode = 1 if debug else 0,
