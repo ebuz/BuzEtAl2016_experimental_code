@@ -157,7 +157,7 @@
 
                         <div id="page4">
                             <fieldset>
-                            <label>In this experiment, there was actually no partner. While we did record you and plan to use your recordings we wanted you to speak as if you were talking to another person. All the responses, and how quickly the responses occured were pre-programmed. Please answer these questions about how believable it was that you were actually speaking to another person.</label>
+                            <label>In this experiment, there was actually no partner. While we did record you and plan to use your recordings we wanted you to speak as if you were talking to another person. All the responses by your partner, and how quickly the responses occured were pre-programmed. Please answer these questions about how believable it was that you were actually speaking to another person.</label>
 
                             {% for question, formname, scale in [
                                 ("Was the cover story that we gave at the start of the experiment believable?", 'q.coverstory_plausability', '1 not at all; 6 absolutely'),
@@ -186,6 +186,8 @@
                                 </tr>
                             </table>
                         {% endfor %}
+                            <p>At any point in the experiment did something make you think you were not interacting with a real person? If so please explain</p>
+                            <p><textarea id="microphone_model" name="microphone_model" cols="40" rows="2"></textarea></p>
                             </fieldset>
                         <button type="button" id="endsurvey">Done</button>
                         </div>

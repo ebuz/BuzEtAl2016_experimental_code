@@ -1,24 +1,10 @@
-# General changes #
-* Instructions should reiterate that subjects should be in quiet room with no one else around
-* Mention in instructions that experiment should be done in one go, and not to wait too long between trials to avoid wasting "partner time"
+# Files that have to change for any given change of the experiment #
+1. the db_init.py program is hard-coded to generate the possible lists so if the number of lists changes so should this
+1. any changes to the feedback procedure needs to be reflected in the instructions.html file and probably also the survey.html file
+1. if the experiment moves from testing to live, the form under expt.cfg needs to be changed
+1. YOU SHOULD MAKE SURE THE STIMULI.CSV FILES HAS THE NEW EXPERIMENT NAME
+1. Any of the above changes ultimately require a change to the /mturk/* files, especially the .properties and .question files
+1. the javascript file needs to be updated with the url of the experiment in order for the ajax/json data to be correctly sent (this later point is important if the url will change with each new version of the experiment, otherwise it could be keep as baese-berk_goldrick_rep and the server files changed to reflect this. note the lack of a 1 there).
 
 # Dealing with partner timings #
-* Change the instructions such that it presents the pseudo-confederate setup
 * Add a set of practice trials, presumably from a generated list
-
-Trials should start like this: a little set of images appears that shows the syncing occuring between speaker and partner, the timing should be variable but not more than 2 seconds. The images dissapear and a fixation cross occurs in the middle of the screen for about 500ms. Then the words appear for about 1000ms. Then the cue is given with: a green box around the word and a little microphone icon. The timer bar appears and counts down from something like 20 seconds, it should be grey. Then feedback occurs. Then the trial stuff goes away and a button to move onto the next trial appears with a countdown timer and message that sends people to the end of the experiment if they take too long.
-Things that have to be done to get the current experiment to this point:
-1. Fix the choice feedback (right/wrong)
-
-# Dealing with feedback #
-There needs to be a cohesive way to handle feedback that changes by condition. Ideally there are three kinds of feedback we will use: no feedback, positive feedback, positive and negative feedback.
-## no feedback ##
-two types:
-* the timer bar ends and the trial ends, nothing else
-* responses are variable in time, when a response is made the timer bar stops for a brief period, then the trial ends
-## positive feedback ##
-* the response is only positive: timer bar stops in variable time and a message saying "correct" appears
-* the response is only positive: timer bar stops in variable time and the choice of the partner is highlighted
-## positive feedback ##
-* the response is both positive and negative: timer bar stops in variable time and the participant sees a message of correct or incorrect
-* the response is both positive and negative: timer bar stops in variable time and the participant sees the choice of the partner highlighted

@@ -40,6 +40,7 @@ $(document).ready(function() {
       $('button#replaytest').attr('disabled', 'disabled');
       $('button#playbacktest').attr('disabled', 'disabled');
       $('button#endrecordtest').removeAttr('disabled');
+      $('button#endsetup').removeAttr('disabled');
       Wami.startRecording(recorder_url + '?workerId=' +
         workerId +
         '&assignmentId=' + assignmentId +
@@ -175,28 +176,39 @@ $(document).ready(function() {
       });
     });
   };
-  var positionTypeResponseMap = {
-    
-  };
+
+  var positionTypeResponseMap = [
+    ["0", "1", "2", "3", "4", "5"],
+    ["Target", "Target", "Filler", "Competitor", "Competitor", "Filler"],
+    ["Competitor", "Filler", "Target", "Target", "Filler", "Competitor"],
+    ["Filler", "Competitor", "Competitor", "Filler", "Target", "Target"]
+  ];
 
   var showFeedback = function($trialDiv){
     console.log('generating feedback for trial: ' + $trialDiv.attr("id"));
     switch ($trialDiv.children(':input.partnerfeedback').val()){
       case "Choice":
         //show partner choice, green if target, red otherwise for 2 seconds, then move to post trial wait
-        var partnerResponse = $trialDiv.children(':input.partnerresponse').val() 
-        var positionType  = $trialDiv.children(':input.targetposition').val() 
-        switch (partnerResponse){
-          case "Target":
-            break;
-          case "Competitor":
-            break;
-          case "Filler":
-            break;
+        var partnerResponse = $trialDiv.children(':input.partnerresponse').val();
+        var positionType  = $trialDiv.children(':input.targetposition').val();
+        var backgroundcolor = "red";
+        if (partnerResponse == "Target"){
+          backgroundcolor = "green";
         }
-        $trialDiv.children(".stimuliframe").hide();
-        $trialDiv.children(".timerbar").hide();
-        $trialDiv.children(".posttrialwait").show();
+        var $partnerDiv = $trialDiv.find('.position1');
+        if (positionTypeResponseMap[2][positionType] == partnerResponse){
+          //response is position 2
+          $partnerDiv = $trialDiv.find('.position2');
+        } else if (positionTypeResponseMap[3][positionType] == partnerResponse){
+          $partnerDiv = $trialDiv.find('.position3');
+        }
+        $partnerDiv.children('.partnercue').show();
+        $partnerDiv.css("background-color", backgroundcolor);
+        $trialDiv.children(".stimuliframe").oneTime(3000, function(){
+          $trialDiv.children(".stimuliframe").hide();
+          $trialDiv.children(".timerbar").hide();
+          $trialDiv.children(".posttrialwait").show();
+        });
         break;
       case "Simple":
         //set feedback msg to say the partner picked right/wrong
@@ -299,17 +311,17 @@ $(document).ready(function() {
       p1valid = false;
       }
     });
-    if ($('[name="q.internet.speed"]').val() === '') {
-      $('#internetspeed').css('color', 'red');
-      p1valid = false;
+    if ($('[name="q.internet.speed"]').val() != '') {
+      $('#internetspeed').css('color', 'black');
+      p1valid = true;
     }
-    if ($('[name="q.microphone.type"]').val() === '') {
-      $('#microphonetype').css('color', 'red');
-      p1valid = false;
+    if ($('[name="q.microphone.type"]').val() != '') {
+      $('#microphonetype').css('color', 'black');
+      p1valid = true;
     }
     if (p1valid) {
-    $('#page1').hide();
-    $('#page2').show(function() {$('label:visible')[0].scrollIntoView()});
+      $('#page1').hide();
+      $('#page2').show(function() {$('label:visible')[0].scrollIntoView()});
     } else {
       alert('Please answer all questions.');
     }
@@ -426,7 +438,7 @@ var onRecordFinishUpdate = function() {
   }
   $.ajax({
     type: 'POST',
-    url: '/mturk/experiments/socalign1',
+    url: '/mturk/experiments/baese-berk_goldrick_rep1',
     data: {'ItemNumber': ++itemno, 'WorkerId': workerId},
     datatype: 'json'
   }).done(function(msg) {

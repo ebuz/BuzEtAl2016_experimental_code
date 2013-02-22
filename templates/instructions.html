@@ -1,8 +1,9 @@
         <div id="instructions">
-            <h2>Picture Description</h2>
+            <h2>Word reading with a partner</h2>
             <div id="audiosetup">
-                <p style="font-weight:bold;">In this experiment you will listen to
-                audio and describe pictures. You need a working head set and microphone.
+              <p style="font-weight:bold;">In this experiment you will be shown sets
+              of words and be asked to say one to a partner that we will connect you
+              to automatically. You need a working head set and microphone.
                 This experiment requires Flash and javascript to be enabled.
                 <span style="color:red;">If this is the first time you're visiting
                 this page, you might see a dialogue asking you to give us permission
@@ -26,29 +27,53 @@
                     the pop-up that might show up at the bottom of this page) or
                     your microphone is muted or not working. Please do not continue
                     with the experiment if you cannot resolve this issue. We won't
-                    be able to use your recordings and you will not be paid.</p>
+                    be able to use your recordings and you will not be paid. Equally
+                    important is that you do this experiment in a quiet room with no
+                    other people around, if your speech is not distinguishable from
+                    background noise we will not be able to use your data and you will
+                    not be paid.</p>
+                    <p>We recommend you use a headworn microphone with the microphone a
+                    few inches from your mouth or a desktop microphone that you keep a
+                    consistent distance from your mouth. Please try not to whisper or yell.
                     <p>By clicking the 'Continue to instructions' button below, I
                     confirm that I adjusted my volume and recording settings and that
                     the recording was clearly understandable</p>
+                    {% if debugmode %}
                     <button type="button" id="endsetup">Continue to instructions</button>
+                    {% else %}
+                    <button type="button" id="endsetup" disabled>Continue to instructions</button>
+                    {% endif %}
                 </div>
                 {% endif %}
             </div>
             <div id="realinstructions">
-                <p>This experiment consists of three phases, followed by a short questionnaire.</p>
-                <p>In <span style="font-weight:bold;">phase one</span>, you will listen to a short speech from an amateur debater.
-                In this speech, the speaker will present his/her stance on a current political
-                issue. Listen carefully to the speech, and form an impression of the speaker and
-                their argument. You will be asked to describe them later.</p>
-                <p>In <span style="font-weight:bold;">phase two</span>, you will be presented with ten pictures, one at a time.
-                When each picture is displayed it will automatically start recording audio. Please describe what is
-                happening in each picture using <span style="font-weight:bold;">one sentence</span>.
-                Then press "Finish" to advance to the next picture.
-                Also, please avoid pronouns (words like he/she, him/her, etc). For example,
-                if the picture was of a boy smiling at a girl, you could say "The boy is smiling at the girl" but not
-                "He is smiling at her."</p>
-                <p><span style="font-weight:bold;">Phase three</span> is a brief survey. This survey consists of questions about the
-                speech that you heard in <span style="font-weight:bold;">phase one</span> and questions about you as a participant.
+                <p>This experiment consists of two phases.</p>
+                <p>In <span style="font-weight:bold;">phase one</span>, you will be paired
+                up with a partner, this process may take a minute or two while your computer syncs with our server, and while your partner's computer syncs with yours. After a partner is found and yours and their computers are connected, there will be a short practice session that will get the both of you
+                accustomed to the experiment. After the initial practice trials, the real
+                experiment will start.</p>
+                <p>In both the practice and actual trials your task is the same: direct your partner to click on a word from among several that appear on the screen. Each trial will follow this pattern: the software on your computer and your partner's will briefly resyncronize. Then a cross will briefly appear on your screen. You should look at the cross. Shortly after, three words will appear. One will be highlighted and a small microphone symbol will appear above it. You should tell your partner to "Click on the <span style="font-style:italic">word</span>" where <span style="font-style:italic">word</span> is the highlighted word on your screen. A timer bar will let you know how long your partner has to respond. While your partner can hear you, you will not hear your partner.</p>
+                <p>
+                {% if debugmode %}
+                Feedback varies in this version of the experiment, sometimes the bar will run out and sometimes it won't. Sometimes you will see which word your partner clicked on and sometimes you won't. Sometimes we will tell you if your partner clicked the right word or wrong word and sometimes we won't.
+                {% else %}
+                  {% if responsetimetype == 1 %}
+                  The timer bar will stop when your partner has made a response.
+                  {% else %}
+                  The timer bar will finish and the trial will continue on.
+                  {% endif %}
+                  {% if feedbackcondition == 'Simple' %}
+                  You will be told if your partner picked the right word or not.
+                  {% elif feedbackcondition == 'Choice' %}
+                  On your screen, a little icon of headhpones will appear next to the word your partner picked. The word will also be green if it was the word you said or red if not.
+                  {% endif %}
+                {% endif %}
+                At the end of the trial a pause screen will appear with a 30 second timer.
+                Press the button or press your spacebar to advance to the next trial.
+                If you need a break please take it but we encourage you to finish the
+                experiment quickly both for your sake and your partner's. <span style="font-weight:bold">If you wait too long the experiment will terminate, your partner will be disconnected and you'll be taken to phase two</span>.</p>
+                <p><span style="font-weight:bold;">Phase two</span> is a brief survey. This survey consists of questions about the
+                experiment, your partner, you and your computer <span style="font-weight:bold;">phase one</span>.
                 The data we collect with the survey will be non-identifying. It is
                 very important to us that you try to answer the questions in the survey
                 to the best of your abilities. Rushing through the survey will make
@@ -82,8 +107,7 @@
                 </div>
                 <p style="font-weight:bold;">Once you press Start, these instructions
                 will disappear, so make sure you understand them fully before you start.
-                A sound file will start playing automatically. Please make sure that
-                your volume settings are adjusted (see above).</p>
+                A partner will be found for you.</p>
                 <button type="button" id="endinstr">I confirm that I have read and understood the instructions and want to start the experiment</button>
             </div>
         </div>
