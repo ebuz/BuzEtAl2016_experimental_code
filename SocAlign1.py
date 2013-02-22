@@ -183,7 +183,7 @@ class SocAlign1Server(object):
                                                       req.params['hitId'],
                                                       req.params['assignmentId'])).hexdigest()
 
-            currlist, pictrials = [[] for x in range(2)]
+            currlist = [[] for x in range(1)]
             condition, survey = None, None
             if worker:
                 if (debug and forcelist):
@@ -193,9 +193,6 @@ class SocAlign1Server(object):
                 listid = 0
                 currlist = [x for x in stims if int(x['ListID']) == listid]
                 testtrials = [z for z in currlist if z['TrialType'] == 'TEST']
-                # feedback condition is the same for a given list
-                feedbackcondition = testtrials[0]['PartnerFeedbackCondition']
-                # feedback condition is the same for a given list
                 survey = testtrials[0]['SurveyList']
             else:
                 pass
@@ -219,7 +216,6 @@ class SocAlign1Server(object):
                     amz = amz_dict,
                     listid = listid,
                     survey = survey,
-                    feedbackcondition = feedbackcondition,
                     formtype = formtype,
                     recorder_url = recorder_url,
                     debugmode = 1 if debug else 0,

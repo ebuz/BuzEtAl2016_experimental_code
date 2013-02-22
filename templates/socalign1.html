@@ -197,7 +197,7 @@
         margin-top: 2em;
         padding: 1em;
       }
-      #micwarning, #oldBrowserMessage, #reloadResume, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment, #testing, .testtrial, .fixation, .stimuliframe, .timerbar, .posttrialwait {display:none;}
+      #micwarning, #oldBrowserMessage, #earlyStop, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment, #testing, .testtrial, .fixation, .stimuliframe, .timerbar, .posttrialwait {display:none;}
       {% if not preview %}
       #instructions, #realinstructions {display:none;}
       {% endif %}
@@ -245,18 +245,21 @@
         </div>
       </div>
 
-      <div id="reloadResume">
-        <p>You have already started this experiment. Resuming where you left off.</p>
-        <button type="button" id="resume">Resume</button>
-        {% if debugmode == 1 -%}
-        <button type="button" id="reset">Reset</button>
-        {%- endif %}
-      </div>
+      {% if formtype == 'sandbox' %}
+      <form id="results" method="post" action="https://workersandbox.mturk.com/mturk/externalSubmit">
+      {% elif formtype == 'live' %}
+      <form id="results" method="post" action="https://www.mturk.com/mturk/externalSubmit">
+      {% elif formtype == 'testing' %}
+      <form id="results" method="post" action="http://www.hlp.rochester.edu/cgi-bin/postdetails.pl">
+      {% else %}
+      <form id="results" method="post" action="">
+      {% endif %}
 
       <div id="testing">
         <div id="startmessage">
           <div id="partnersync">
-            <p id="partnersyncmsg">Please wait a moment while we sync you with a partner, this initial connection generally takes 30 second to 2 minutes. Each trial will have a much shorter sync screen as well, usually not longer than 2 seconds. You've been waiting <span id="synctimer">0</span> seconds</p>
+            <p id="partnersyncmsg">Please wait a moment while we sync you with a partner, this initial connection generally takes 30 second to 2 minutes. Each trial will have a much shorter sync screen as well, usually not longer than 2 seconds.</p>
+            <p>You've been waiting <span id="synctimer">0</span> seconds</p>
             <div id="initialsync">
                 <img src="/mturk/img/microphone.png">
                 <img src="/mturk/img/arrow.png">
@@ -265,17 +268,12 @@
                 <img src="/mturk/img/headphone.png">
             </div>
           </div>
+          {% if debugmode %}
+          <button type="button" id="starttest">Start</button>
+          {% else %}
           <button type="button" id="starttest" disabled>Start</button>
+          {% endif %}
         </div>
-        {% if formtype == 'sandbox' %}
-        <form id="results" method="post" action="https://workersandbox.mturk.com/mturk/externalSubmit">
-        {% elif formtype == 'live' %}
-        <form id="results" method="post" action="https://www.mturk.com/mturk/externalSubmit">
-        {% elif formtype == 'testing' %}
-        <form id="results" method="post" action="http://www.hlp.rochester.edu/cgi-bin/postdetails.pl">
-        {% else %}
-        <form id="results" method="post" action="">
-        {% endif %}
         {% for item in testtrials %}
           <div id="trial{{loop.index}}" class="testtrial">
             <div class="pretrialsync">
@@ -313,14 +311,26 @@
             </div>
             <div class="timerbar"></div>
             <div class="posttrialwait">
-              <p class="posttrialmsg">Please click the button or press the space bar in the next 30 seconds</p>
-              <button type="button" class="nexttrialbutton">30</button>
+              <p class="feedbackmsg"></p>
+              <p class="posttrialmsg">Please click the button or press the space bar in the next 30 seconds to start the next trial.</p>
+              <button type="button" id="{{item.ItemID}}" class="nexttrial">30</button>
             </div>
+            <button type="button" class="hiddennext" style="display: none !important"></button>
             <input type="hidden" class = "targetposition", id="targetposition_{{item.ItemID}}" name="targetposition_{{item.ItemID}}" value="{{item.TargetCompetitorPositions}}"/>
             <input type="hidden" class = "partnerresponsetime", id="partnerresponsetime_{{item.ItemID}}" name="partnerresponsetime_{{item.ItemID}}" value="{{item.PartnerResponseTime}}"/>
-            <input type="hidden" class = "partnerfeedback", id="partnerfeedback_{{item.ResponseCorrect}}" name="partnerfeedback_{{item.ItemID}}" value="{{item.PartnerFeedback}}"/>
+            <input type="hidden" class = "partnerresponse", id="partnerresponse_{{item.ItemID}}" name="partnerresponse_{{item.ItemID}}" value="{{item.PartnerResponse}}"/>
+            <input type="hidden" class = "partnerfeedback", id="partnerfeedback_{{item.ItemID}}" name="partnerfeedback_{{item.ItemID}}" value="{{item.PartnerFeedbackType}}"/>
           </div>
         {% endfor %}
+
+      </div>
+      <div id="earlyStop">
+        <p>You took too long to advance, for the sake of your partner's time we have ended the experiment. Please fill out the post experiment survey.</p>
+        <button type="button" id="tosurvey">Continue</button>
+        {% if debugmode == 1 -%}
+        <button type="button" id="reset">Reset</button>
+        {%- endif %}
+      </div>
 
         {% include 'survey.html' %}
 
@@ -329,9 +339,9 @@
             <input type="hidden" id="endaudio" name="endaudio" value="NA"/>-->
             <input type="hidden" id="experiment" name="experiment" value="SocAlign1"/>
             <input type="hidden" id="list" name="ListID" value="{{ListID}}"/>
-            <input type="hidden" id="exposurecondition" name="PartnerFeedbackCondition" value="{{feedbackcondition}}"/>
             <input type="hidden" id="assignmentId" name="assignmentId" value="{{amz.assignmentId}}"/>
             <input type="hidden" id="browserid" name="browserid" value="NA"/>
+            <input type="hidden" id="endearly" name="endearly" value="NA"/>
           </div>
           <div id="comment">
             <p>Feedback on this HIT (optional):</p>

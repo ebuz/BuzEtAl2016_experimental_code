@@ -20,6 +20,7 @@ $(document).ready(function() {
   }
 
   $('button#reset').on('click', function() {
+    endEarly = false;
     $.ajax({
       type: 'POST',
       url: '/mturk/experiments/socalign1',
@@ -32,17 +33,10 @@ $(document).ready(function() {
     });
   });
 
-  $('button#resume').on('click', function() {
-    if (typeof(Wami.startRecording) === 'function') {
-      $('#reloadResume').hide();
-      if (itemno == $('.testtrial').length) {
-        $('#page1').show();
-      } else {
-        $('#testing').show(0, partner_sync_screen());
-      }
-    } else {
-      alert('Still waiting for recorder to become ready.');
-    }
+  $('button#tosurvey').on('click', function() {
+    $(document).find(':input#endearly').val('Yes');
+    $('#earlyStop').hide();
+    $('#page1').show();
   });
 
   $('button#startrecordtest').on('click', function() {
@@ -87,26 +81,14 @@ $(document).ready(function() {
     $('#realinstructions').show();
   });
 
-  var partner_sync_screen = function(){
-      $('#startmessage').show();
-      $('#partnersyncstatus').text("Waiting for next available partner");
-      $('#partnersyncstatus').oneTime(11520, function(){
-        $(this).text("Found partner, syncing software with eachother");
-        $(this).oneTime(9250, function(){
-          $(this).text("Synced! Partner is ready, click start");
-          $('#syncicon').hide();
-          $('#starttest').removeAttr("disabled");
-          });
-      });
-  };
-
   $('button#endinstr').on('click', function() {
     if (Wami.getSettings().microphone.granted) {
       $('object').attr('height', 0);
       $('object').attr('width', 0);
       //$(':input[name="starttime"]').val(new Date().toISOString());
-      $('#instructions').hide();
-      $('#testing').show(0, partner_sync_screen());
+      $('#instructions').hide(0);
+      $('#testing').show(0);
+      initial_sync_screen();
     } else {
       alert('You have to allow microphone access for this experiment!');
     }
@@ -115,78 +97,184 @@ $(document).ready(function() {
   $('button#starttest').on('click', function() {
     $('#startmessage').hide();
     var $nextTrial = $($('.testtrial')[itemno]);
-    $nextTrial.show(runTrial($nextTrial));
+    console.log('Starting first trial: ' + $($('.testtrial')[itemno]).attr("id"))
+    $nextTrial.show(0, function(){
+      pretrial_sync_fixation_screen($nextTrial)
+    });
   });
 
-  $('.stoprecord').on('click', function() {
-    Wami.stopRecording();
-  });
-
-  var trialTimeOut = function($trialDiv){
-      $trialDiv.children(".stimuliframe").hide();
-      $trialDiv.children(".feedback").show()
-      $trialDiv.oneTime(2000, function(){
-        $trialDiv.hide().children("button.stoprecord").click();
-      });
+  var showReady = function($imgd, duration){
+    $imgd.animate({opacity: 1}, duration, function(){
+      $imgd.css("background-color", "green");
+    });
   };
 
-  var partnerResponseMade = function($trialDiv){
-      $trialDiv.children('.timerbar').stop();
-      $trialDiv.children(".stimuliframe").hide();
-      if ($trialDiv.children(':input.partnerfeedback').val() == "Correct"){
-        $trialDiv.find(".feedbackmsg").text("Your partner picked the right word!");
-      } else {
-        $trialDiv.find(".feedbackmsg").text("Your partner picked the wrong word! :(");
-      }
-      $trialDiv.children(".feedback").show();
-      $trialDiv.oneTime(2000, function(){
-        $trialDiv.hide().children("button.stoprecord").click();
+  var initial_sync_screen = function(){
+    $('#startmessage').show();
+    var count = 0;
+    $('#synctimer').everyTime(1000, "synctimer", function(){
+      $('#synctimer').text(++count + '');
+    });
+    var $iconList = $('#initialsync').children();
+    $iconList.css('opacity', '.1')
+    showReady($($iconList[0]), 300);
+    var waitTime = 11530;
+    $iconList.oneTime(waitTime, function(){
+      showReady($($iconList[1]), 500);
+      showReady($($iconList[2]), 1000);
+    });
+    waitTime += 16300;
+    $iconList.oneTime(waitTime, function(){
+      showReady($($iconList[3]), 500);
+    });
+    waitTime += 2200;
+    $iconList.oneTime(waitTime, function(){
+      showReady($($iconList[4]), 2000);
+    });
+    waitTime += 3000;
+    $iconList.oneTime(waitTime, function(){
+      $('#initialsync').hide();
+      $('#partnersyncmsg').text("Ready! Please click the start button");
+      $('#synctimer').stopTime("synctimer");
+      $('#starttest').removeAttr('disabled');
+    });
+  };
+
+  var pretrial_sync_fixation_screen = function($trialDiv){
+    console.log('presync screen for : ' + $trialDiv.attr("id"));
+    $trialDiv.show();
+    $trialDiv.children('.pretrialsync').show();
+    var $iconList = $trialDiv.children('.pretrialsync').children();
+    $iconList.css('opacity', '.1')
+    showReady($($iconList[0]), 100);
+    var waitTime = 100 + Math.random()*100;
+    $($iconList[1]).oneTime(waitTime, function(){
+      showReady($(this), 300);
+      showReady($(this).next(), 400);
+      waitTime += 300 + Math.random()*300;
+      $(this).next().next().oneTime(waitTime, function(){
+        showReady($(this), 400);
+        waitTime += 400 + Math.random()*400;
+        $(this).next().oneTime(waitTime, function(){
+          showReady($(this), 400);
+          $(this).oneTime(500, function(){
+            console.log('finished animating icons for trial: ' + $trialDiv.attr("id"));
+            $trialDiv.children('.pretrialsync').hide();
+        //      Wami.startRecording(recorder_url + '?workerId=' +
+        //        workerId +
+        //        '&assignmentId=' + assignmentId +
+        //        '&hitId=' + hitId +
+        //        '&hash=' + amzhash +
+        //        '&experiment=SocAlign.1' +
+        //        '&filename=' + $trialDiv.find(':button.stoprecord').attr('id'), 'onRecordStart', 'onRecordFinishUpdate', 'onError');
+            $trialDiv.children('.pretrialsync').hide();
+            $trialDiv.children('.fixation').show(0);
+            console.log('showing fixation, for trial: ' + $trialDiv.attr("id"));
+            $trialDiv.children('.fixation').oneTime(500, function(){
+              $trialDiv.children('.fixation').hide();
+              console.log('hiding fixation, for trial: ' + $trialDiv.attr("id"));
+              runTrial($trialDiv);
+            });
+          });
+        });
       });
+    });
+  };
+
+  var showFeedback = function($trialDiv){
+    console.log('generating feedback for trial: ' + $trialDiv.attr("id"));
+    switch ($trialDiv.children(':input.partnerfeedback').val()){
+      case "Choice":
+        //show partner choice, green if target, red otherwise for 2 seconds, then move to post trial wait
+        $trialDiv.children(".stimuliframe").hide();
+        $trialDiv.children(".timerbar").hide();
+        $trialDiv.children(".posttrialwait").show();
+        break;
+      case "Simple":
+        //set feedback msg to say the partner picked right/wrong
+        if ($trialDiv.children(':input.partnerresponse').val() == "Target"){
+          $trialDiv.find(".feedbackmsg").text("Your partner picked the right word!");
+        } else {
+          $trialDiv.find(".feedbackmsg").text("Your partner picked the wrong word!");
+        }
+      case "NoFeedback":
+      default:
+        $trialDiv.children(".timerbar").hide();
+        //move to post trial wait
+        $trialDiv.children(".stimuliframe").hide();
+        $trialDiv.children(".posttrialwait").show();
+    }
+    var count = 30;
+    $trialDiv.find('button.nexttrial').everyTime(1000, "buttonTimer", function(){
+      if (count < 1){
+        endEarly = true;
+        $(this).click();
+      } else {
+        $(this).text(--count + '');
+      }
+    }, 35);
   };
 
   var runTrial = function($trialDiv) {
-    ///lets do this shit
-    Wami.startRecording(recorder_url + '?workerId=' +
-      workerId +
-      '&assignmentId=' + assignmentId +
-      '&hitId=' + hitId +
-      '&hash=' + amzhash +
-      '&experiment=SocAlign.1' +
-      '&filename=' + $trialDiv.children(':button.stoprecord').attr('id'), 'onRecordStart', 'onRecordFinishUpdate', 'onError');
-    var $targetPosition = $trialDiv.find('.position1');
-    if ($trialDiv.children(':input.targetposition').val() == 2 || $trialDiv.children(':input.targetposition').val() == 3) {
-      $targetPosition = $trialDiv.find('.position2');
-    } else if ($trialDiv.children(':input.targetposition').val() == 4 || $trialDiv.children(':input.targetposition').val() == 5) {
-      $targetPosition = $trialDiv.find('.position3');
+    console.log('Starting trial: ' + $trialDiv.attr("id"));
+    var $targetDiv = $trialDiv.find('.position1');
+    var positionType = $trialDiv.children(':input.targetposition').val();
+    if (positionType == 2 || positionType == 3) {
+      $targetDiv = $trialDiv.find('.position2');
+    } else if (positionType == 4 || positionType == 5) {
+      $targetDiv = $trialDiv.find('.position3');
     }
-    $trialDiv.oneTime(1000, function(){
-      $targetPosition.css("border-color", "red");
-      $trialDiv.find(".timerbar").animate({width: "0px"}, 10000, 'linear');
-      switch ($trialDiv.children(':input.partnerfeedback').val()){
-        case "Correct":
-        case "Wrong":
-          $trialDiv.oneTime(parseInt($trialDiv.children(':input.partnerresponsetime').val()), function(){
-            partnerResponseMade($trialDiv);
-          });
-          break;
-        case "TimeOut":
-          $trialDiv.oneTime(10000, function(){
-            trialTimeOut($trialDiv);
-          });
-        default:
-          $trialDiv.oneTime(10000, function(){
-            trialTimeOut($trialDiv);
-          });
-          break;
+    var previewTime = 1000;
+    var timerLength = 10000;
+    $trialDiv.find(".timerbar").show(0);
+    $trialDiv.find(".stimuliframe").show(0);
+    $trialDiv.oneTime(previewTime, "preview", function(){
+      $targetDiv.css("border-color", "green");
+      $targetDiv.children('.speakercue').show();
+      console.log('Animating timerbar');
+      if (parseInt($trialDiv.children(':input.partnerresponsetime').val()) == -1){
+        //let timer go out then show feedback
+        $trialDiv.find(".timerbar").animate({width: "0px"}, timerLength, 'linear', function(){
+          console.log('Waited till timebar finished, showing feedback');
+          showFeedback($trialDiv);
+        });
+      } else {
+        //end timer at partnerresponsetime and then show feedback
+        $trialDiv.oneTime(parseInt($trialDiv.children(':input.partnerresponsetime').val()), "feedbackwaittime", function(){
+          console.log("'partner' initiated response, stopping bar, showing feedback");
+          $trialDiv.find('.timerbar').stop();
+          showFeedback($trialDiv);
+        });
       }
     });
   };
 
+  $('button.nexttrial').on('click', function(){
+    //Wami.stopRecording();
+    console.log('Next trial button hit for trial: ' + $(this).parent().parent().attr("id"))
+    $(this).stopTime();
+    $(this).stopTime("buttonTimer");
+    $(this).parent().hide();
+    //because the stop recording function isn't called above we need to run this function
+    onRecordFinishUpdate();
+  });
+
+  document.addEventListener('keydown', function(event) {
+    if(event.keyCode == 32) {
+      $('button.nexttrial:visible').click();
+    }
+  });
+
   $('button.hiddennext').on('click', function() {
     //$(':input[name="end_' + $(this).siblings('.stoprecord').attr('id') + '"]').val(new Date().toISOString());
-    var $nextTrial = $(this).parent().hide().next();
-    $nextTrial.show(runTrial($nextTrial));
+    $(this).parent().hide()
+    var $nextTrial = $($('.testtrial')[itemno]).next();
+    console.log('advancing to next trial: ' + $nextTrial.attr("id"))
+    $nextTrial.show(0, function(){
+      pretrial_sync_fixation_screen($nextTrial)
+    });
     if ($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
+      $('#testing').hide();
       $('#page1').show();
     }
   });
@@ -202,6 +290,14 @@ $(document).ready(function() {
       p1valid = false;
       }
     });
+    if ($('[name="q.internet.speed"]').val() === '') {
+      $('#internetspeed').css('color', 'red');
+      p1valid = false;
+    }
+    if ($('[name="q.microphone.type"]').val() === '') {
+      $('#microphonetype').css('color', 'red');
+      p1valid = false;
+    }
     if (p1valid) {
     $('#page1').hide();
     $('#page2').show(function() {$('label:visible')[0].scrollIntoView()});
@@ -303,13 +399,22 @@ $(document).ready(function() {
     $('#instructions').show();
   } else { // and this should only happen if we're starting from after the 1st item
     $('#instructions').hide();
-    $('#reloadResume').show();
+    endEarly = true;
+    $('#earlyStop').show();
   }
 });
 
+var endEarly = false;
+
 var onRecordFinishUpdate = function() {
-  clearInterval(recordInterval);
-  $($('.testtrial')[itemno]).find(':button.hiddennext').click();
+  //clearInterval(recordInterval);
+  console.log('internally clicking hidden next button for trial: ' + $($('.testtrial')[itemno]).attr("id"));
+  if (endEarly){
+    $('#testing').hide();
+    $('#earlyStop').show();
+  } else {
+    $($('.testtrial')[itemno]).find(':button.hiddennext').click();
+  }
   $.ajax({
     type: 'POST',
     url: '/mturk/experiments/socalign1',
