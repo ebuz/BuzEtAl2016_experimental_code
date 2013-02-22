@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>SocAlign1</title>
+    <title>BaeseberkGoldrickRep1</title>
     <meta charset=utf-8"/>
     <style type="text/css">
       body {
@@ -210,7 +210,7 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
     <script type="text/javascript" src="/mturk/recorder.js"></script>
     <script type="text/javascript" src="/mturk/wami-helpers.js"></script>
-    <script type="text/javascript" src="/mturk/socalign1.js"></script>
+    <script type="text/javascript" src="/mturk/baese-berk_goldrick_rep1.js"></script>
     <script type="text/javascript">
       var hitId = "{{amz.hitId}}";
       var workerId = "{{amz.workerId}}";
@@ -219,7 +219,7 @@
       var debugmode = {{debugmode}};
       var recorder_url = "{{recorder_url}}";
       var itemno = {{startitem}};
-      var experiment = "SocAlign.1";
+      var experiment = "{{experimentname}}";
     </script>
     {% endif %}
     </head>
@@ -337,8 +337,8 @@
           <div id="hiddenfields">
             <!--<input type="hidden" id="starttime" name="starttime" value="NA"/>
             <input type="hidden" id="endaudio" name="endaudio" value="NA"/>-->
-            <input type="hidden" id="experiment" name="experiment" value="SocAlign1"/>
-            <input type="hidden" id="list" name="ListID" value="{{ListID}}"/>
+            <input type="hidden" id="experiment" name="experiment" value="{{experimentname}}"/>
+            <input type="hidden" id="list" name="ListID" value="{{listid}}"/>
             <input type="hidden" id="assignmentId" name="assignmentId" value="{{amz.assignmentId}}"/>
             <input type="hidden" id="browserid" name="browserid" value="NA"/>
             <input type="hidden" id="endearly" name="endearly" value="NA"/>

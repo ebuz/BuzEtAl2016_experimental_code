@@ -10,11 +10,6 @@ $(document).ready(function() {
 
   if (Modernizr.audio) {
     $('#instructions').show();
-
-    $('#voladjust').on('play', function() {this.volume = 1;});
-    $('#voladjust').on('volumechange', function() {this.volume = 1;});
-    $('#voladjust').on('ended', function() {this.currentTime = 0; this.pause();});
-
   } else {
     $('#oldBrowserMessage').show();
   }
@@ -50,7 +45,7 @@ $(document).ready(function() {
         '&assignmentId=' + assignmentId +
         '&hitId=' + hitId +
         '&hash=' + amzhash +
-        '&experiment=SocAlign.1' +
+        '&experiment=' + experiment +
         '&filename=test', 'onTestRecordStart', 'onTestRecordFinish', 'onError');
     } else {
     alert('Still waiting for recorder to become ready.');
@@ -72,7 +67,7 @@ $(document).ready(function() {
       '&assignmentId=' + assignmentId +
       '&hitId=' + hitId +
       '&hash=' + amzhash +
-      '&experiment=SocAlign.1' +
+      '&experiment=' + experiment +
       '&filename=test', 'onPlayStart', 'onPlayFinish', 'onError');
   });
 
@@ -160,13 +155,13 @@ $(document).ready(function() {
           $(this).oneTime(500, function(){
             console.log('finished animating icons for trial: ' + $trialDiv.attr("id"));
             $trialDiv.children('.pretrialsync').hide();
-        //      Wami.startRecording(recorder_url + '?workerId=' +
-        //        workerId +
-        //        '&assignmentId=' + assignmentId +
-        //        '&hitId=' + hitId +
-        //        '&hash=' + amzhash +
-        //        '&experiment=SocAlign.1' +
-        //        '&filename=' + $trialDiv.find(':button.stoprecord').attr('id'), 'onRecordStart', 'onRecordFinishUpdate', 'onError');
+              Wami.startRecording(recorder_url + '?workerId=' +
+                workerId +
+                '&assignmentId=' + assignmentId +
+                '&hitId=' + hitId +
+                '&hash=' + amzhash +
+                '&experiment=' + experiment +
+                '&filename=' + $trialDiv.find(':button.nexttrial').attr('id'), 'onRecordStart', 'onRecordFinishUpdate', 'onError');
             $trialDiv.children('.pretrialsync').hide();
             $trialDiv.children('.fixation').show(0);
             console.log('showing fixation, for trial: ' + $trialDiv.attr("id"));
@@ -193,7 +188,6 @@ $(document).ready(function() {
         var positionType  = $trialDiv.children(':input.targetposition').val() 
         switch (partnerResponse){
           case "Target":
-            switch (positionType):
             break;
           case "Competitor":
             break;
@@ -239,7 +233,7 @@ $(document).ready(function() {
       $targetDiv = $trialDiv.find('.position3');
     }
     var previewTime = 1000;
-    var timerLength = 10000;
+    var timerLength = 30000;
     $trialDiv.find(".timerbar").show(0);
     $trialDiv.find(".stimuliframe").show(0);
     $trialDiv.oneTime(previewTime, "preview", function(){
@@ -254,6 +248,7 @@ $(document).ready(function() {
         });
       } else {
         //end timer at partnerresponsetime and then show feedback
+        $trialDiv.find(".timerbar").animate({width: "0px"}, timerLength, 'linear');
         $trialDiv.oneTime(parseInt($trialDiv.children(':input.partnerresponsetime').val()), "feedbackwaittime", function(){
           console.log("'partner' initiated response, stopping bar, showing feedback");
           $trialDiv.find('.timerbar').stop();
@@ -264,13 +259,13 @@ $(document).ready(function() {
   };
 
   $('button.nexttrial').on('click', function(){
-    //Wami.stopRecording();
+    Wami.stopRecording();
     console.log('Next trial button hit for trial: ' + $(this).parent().parent().attr("id"))
     $(this).stopTime();
     $(this).stopTime("buttonTimer");
     $(this).parent().hide();
     //because the stop recording function isn't called above we need to run this function
-    onRecordFinishUpdate();
+    //onRecordFinishUpdate();
   });
 
   document.addEventListener('keydown', function(event) {

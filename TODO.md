@@ -1,8 +1,6 @@
 # General changes #
-* Scrub the SocAlign1 references
-* Figure out why the server spits out bad list numbers (greater than 7)
 * Instructions should reiterate that subjects should be in quiet room with no one else around
-* Mention that experiment should be done in one go, and not to wait too long between trials to avoid wasting "partner time"
+* Mention in instructions that experiment should be done in one go, and not to wait too long between trials to avoid wasting "partner time"
 
 # Dealing with partner timings #
 * Change the instructions such that it presents the pseudo-confederate setup

@@ -71,11 +71,11 @@ def check_worker_exists(workerid, session):
         return worker
 
 def random_lowest_list(session):
-    #all_lists = session.query(TrialList).all()
+    all_lists = session.query(TrialList).all()
     # Starting by piloting lists NATACC.GOV.LEFT.DO and NATACC.GOV.LEFT.PO, aka 1 and 3
     #all_lists = session.query(TrialList).filter(TrialList.number.in_([1,3])).all()
-    target_lists = range(1,3) # we don't want list 25, which has no sound (aka 'EXPOSURE') trial
-    all_lists = session.query(TrialList).filter(TrialList.number.in_(target_lists)).all()
+    #target_lists = range(1,3) # we don't want list 25, which has no sound (aka 'EXPOSURE') trial
+    #all_lists = session.query(TrialList).filter(TrialList.number.in_(target_lists)).all()
     # sort the lists from least assigned workers to most
     all_lists.sort(key = lambda x: len(x.workers))
 
@@ -95,7 +95,7 @@ def shuffle_filter(value):
     shuffle(value)
     return value
 
-class SocAlign1Server(object):
+class BaeseberkGoldrickRep1Server(object):
     """
     WSGI compatible class to dispatch pages for the experiment
     """
@@ -186,11 +186,10 @@ class SocAlign1Server(object):
             currlist = [[] for x in range(1)]
             condition, survey = None, None
             if worker:
-                if (debug and forcelist):
+                if (debug and forcelist is not None):
                     listid = forcelist
                 else:
                     listid = worker.triallist.number
-                listid = 0
                 currlist = [x for x in stims if int(x['ListID']) == listid]
                 testtrials = [z for z in currlist if z['TrialType'] == 'TEST']
                 survey = testtrials[0]['SurveyList']
@@ -210,7 +209,7 @@ class SocAlign1Server(object):
                 startitem = 0
                 if (type(worker) != type(None)):
                     startitem = worker.lastitem
-                template = env.get_template('socalign1.html')
+                template = env.get_template('baese-berk_goldrick_rep1.html')
                 t = template.render(
                     testtrials = testtrials,
                     amz = amz_dict,
@@ -233,17 +232,17 @@ if __name__ == '__main__':
     from paste import httpserver, fileapp, urlmap
 
     app = urlmap.URLMap()
-    app['/mturk/stimuli/socalign1'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'stimuli'))
+    app['/mturk/stimuli/baese-berk_goldrick_rep1'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'stimuli'))
     app['/mturk/img'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'img'))
     app['/mturk/iso8601shim.min.js'] = fileapp.FileApp('iso8601shim.min.js')
     app['/mturk/jquery.timers-1.2.js'] = fileapp.FileApp('jquery.timers-1.2.js')
     app['/mturk/recorder.js'] = fileapp.FileApp('recorder.js')
     app['/mturk/wami-helpers.js'] = fileapp.FileApp('wami-helpers.js')
-    app['/mturk/socalign1.js'] = fileapp.FileApp('socalign1.js')
+    app['/mturk/baese-berk_goldrick_rep1.js'] = fileapp.FileApp('baese-berk_goldrick_rep1.js')
     #app['/mturk/modernizr.audioonly.js'] = fileapp.FileApp('modernizr.audioonly.js')
     app['/mturk/modernizr.audiocanvas.js'] = fileapp.FileApp('modernizr.audiocanvas.js')
     #app['/mturk/modernizr.canvas.js'] = fileapp.FileApp('modernizr.canvas.js')
     app['/mturk/excanvas.js'] = fileapp.FileApp('excanvas.js')
     app['/mturk/experiments/Wami.swf'] = fileapp.FileApp('Wami.swf')
-    app['/mturk/experiments/socalign1'] = SocAlign1Server(app)
+    app['/mturk/experiments/baese-berk_goldrick_rep1'] = BaeseberkGoldrickRep1Server(app)
     httpserver.serve(app, host='127.0.0.1', port=8080)

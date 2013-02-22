@@ -28,7 +28,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import ConfigParser
 
-MAX_LIST = 6
+MAX_LIST = 8
 
 cfg = ConfigParser.SafeConfigParser()
 cfg.read('expt.cfg')
@@ -44,7 +44,7 @@ Worker.metadata.create_all(engine)
 TrialList.metadata.create_all(engine)
 
 # create our lists
-for i in range(1,MAX_LIST+1):
+for i in range(0,MAX_LIST):
     triallist = TrialList(number = i)
     session.add(triallist)
 
