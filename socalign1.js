@@ -180,12 +180,26 @@ $(document).ready(function() {
       });
     });
   };
+  var positionTypeResponseMap = {
+    
+  };
 
   var showFeedback = function($trialDiv){
     console.log('generating feedback for trial: ' + $trialDiv.attr("id"));
     switch ($trialDiv.children(':input.partnerfeedback').val()){
       case "Choice":
         //show partner choice, green if target, red otherwise for 2 seconds, then move to post trial wait
+        var partnerResponse = $trialDiv.children(':input.partnerresponse').val() 
+        var positionType  = $trialDiv.children(':input.targetposition').val() 
+        switch (partnerResponse){
+          case "Target":
+            switch (positionType):
+            break;
+          case "Competitor":
+            break;
+          case "Filler":
+            break;
+        }
         $trialDiv.children(".stimuliframe").hide();
         $trialDiv.children(".timerbar").hide();
         $trialDiv.children(".posttrialwait").show();
