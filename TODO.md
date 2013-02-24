@@ -8,3 +8,8 @@
 
 # Dealing with partner timings #
 * test practice trial code, and early stopping code, and regular trial code
+
+# misc #
+attribute the noun project and authors:
+1. Network designed by Stephen Boak from The Noun Project
+2. Headphones from The Noun Project
