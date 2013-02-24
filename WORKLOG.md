@@ -6,3 +6,4 @@
 * 2/21/13 - Added feedback in no and simple types, fixed timing issues, got experiment to end if people wait too long inter-trial wise
 * 2/22/13 - Fixed one feedback issue, managed to re-name everything, cleaned up some unneeded files, sorted out experiment length issues
 * 2/22/13 - Fixed so many things that this experiment is almost ready to go, final issues to deal with are practice trials and if I am feeling like it a cohesive way to handle the various files that need to be changed as outlined in the TODO.md
+* 2/24/13 - Added practice trial code and removed direct need for itemno variable except in a few spots. Will need to test all of this code but will need to generate some practice trials and shorter experiment lists to be sure everything else is working

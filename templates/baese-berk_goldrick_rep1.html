@@ -11,6 +11,15 @@
         padding:0;
         text-align:center;
       }
+      div#practice {
+        position:absolute;
+        width: 98%;
+        top: 1%;
+        left: 1%;
+        height: 500px;
+        text-align: center;
+        margin: 0 auto;
+      }
       div#testing {
         position:absolute;
         width: 98%;
@@ -21,6 +30,16 @@
         margin: 0 auto;
       }
       div#startmessage {
+        position:absolute;
+        width: 98%;
+        height: 80%;
+        top: 1%;
+        left: 1%;
+        text-align: center;
+        float:0 auto;
+        margin: 0 auto;
+      }
+      div.practicetrial {
         position:absolute;
         width: 98%;
         height: 80%;
@@ -197,7 +216,7 @@
         margin-top: 2em;
         padding: 1em;
       }
-      #micwarning, #oldBrowserMessage, #earlyStop, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment, #testing, .testtrial, .fixation, .stimuliframe, .timerbar, .posttrialwait {display:none;}
+      #micwarning, #oldBrowserMessage, #startmessage, #earlyStop, #page1, #page2, #page3, #page4, #debriefing, #submit, #comment, #practice, .practicetrial, #teststart, #testing, .testtrial, .fixation, .stimuliframe, .timerbar, .posttrialwait {display:none;}
       {% if not preview %}
       #instructions, #realinstructions {display:none;}
       {% endif %}
@@ -255,25 +274,79 @@
       <form id="results" method="post" action="">
       {% endif %}
 
-      <div id="testing">
-        <div id="startmessage">
-          <div id="partnersync">
-            <p id="partnersyncmsg">Please wait a moment while we sync you with a partner, this initial connection generally takes 30 second to 2 minutes. Each trial will have a much shorter sync screen as well, usually not longer than 2 seconds.</p>
-            <p>You've been waiting <span id="synctimer">0</span> seconds</p>
-            <div id="initialsync">
+      <div id="startmessage">
+        <div id="partnersync">
+          <p id="partnersyncmsg">Please wait a moment while we sync you with a partner, this initial connection generally takes 30 second to 2 minutes. Each trial will have a much shorter sync screen as well, usually not longer than 2 seconds.</p>
+          <p>You've been waiting <span id="synctimer">0</span> seconds</p>
+          <div id="initialsync">
+              <img src="/mturk/img/microphone.png">
+              <img src="/mturk/img/arrow.png">
+              <img src="/mturk/img/internet.png">
+              <img src="/mturk/img/arrow.png">
+              <img src="/mturk/img/headphone.png">
+          </div>
+        </div>
+        {% if debugmode %}
+        <button type="button" id="starttrials">Start</button>
+        {% else %}
+        <button type="button" id="starttrials" disabled>Start</button>
+        {% endif %}
+      </div>
+      <div id="practice">
+        {% for item in practicetrials %}
+          <div id="practice_trial{{loop.index}}" class="practicetrial">
+            <div class="pretrialsync">
                 <img src="/mturk/img/microphone.png">
                 <img src="/mturk/img/arrow.png">
                 <img src="/mturk/img/internet.png">
                 <img src="/mturk/img/arrow.png">
                 <img src="/mturk/img/headphone.png">
             </div>
+            <div class="fixation">
+              <img class="fixationcross" src="/mturk/img/fixation.png">
+            </div>
+            <div class="stimuliframe">
+              <div class="position1">
+                <img class="speakercue" src="/mturk/img/microphone.png">
+                <img class="partnercue" src="/mturk/img/headphone.png">
+                <div class="stimulus">
+                  {{item.Position1}}
+                </div>
+              </div>
+              <div class="position2">
+                <img class="speakercue" src="/mturk/img/microphone.png">
+                <img class="partnercue" src="/mturk/img/headphone.png">
+                <div class="stimulus">
+                  {{item.Position2}}
+                </div>
+              </div>
+              <div class="position3">
+                <img class="speakercue" src="/mturk/img/microphone.png">
+                <img class="partnercue" src="/mturk/img/headphone.png">
+                <div class="stimulus">
+                  {{item.Position3}}
+                </div>
+              </div>
+            </div>
+            <div class="timerbar"></div>
+            <div class="posttrialwait">
+              <p class="feedbackmsg"></p>
+              <p class="posttrialmsg">Please click the button or press the space bar in the next 30 seconds to start the next trial.</p>
+              <button type="button" id="{{item.ItemID}}" class="nexttrial">30</button>
+            </div>
+            <button type="button" class="hiddennext" style="display: none !important"></button>
+            <input type="hidden" class = "targetposition", id="targetposition_{{item.ItemID}}" name="targetposition_{{item.ItemID}}" value="{{item.TargetCompetitorPositions}}"/>
+            <input type="hidden" class = "partnerresponsetime", id="partnerresponsetime_{{item.ItemID}}" name="partnerresponsetime_{{item.ItemID}}" value="{{item.PartnerResponseTime}}"/>
+            <input type="hidden" class = "partnerresponse", id="partnerresponse_{{item.ItemID}}" name="partnerresponse_{{item.ItemID}}" value="{{item.PartnerResponse}}"/>
+            <input type="hidden" class = "partnerfeedback", id="partnerfeedback_{{item.ItemID}}" name="partnerfeedback_{{item.ItemID}}" value="{{item.PartnerFeedbackType}}"/>
           </div>
-          {% if debugmode %}
-          <button type="button" id="starttest">Start</button>
-          {% else %}
-          <button type="button" id="starttest" disabled>Start</button>
-          {% endif %}
-        </div>
+        {% endfor %}
+      </div>
+      <div id="teststart">
+        <p class="teststartmsg">That was the end of the practice set, please click the button below or press the space bar to begin the start of the actual experiment. Again, try to do so in less than 30 seconds as your partner is waiting for you.</p>
+        <button type="button" id="starttest">30</button>
+      </div>
+      <div id="testing">
         {% for item in testtrials %}
           <div id="trial{{loop.index}}" class="testtrial">
             <div class="pretrialsync">
@@ -322,7 +395,6 @@
             <input type="hidden" class = "partnerfeedback", id="partnerfeedback_{{item.ItemID}}" name="partnerfeedback_{{item.ItemID}}" value="{{item.PartnerFeedbackType}}"/>
           </div>
         {% endfor %}
-
       </div>
       <div id="earlyStop">
         <p>You took too long to advance, for the sake of your partner's time we have ended the experiment. Please fill out the post experiment survey.</p>

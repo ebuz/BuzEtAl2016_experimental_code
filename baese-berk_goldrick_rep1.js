@@ -18,7 +18,7 @@ $(document).ready(function() {
     endEarly = false;
     $.ajax({
       type: 'POST',
-      url: '/mturk/experiments/socalign1',
+      url: '/mturk/experiments/baese-berk_goldrick_rep1',
       data: {'ItemNumber': 0, 'Abandoned': false, 'WorkerId': workerId},
       datatype: 'json'
     }).done(function() {
@@ -83,17 +83,18 @@ $(document).ready(function() {
       $('object').attr('width', 0);
       //$(':input[name="starttime"]').val(new Date().toISOString());
       $('#instructions').hide(0);
-      $('#testing').show(0);
+      $('#startmessage').show(0);
       initial_sync_screen();
     } else {
       alert('You have to allow microphone access for this experiment!');
     }
   });
 
-  $('button#starttest').on('click', function() {
+  $('button#starttrials').on('click', function() {
     $('#startmessage').hide();
-    var $nextTrial = $($('.testtrial')[itemno]);
-    console.log('Starting first trial: ' + $($('.testtrial')[itemno]).attr("id"))
+    $('#startmessage').next().show();
+    var $nextTrial = $('#startmessage').next().children().first();
+    console.log('Starting first trial: ' + $nextTrial.attr("id"))
     $nextTrial.show(0, function(){
       pretrial_sync_fixation_screen($nextTrial)
     });
@@ -131,8 +132,9 @@ $(document).ready(function() {
     $iconList.oneTime(waitTime, function(){
       $('#initialsync').hide();
       $('#partnersyncmsg').text("Ready! Please click the start button");
+      $('#partnersyncmsg').next().hide();
       $('#synctimer').stopTime("synctimer");
-      $('#starttest').removeAttr('disabled');
+      $('#starttrials').removeAttr('disabled');
     });
   };
 
@@ -186,8 +188,10 @@ $(document).ready(function() {
 
   var showFeedback = function($trialDiv){
     console.log('generating feedback for trial: ' + $trialDiv.attr("id"));
+    var count = 30;
     switch ($trialDiv.children(':input.partnerfeedback').val()){
       case "Choice":
+        count += 3;
         //show partner choice, green if target, red otherwise for 2 seconds, then move to post trial wait
         var partnerResponse = $trialDiv.children(':input.partnerresponse').val();
         var positionType  = $trialDiv.children(':input.targetposition').val();
@@ -224,7 +228,7 @@ $(document).ready(function() {
         $trialDiv.children(".stimuliframe").hide();
         $trialDiv.children(".posttrialwait").show();
     }
-    var count = 30;
+
     $trialDiv.find('button.nexttrial').everyTime(1000, "buttonTimer", function(){
       if (count < 1){
         endEarly = true;
@@ -232,7 +236,7 @@ $(document).ready(function() {
       } else {
         $(this).text(--count + '');
       }
-    }, 35);
+    }, 40);
   };
 
   var runTrial = function($trialDiv) {
@@ -249,7 +253,7 @@ $(document).ready(function() {
     $trialDiv.find(".timerbar").show(0);
     $trialDiv.find(".stimuliframe").show(0);
     $trialDiv.oneTime(previewTime, "preview", function(){
-      $targetDiv.css("border-color", "green");
+      $targetDiv.css("border-color", "black");
       $targetDiv.children('.speakercue').show();
       console.log('Animating timerbar');
       if (parseInt($trialDiv.children(':input.partnerresponsetime').val()) == -1){
@@ -271,10 +275,10 @@ $(document).ready(function() {
   };
 
   $('button.nexttrial').on('click', function(){
-    Wami.stopRecording();
-    console.log('Next trial button hit for trial: ' + $(this).parent().parent().attr("id"))
     $(this).stopTime();
     $(this).stopTime("buttonTimer");
+    Wami.stopRecording();
+    console.log('Next trial button hit for trial: ' + $(this).parent().parent().attr("id"))
     $(this).parent().hide();
     //because the stop recording function isn't called above we need to run this function
     //onRecordFinishUpdate();
@@ -288,15 +292,41 @@ $(document).ready(function() {
 
   $('button.hiddennext').on('click', function() {
     //$(':input[name="end_' + $(this).siblings('.stoprecord').attr('id') + '"]').val(new Date().toISOString());
-    $(this).parent().hide()
-    var $nextTrial = $($('.testtrial')[itemno]).next();
+    $(this).parent().hide();
+    var $nextTrial = $(this).parent().hide().next();
     console.log('advancing to next trial: ' + $nextTrial.attr("id"))
     $nextTrial.show(0, function(){
       pretrial_sync_fixation_screen($nextTrial)
     });
+    if ($(this).parents('.practicetrial')[0] === $('.practicetrial').last()[0]) {
+      $('#practice').hide();
+      $('#teststart').show();
+      var count = 30;
+      $('#starttest').everyTime(1000, "buttonTimer", function(){
+        if (count < 1){
+          endEarly = true;
+          $(this).click();
+        } else {
+          $(this).text(--count + '');
+        }
+      }, 40);
+    }
     if ($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
       $('#testing').hide();
       $('#page1').show();
+    }
+  });
+
+  $('button#starttest').on('click', function() {
+    $(this).stopTime();
+    $(this).stopTime("buttonTimer");
+    if (endEarly){
+      $(this).parent().hide()
+      $('#earlyStop').show();
+    } else {
+      $(this).parent().hide().next().show(0, function(){
+        pretrial_sync_fixation_screen($(this).children().first());
+      });
     }
   });
 
@@ -428,13 +458,15 @@ $(document).ready(function() {
 var endEarly = false;
 
 var onRecordFinishUpdate = function() {
-  //clearInterval(recordInterval);
+  clearInterval(recordInterval);
   console.log('internally clicking hidden next button for trial: ' + $($('.testtrial')[itemno]).attr("id"));
   if (endEarly){
+    $('#practice').hide();
     $('#testing').hide();
     $('#earlyStop').show();
   } else {
-    $($('.testtrial')[itemno]).find(':button.hiddennext').click();
+    $('button.nexttrial:visible').parent().siblings('.hiddennext').click();
+   //$($('.testtrial')[itemno]).find(':button.hiddennext').click();
   }
   $.ajax({
     type: 'POST',

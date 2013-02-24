@@ -7,4 +7,4 @@
 1. the javascript file needs to be updated with the url of the experiment in order for the ajax/json data to be correctly sent (this later point is important if the url will change with each new version of the experiment, otherwise it could be keep as baese-berk_goldrick_rep and the server files changed to reflect this. note the lack of a 1 there).
 
 # Dealing with partner timings #
-* Add a set of practice trials, presumably from a generated list
+* test practice trial code, and early stopping code, and regular trial code
