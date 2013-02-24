@@ -1,7 +1,7 @@
 # VisualConfusabilityMturk #
 
 ## External Python dependancies: ##
-All of these should be installable with easy\_install or pip
+All of these should be installable with [easy\_install or pip](http://pythonhosted.org/distribute/)
 
 * [WebOb](http://webob.org/)
 * [Paste](http://pythonpaste.org/)

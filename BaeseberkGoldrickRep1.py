@@ -2,7 +2,7 @@
 
 #Author: Andrew Watts
 #
-#    Copyright 2009-2012 Andrew Watts and
+#    Copyright 2009-2013 Andrew Watts and
 #        the University of Rochester BCS Department
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,8 +19,11 @@
 #    If not, see <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>.
 #
 
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from __future__ import print_function
+
 from random import choice, shuffle
-import sys
 import cPickle
 import ConfigParser
 import os.path
@@ -49,7 +52,7 @@ urlpath = cfg.get('host', 'path')
 
 # read in the stimuli via cPickle.
 stims = []
-with open(os.path.join(basepath,'stims.pickle'),'r') as p:
+with open(os.path.join(basepath,'stims.pickle'),'rb') as p:
     stims = cPickle.load(p)
 
 oldworkers = []
@@ -117,7 +120,7 @@ class BaeseberkGoldrickRep1Server(object):
             if not req.method == 'POST':
                 raise HTTPMethodNotAllowed("Only POST allowed", allowed='POST')
 
-            if not req.params.has_key('WorkerId'):
+            if 'WorkerId' not in req.params:
                 raise HTTPBadRequest('Missing key: WorkerId')
 
             worker = None
@@ -126,12 +129,12 @@ class BaeseberkGoldrickRep1Server(object):
             except NoResultFound:
                 raise HTTPBadRequest('Worker {} does not exist'.format(req.params['WorkerId']))
 
-            if req.params.has_key('ItemNumber'):
+            if 'ItemNumber' in req.params:
                 worker.lastseen = datetime.now()
                 worker.lastitem = req.params['ItemNumber']
                 #print("Setting {} to {} at {}".format(worker.workerid, worker.lastitem, worker.lastseen))
 
-            if req.params.has_key('Abandoned'):
+            if 'Abandoned' in req.params:
                 if req.params['Abandoned'] == "true":
                     worker.abandoned = True
                     #print("{} has abandoned the hit".format(worker.workerid))
@@ -153,11 +156,11 @@ class BaeseberkGoldrickRep1Server(object):
             key_error_msg = 'Missing parameter: {0}. Required keys: {1}'
 
             debug = False
-            if req.params.has_key('debug'):
+            if 'debug' in req.params:
                 debug = True if req.params['debug'] == '1' else False
 
             forcelist = None
-            if req.params.has_key('list'):
+            if 'list' in req.params:
                 forcelist = int(req.params['list'])
 
             try:
