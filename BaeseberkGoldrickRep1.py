@@ -186,16 +186,17 @@ class BaeseberkGoldrickRep1Server(object):
                                                       req.params['hitId'],
                                                       req.params['assignmentId'])).hexdigest()
 
-            currlist = [[] for x in range(1)]
+            currlist, testtrials, practicetrials = [[] for x in range(3)]
             feedbackcondition, responsetimetype, experimentname, survey = None, None, None, None
             if worker:
-                if (debug and forcelist is not None):
+                #if (debug and forcelist is not None):
+                if (forcelist is not None):
                     listid = forcelist
                 else:
                     listid = worker.triallist.number
                 currlist = [x for x in stims if int(x['ListID']) == listid]
-                testtrials = [z for z in currlist if z['TrialType'] == 'TEST']
-                survey = testtrials[0]['SurveyList']
+                practicetrials = [z for z in currlist if z['TrialType'] == 'Practice']
+                testtrials = [z for z in currlist if z['TrialType'] == 'Test']
                 experimentname = testtrials[0]['ExperimentName']
                 feedbackcondition = testtrials[0]['PartnerFeedbackType']
                 responsetimetype = 0 if testtrials[0]['PartnerResponseTime'] == '-1' else 1
@@ -217,12 +218,12 @@ class BaeseberkGoldrickRep1Server(object):
                     startitem = worker.lastitem
                 template = env.get_template('baese-berk_goldrick_rep1.html')
                 t = template.render(
+                    practicetrials = practicetrials,
                     testtrials = testtrials,
                     amz = amz_dict,
                     listid = listid,
                     feedbackcondition = feedbackcondition,
                     responsetimetype = responsetimetype,
-                    survey = survey,
                     experimentname = experimentname,
                     formtype = formtype,
                     recorder_url = recorder_url,

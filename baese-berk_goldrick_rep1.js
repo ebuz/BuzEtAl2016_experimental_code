@@ -189,6 +189,7 @@ $(document).ready(function() {
   var showFeedback = function($trialDiv){
     console.log('generating feedback for trial: ' + $trialDiv.attr("id"));
     var count = 30;
+    var choicefeedbacktime = 3000;
     switch ($trialDiv.children(':input.partnerfeedback').val()){
       case "Choice":
         count += 3;
@@ -208,7 +209,7 @@ $(document).ready(function() {
         }
         $partnerDiv.children('.partnercue').show();
         $partnerDiv.css("background-color", backgroundcolor);
-        $trialDiv.children(".stimuliframe").oneTime(3000, function(){
+        $trialDiv.children(".stimuliframe").oneTime(choicefeedbacktime, function(){
           $trialDiv.children(".stimuliframe").hide();
           $trialDiv.children(".timerbar").hide();
           $trialDiv.children(".posttrialwait").show();
@@ -223,20 +224,30 @@ $(document).ready(function() {
         }
       case "NoFeedback":
       default:
+        choicefeedbacktime = 1000
         $trialDiv.children(".timerbar").hide();
         //move to post trial wait
         $trialDiv.children(".stimuliframe").hide();
         $trialDiv.children(".posttrialwait").show();
     }
 
-    $trialDiv.find('button.nexttrial').everyTime(1000, "buttonTimer", function(){
-      if (count < 1){
-        endEarly = true;
+    var $nextButton = $trialDiv.find('button.nexttrial')
+    if ($nextButton.parents('.practicetrial')[0] === $('.practicetrial').last()[0] || $nextButton.parents('.testtrial')[0] === $('.testtrial').last()[0]) {
+      $nextButton.text('wait');
+      $nextButton.siblings('.posttrialmsg').text('Trial done, one moment.');
+      $nextButton.oneTime(choicefeedbacktime + 1000, "buttonTimer", function(){
         $(this).click();
-      } else {
-        $(this).text(--count + '');
-      }
-    }, 40);
+      });
+    } else {
+      $nextButton.everyTime(1000, "buttonTimer", function(){
+        if (count < 1){
+          endEarly = true;
+          $(this).click();
+        } else {
+          $(this).text(--count + '');
+        }
+      }, 40);
+    }
   };
 
   var runTrial = function($trialDiv) {
@@ -249,7 +260,7 @@ $(document).ready(function() {
       $targetDiv = $trialDiv.find('.position3');
     }
     var previewTime = 1000;
-    var timerLength = 30000;
+    var timerLength = 10000;
     $trialDiv.find(".timerbar").show(0);
     $trialDiv.find(".stimuliframe").show(0);
     $trialDiv.oneTime(previewTime, "preview", function(){
@@ -279,7 +290,9 @@ $(document).ready(function() {
     $(this).stopTime("buttonTimer");
     Wami.stopRecording();
     console.log('Next trial button hit for trial: ' + $(this).parent().parent().attr("id"))
-    $(this).parent().hide();
+    $(this).text('wait');
+    $(this).attr("disabled", "disabled");;
+    //$(this).parent().hide();
     //because the stop recording function isn't called above we need to run this function
     //onRecordFinishUpdate();
   });
@@ -287,18 +300,21 @@ $(document).ready(function() {
   document.addEventListener('keydown', function(event) {
     if(event.keyCode == 32) {
       $('button.nexttrial:visible').click();
+      $('#starttest:visible').click();
     }
   });
 
   $('button.hiddennext').on('click', function() {
     //$(':input[name="end_' + $(this).siblings('.stoprecord').attr('id') + '"]').val(new Date().toISOString());
+    console.log('hiddennext button clicked for trial : ' + $(this).parent().attr("id"));
     $(this).parent().hide();
-    var $nextTrial = $(this).parent().hide().next();
-    console.log('advancing to next trial: ' + $nextTrial.attr("id"))
+    var $nextTrial = $(this).parent().next();
+    console.log('advancing to next trial: ' + $nextTrial.attr("id"));
     $nextTrial.show(0, function(){
       pretrial_sync_fixation_screen($nextTrial)
     });
     if ($(this).parents('.practicetrial')[0] === $('.practicetrial').last()[0]) {
+      console.log('practice done, starting real trials');
       $('#practice').hide();
       $('#teststart').show();
       var count = 30;
@@ -312,6 +328,7 @@ $(document).ready(function() {
       }, 40);
     }
     if ($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
+      console.log('real trials done, starting survey');
       $('#testing').hide();
       $('#page1').show();
     }
@@ -459,14 +476,15 @@ var endEarly = false;
 
 var onRecordFinishUpdate = function() {
   clearInterval(recordInterval);
-  console.log('internally clicking hidden next button for trial: ' + $($('.testtrial')[itemno]).attr("id"));
+  console.log('Wami done, checking if ending early');
   if (endEarly){
+    console.log('ending early');
     $('#practice').hide();
     $('#testing').hide();
     $('#earlyStop').show();
   } else {
+    console.log('clicking hiddennext button of trial:' + $('button.nexttrial:visible').parent().parent().attr("id"));
     $('button.nexttrial:visible').parent().siblings('.hiddennext').click();
-   //$($('.testtrial')[itemno]).find(':button.hiddennext').click();
   }
   $.ajax({
     type: 'POST',
