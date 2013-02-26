@@ -81,7 +81,6 @@ $(document).ready(function() {
     if (Wami.getSettings().microphone.granted) {
       $('object').attr('height', 0);
       $('object').attr('width', 0);
-      //$(':input[name="starttime"]').val(new Date().toISOString());
       $('#instructions').hide(0);
       $('#startmessage').show(0);
       initial_sync_screen();
@@ -253,7 +252,7 @@ $(document).ready(function() {
       $targetDiv = $trialDiv.find('.position3');
     }
     var previewTime = 1000;
-    var timerLength = 10000;
+    var timerLength = 20000;
     $trialDiv.find(".timerbar").show(0);
     $trialDiv.find(".stimuliframe").show(0);
     $trialDiv.oneTime(previewTime, "preview", function(){
@@ -294,7 +293,6 @@ $(document).ready(function() {
   });
 
   $('button.hiddennext').on('click', function() {
-    //$(':input[name="end_' + $(this).siblings('.stoprecord').attr('id') + '"]').val(new Date().toISOString());
     $(this).parent().hide();
     var $nextTrial = $(this).parent().next();
     $nextTrial.show(0, function(){

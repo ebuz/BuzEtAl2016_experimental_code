@@ -189,7 +189,7 @@ class BaeseberkGoldrickRep1Server(object):
             currlist, testtrials, practicetrials = [[] for x in range(3)]
             feedbackcondition, responsetimetype, experimentname, survey = None, None, None, None
             if worker:
-                #if (debug and forcelist is not None):
+                if (debug and forcelist is not None):
                 #if (forcelist is not None):
                     listid = forcelist
                 else:
@@ -242,9 +242,9 @@ if __name__ == '__main__':
     from paste import httpserver, fileapp, urlmap
 
     app = urlmap.URLMap()
-    app['/mturk/stimuli/baese-berk_goldrick_rep1'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'stimuli'))
+    #app['/mturk/stimuli/baese-berk_goldrick_rep1'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'stimuli'))
     app['/mturk/img'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'img'))
-    app['/mturk/iso8601shim.min.js'] = fileapp.FileApp('iso8601shim.min.js')
+    #app['/mturk/iso8601shim.min.js'] = fileapp.FileApp('iso8601shim.min.js')
     app['/mturk/jquery.timers-1.2.js'] = fileapp.FileApp('jquery.timers-1.2.js')
     app['/mturk/recorder.js'] = fileapp.FileApp('recorder.js')
     app['/mturk/wami-helpers.js'] = fileapp.FileApp('wami-helpers.js')
