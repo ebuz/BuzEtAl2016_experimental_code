@@ -10,5 +10,6 @@
 1. attribute the noun project and authors:
   1. Network designed by Stephen Boak from The Noun Project
   2. Headphones from The Noun Project
-1. remove the console log outputs, clean up any parts of the code that may speed up functionality
+1. clean up any parts of the code that may speed up functionality
 1. the method that advances the last trial in a list to the next part of the webpage is _super hacky_ and should be corrected
+1. the server, once in a while, spits out some baroquely described errors that may be important to work out, could just be related to reloading the page

@@ -190,7 +190,7 @@ class BaeseberkGoldrickRep1Server(object):
             feedbackcondition, responsetimetype, experimentname, survey = None, None, None, None
             if worker:
                 #if (debug and forcelist is not None):
-                if (forcelist is not None):
+                #if (forcelist is not None):
                     listid = forcelist
                 else:
                     listid = worker.triallist.number

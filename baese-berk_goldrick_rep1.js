@@ -94,7 +94,6 @@ $(document).ready(function() {
     $('#startmessage').hide();
     $('#startmessage').next().show();
     var $nextTrial = $('#startmessage').next().children().first();
-    console.log('Starting first trial: ' + $nextTrial.attr("id"))
     $nextTrial.show(0, function(){
       pretrial_sync_fixation_screen($nextTrial)
     });
@@ -139,7 +138,6 @@ $(document).ready(function() {
   };
 
   var pretrial_sync_fixation_screen = function($trialDiv){
-    console.log('presync screen for : ' + $trialDiv.attr("id"));
     $trialDiv.show();
     $trialDiv.children('.pretrialsync').show();
     var $iconList = $trialDiv.children('.pretrialsync').children();
@@ -156,7 +154,6 @@ $(document).ready(function() {
         $(this).next().oneTime(waitTime, function(){
           showReady($(this), 400);
           $(this).oneTime(500, function(){
-            console.log('finished animating icons for trial: ' + $trialDiv.attr("id"));
             $trialDiv.children('.pretrialsync').hide();
               Wami.startRecording(recorder_url + '?workerId=' +
                 workerId +
@@ -167,10 +164,8 @@ $(document).ready(function() {
                 '&filename=' + $trialDiv.find(':button.nexttrial').attr('id'), 'onRecordStart', 'onRecordFinishUpdate', 'onError');
             $trialDiv.children('.pretrialsync').hide();
             $trialDiv.children('.fixation').show(0);
-            console.log('showing fixation, for trial: ' + $trialDiv.attr("id"));
             $trialDiv.children('.fixation').oneTime(500, function(){
               $trialDiv.children('.fixation').hide();
-              console.log('hiding fixation, for trial: ' + $trialDiv.attr("id"));
               runTrial($trialDiv);
             });
           });
@@ -187,7 +182,6 @@ $(document).ready(function() {
   ];
 
   var showFeedback = function($trialDiv){
-    console.log('generating feedback for trial: ' + $trialDiv.attr("id"));
     var count = 30;
     var choicefeedbacktime = 3000;
     switch ($trialDiv.children(':input.partnerfeedback').val()){
@@ -251,7 +245,6 @@ $(document).ready(function() {
   };
 
   var runTrial = function($trialDiv) {
-    console.log('Starting trial: ' + $trialDiv.attr("id"));
     var $targetDiv = $trialDiv.find('.position1');
     var positionType = $trialDiv.children(':input.targetposition').val();
     if (positionType == 2 || positionType == 3) {
@@ -266,18 +259,15 @@ $(document).ready(function() {
     $trialDiv.oneTime(previewTime, "preview", function(){
       $targetDiv.css("border-color", "black");
       $targetDiv.children('.speakercue').show();
-      console.log('Animating timerbar');
       if (parseInt($trialDiv.children(':input.partnerresponsetime').val()) == -1){
         //let timer go out then show feedback
         $trialDiv.find(".timerbar").animate({width: "0px"}, timerLength, 'linear', function(){
-          console.log('Waited till timebar finished, showing feedback');
           showFeedback($trialDiv);
         });
       } else {
         //end timer at partnerresponsetime and then show feedback
         $trialDiv.find(".timerbar").animate({width: "0px"}, timerLength, 'linear');
         $trialDiv.oneTime(parseInt($trialDiv.children(':input.partnerresponsetime').val()), "feedbackwaittime", function(){
-          console.log("'partner' initiated response, stopping bar, showing feedback");
           $trialDiv.find('.timerbar').stop();
           showFeedback($trialDiv);
         });
@@ -289,7 +279,6 @@ $(document).ready(function() {
     $(this).stopTime();
     $(this).stopTime("buttonTimer");
     Wami.stopRecording();
-    console.log('Next trial button hit for trial: ' + $(this).parent().parent().attr("id"))
     $(this).text('wait');
     $(this).attr("disabled", "disabled");;
     //$(this).parent().hide();
@@ -306,15 +295,12 @@ $(document).ready(function() {
 
   $('button.hiddennext').on('click', function() {
     //$(':input[name="end_' + $(this).siblings('.stoprecord').attr('id') + '"]').val(new Date().toISOString());
-    console.log('hiddennext button clicked for trial : ' + $(this).parent().attr("id"));
     $(this).parent().hide();
     var $nextTrial = $(this).parent().next();
-    console.log('advancing to next trial: ' + $nextTrial.attr("id"));
     $nextTrial.show(0, function(){
       pretrial_sync_fixation_screen($nextTrial)
     });
     if ($(this).parents('.practicetrial')[0] === $('.practicetrial').last()[0]) {
-      console.log('practice done, starting real trials');
       $('#practice').hide();
       $('#teststart').show();
       var count = 30;
@@ -328,7 +314,6 @@ $(document).ready(function() {
       }, 40);
     }
     if ($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
-      console.log('real trials done, starting survey');
       $('#testing').hide();
       $('#page1').show();
     }
@@ -476,14 +461,11 @@ var endEarly = false;
 
 var onRecordFinishUpdate = function() {
   clearInterval(recordInterval);
-  console.log('Wami done, checking if ending early');
   if (endEarly){
-    console.log('ending early');
     $('#practice').hide();
     $('#testing').hide();
     $('#earlyStop').show();
   } else {
-    console.log('clicking hiddennext button of trial:' + $('button.nexttrial:visible').parent().parent().attr("id"));
     $('button.nexttrial:visible').parent().siblings('.hiddennext').click();
   }
   $.ajax({
