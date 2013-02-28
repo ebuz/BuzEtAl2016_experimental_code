@@ -198,7 +198,8 @@ class BaeseberkGoldrickRep1Server(object):
                 practicetrials = [z for z in currlist if z['TrialType'] == 'Practice']
                 testtrials = [z for z in currlist if z['TrialType'] == 'Test']
                 experimentname = testtrials[0]['ExperimentName']
-                feedbackcondition = testtrials[0]['PartnerFeedbackType']
+                feedbacktype = testtrials[0]['PartnerFeedbackType']
+                feedbackcondition = testtrials[0]['PartnerFeedbackCondition']
                 responsetimetype = 0 if testtrials[0]['PartnerResponseTime'] == '-1' else 1
             else:
                 pass
@@ -222,6 +223,7 @@ class BaeseberkGoldrickRep1Server(object):
                     testtrials = testtrials,
                     amz = amz_dict,
                     listid = listid,
+                    feedbacktype = feedbacktype,
                     feedbackcondition = feedbackcondition,
                     responsetimetype = responsetimetype,
                     experimentname = experimentname,

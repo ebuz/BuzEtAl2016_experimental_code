@@ -154,13 +154,14 @@ $(document).ready(function() {
           showReady($(this), 400);
           $(this).oneTime(500, function(){
             $trialDiv.children('.pretrialsync').hide();
-              Wami.startRecording(recorder_url + '?workerId=' +
-                workerId +
-                '&assignmentId=' + assignmentId +
-                '&hitId=' + hitId +
-                '&hash=' + amzhash +
-                '&experiment=' + experiment +
-                '&filename=' + $trialDiv.find(':button.nexttrial').attr('id'), 'onRecordStart', 'onRecordFinishUpdate', 'onError');
+            $trialDiv.children('.record_start').val(new Date().getTime());
+            Wami.startRecording(recorder_url + '?workerId=' +
+              workerId +
+              '&assignmentId=' + assignmentId +
+              '&hitId=' + hitId +
+              '&hash=' + amzhash +
+              '&experiment=' + experiment +
+              '&filename=' + $trialDiv.find(':button.nexttrial').attr('id'), 'onRecordStart', 'onRecordFinishUpdate', 'onError');
             $trialDiv.children('.pretrialsync').hide();
             $trialDiv.children('.fixation').show(0);
             $trialDiv.children('.fixation').oneTime(500, function(){
@@ -252,21 +253,25 @@ $(document).ready(function() {
       $targetDiv = $trialDiv.find('.position3');
     }
     var previewTime = 1000;
-    var timerLength = 20000;
+    var timerLength = 10000;
     $trialDiv.find(".timerbar").show(0);
+    $trialDiv.children('.words_up').val(new Date().getTime());
     $trialDiv.find(".stimuliframe").show(0);
     $trialDiv.oneTime(previewTime, "preview", function(){
+      $trialDiv.children('.cue_up').val(new Date().getTime());
       $targetDiv.css("border-color", "black");
       $targetDiv.children('.speakercue').show();
       if (parseInt($trialDiv.children(':input.partnerresponsetime').val()) == -1){
         //let timer go out then show feedback
         $trialDiv.find(".timerbar").animate({width: "0px"}, timerLength, 'linear', function(){
+          $trialDiv.children('.timer_stop').val(new Date().getTime());
           showFeedback($trialDiv);
         });
       } else {
         //end timer at partnerresponsetime and then show feedback
         $trialDiv.find(".timerbar").animate({width: "0px"}, timerLength, 'linear');
         $trialDiv.oneTime(parseInt($trialDiv.children(':input.partnerresponsetime').val()), "feedbackwaittime", function(){
+          $trialDiv.children('.timer_stop').val(new Date().getTime());
           $trialDiv.find('.timerbar').stop();
           showFeedback($trialDiv);
         });
@@ -277,6 +282,7 @@ $(document).ready(function() {
   $('button.nexttrial').on('click', function(){
     $(this).stopTime();
     $(this).stopTime("buttonTimer");
+    $(this).parent().siblings('.record_end').val(new Date().getTime());
     Wami.stopRecording();
     $(this).text('wait');
     $(this).attr("disabled", "disabled");;
@@ -333,25 +339,60 @@ $(document).ready(function() {
   $('#page1 button.next').on('click', function() {
     $('#page1 .survquest').css('color', 'black');
     var p1valid = true;
-    $('#page1 .survquest').each(function() {
-      var value = $(this).attr('id');
-      var that = $(this);
-      if ($('[name="' + value + '"]:checked')[0] === undefined) {
-      $(that).css('color', 'red');
+
+    if ($('[name="q.participant.age"]').val() === '') {
+      $('#age').css('color', 'red');
       p1valid = false;
-      }
-    });
-    if ($('[name="q.internet.speed"]').val() != '') {
-      $('#internetspeed').css('color', 'black');
-      p1valid = true;
     }
-    if ($('[name="q.microphone.type"]').val() != '') {
-      $('#microphonetype').css('color', 'black');
-      p1valid = true;
+
+    if ($('[name="q.participant.education"]').val() === '') {
+      $('#education').css('color', 'red');
+      p1valid = false;
     }
+
+    if ($('[name="q.participant.gender"]').val() === '' &&
+      $('[name="q.participant.gender.other"]').val() === '') {
+      $('#gender').css('color', 'red');
+      p1valid = false;
+    }
+
+    if ($('[name="q.living_city_state"]').val() === '') {
+      $('#accent').css('color', 'red');
+      p1valid = false;
+    }
+
+    if ($('[name="q.website_responsiveness"]:checked')[0] === undefined) {
+      $('#q.website_responsiveness').css('color', 'red');
+      p1valid = false;
+    }
+
+    if ($('[name="q.speaker_instruction_clarity"]:checked')[0] === undefined) {
+      $('#q.speaker_instruction_clarity').css('color', 'red');
+      p1valid = false;
+    }
+
+    if ($('[name="q.speaker_cue_clarity]:checked')[0] === undefined) {
+      $('#q.speaker_cue_clarity').css('color', 'red');
+      p1valid = false;
+    }
+
+    if ($('[name="q.microphone_type"]').val() === '') {
+      $('#q.microphone_type').css('color', 'red');
+      p1valid = false;
+    }
+
+    if ($('[name="q.microphone_model"]').val() === '') {
+      $('#q.microphone_model').css('color', 'red');
+      p1valid = false;
+    }
+
     if (p1valid) {
       $('#page1').hide();
-      $('#page2').show(function() {$('label:visible')[0].scrollIntoView()});
+      if ($('#responsetimetype').val() == "0" && $('#feedbackcondition').val() == "NoFeedback" ){
+        $('#page3').show(function() {$('label:visible')[0].scrollIntoView()});
+      } else {
+        $('#page2').show(function() {$('label:visible')[0].scrollIntoView()});
+      }
     } else {
       alert('Please answer all questions.');
     }
@@ -360,14 +401,41 @@ $(document).ready(function() {
   $('#page2 button.next').on('click', function() {
     $('#page2 .survquest').css('color', 'black');
     var p2valid = true;
-    $('#page2 .survquest').each(function() {
-      var value = $(this).attr('id');
-      var that = $(this);
-      if ($('[name="' + value + '"]:checked')[0] === undefined) {
-        $(that).css('color', 'red');
-        p2valid = false;
-      }
-    });
+    if ($('[name="q.partner_accuracy"]:checked')[0] === undefined) {
+      $('#q.partner_accuracy').css('color', 'red');
+      p2valid = false;
+    }
+
+    if ($('[name="q.partner_mistakes"]').val() === '') {
+      $('#q.partner_mistakes').css('color', 'red');
+      p2valid = false;
+    }
+
+    if ($('[name="q.partner_rt_speed"]:checked')[0] === undefined) {
+      $('#q.partner_rt_speed').css('color', 'red');
+      p2valid = false;
+    }
+
+    if ($('[name="q.speech_delay_to_partner"]:checked')[0] === undefined) {
+      $('#q.speech_delay_to_partner').css('color', 'red');
+      p2valid = false;
+    }
+
+    if ($('[name="q.partner_rt_failure"]').val() === '') {
+      $('#q.partner_rt_failure').css('color', 'red');
+      p2valid = false;
+    }
+
+    if ($('[name="q.partner_rt_before_speaker_finish"]').val() === '') {
+      $('#q.partner_rt_before_speaker_finish').css('color', 'red');
+      p2valid = false;
+    }
+
+    if ($('[name="q.partner_rt_before_speaker_start"]').val() === '') {
+      $('#q.partner_rt_before_speaker_start').css('color', 'red');
+      p2valid = false;
+    }
+
     if (p2valid) {
       $('#page2').hide();
       $('#page3').show(function() {$('label:visible:first')[0].scrollIntoView();});
@@ -380,24 +448,13 @@ $(document).ready(function() {
     $('#page3 .survquest').css('color', 'black');
     var p3valid = true;
 
-    if ($('[name="q.participant.age"]').val() === '') {
-      $('#age').css('color', 'red');
+    if ($('[name="q.experiment_weirdness"]').val() === '') {
+      $('#q.experiment_weirdness').css('color', 'red');
       p3valid = false;
     }
 
-    if ($('[name="q.participant.education"]').val() === '') {
-      $('#education').css('color', 'red');
-      p3valid = false;
-    }
-
-    if ($('[name="q.participant.gender"]').val() === '' &&
-      $('[name="q.participant.gender.other"]').val() === '') {
-      $('#gender').css('color', 'red');
-      p3valid = false;
-    }
-
-    if ($('[name="q.living_city_state"]').val() === '') {
-      $('#accent').css('color', 'red');
+    if ($('[name="q.partner_weirdness"]').val() === '') {
+      $('#q.partner_weirdness').css('color', 'red');
       p3valid = false;
     }
 
@@ -409,19 +466,37 @@ $(document).ready(function() {
     }
   });
 
-  $('#page4 button#endsurvey').on('click', function() {
+  $('#page4 button.next').on('click', function() {
     $('#page4 .survquest').css('color', 'black');
     var p4valid = true;
-    $('#page4 .survquest').each(function() {
-      var value = $(this).attr('id');
-      var that = $(this);
-      if ($('[name="' + value + '"]:checked')[0] === undefined) {
-        $(that).css('color', 'red');
-        p4valid = false;
-      }
-    });
+    if ($('[name="q.partner_computer_like"]:checked')[0] === undefined) {
+      $('#q.partner_computer_like').css('color', 'red');
+      p4valid = false;
+    }
+
     if (p4valid) {
       $('#page4').hide();
+      $('#page5').show(function() {$('label:visible')[0].scrollIntoView()});
+    } else {
+      alert('Please answer all questions.');
+    }
+  });
+
+  $('#page5 button#endsurvey').on('click', function() {
+    $('#page5 .survquest').css('color', 'black');
+    var p5valid = true;
+    if ($('[name="q.coverstory_plausability"]:checked')[0] === undefined) {
+      $('#q.coverstory_plausability').css('color', 'red');
+      p5valid = false;
+    }
+
+    if ($('[name="q.experiment_interactivity"]:checked')[0] === undefined) {
+      $('#q.experiment_interactivity').css('color', 'red');
+      p5valid = false;
+    }
+
+    if (p5valid) {
+      $('#page5').hide();
       wrapup();
     } else {
       alert('Please answer all questions.');
@@ -429,7 +504,6 @@ $(document).ready(function() {
   });
 
   var wrapup = function() {
-    $('#debriefing').show();
     $('#comment').show(function() {$('#commentarea').focus();});
     $('#submit').show(function() {
       $(this).removeAttr('disabled');

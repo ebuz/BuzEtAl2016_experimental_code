@@ -30,8 +30,7 @@
                     be able to use your recordings and you will not be paid. Equally
                     important is that you do this experiment in a quiet room with no
                     other people around, if your speech is not distinguishable from
-                    background noise we will not be able to use your data and you will
-                    not be paid.</p>
+                    background noise we will not be able to use your data.</p>
                     <p>We recommend you use a headworn microphone with the microphone a
                     few inches from your mouth or a desktop microphone that you keep a
                     consistent distance from your mouth. Please try not to whisper or yell.
@@ -62,9 +61,9 @@
                   {% else %}
                   The timer bar will finish and the trial will continue on.
                   {% endif %}
-                  {% if feedbackcondition == 'Simple' %}
+                  {% if feedbacktype == 'Simple' %}
                   You will be told if your partner picked the right word or not.
-                  {% elif feedbackcondition == 'Choice' %}
+                  {% elif feedbacktype == 'Choice' %}
                   On your screen, a little icon of headhpones will appear next to the word your partner picked. The word will also be green if it was the word you said or red if not.
                   {% endif %}
                 {% endif %}

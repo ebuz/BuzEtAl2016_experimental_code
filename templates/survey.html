@@ -1,195 +1,370 @@
-                    <div id="survey">
-                        <div id="page1">
-                            <p>Phase 3: Survey</p>
-                            {% set page1 = [("Did the website run smoothly?", "q.website_responsiveness", "1 not at all; 6 worked very well"), ("Was it clear when and what you were supposed to say?", "q.speaker_informativeness", "1 not at all; 6 very clear"), ("Were the instructions at the start of the experiment clear?", "q.speaker_informativeness", "1 not at all; 6 very clear")] %}
-                            <fieldset>
-                            <label>Please answer these questions about the experiment and your computer and microphone.</label>
-                            {% for question, formname, scale in page1 %}
-                            <table class="survquest" id="{{formname}}">
-                                <tr>
-                                    <td colspan="6">
-                                        <p class="sentence">{{question}}</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    {% for x in range(1,7) %}
-                                    <td><input type="radio" name="{{formname}}" value="{{x}}" class="likert"></input></td>
-                                    {% endfor %}
-                                </tr>
-                                <tr>
-                                    {% for x in range(1,7) %}
-                                    <td>{{x}}</td>
-                                    {% endfor %}
-                                </tr>
-                                <tr>
-                                    <td colspan="6">{{scale}}</td>
-                                </tr>
-                            </table>
-                            {% endfor %}
-                              <table class="survquest" id="internetspeed">
-                                  <tr>
-                                      <td>Internet connection</td>
-                                      <td>
-                                          <select name="q.internet.speed">
-                                              <option value="" selected="selected">-----</option>
-                                              <option value="dialup">dialup</option>
-                                              <option value="cabledsl">cable or dsl</option>
-                                              <option value="otherhighspeed">other highspeed</option>
-                                          </select>
-                                      </td>
-                                  </tr>
-                              </table>
-                              <table class="survquest" id="microphonetype">
-                                  <tr>
-                                      <td>Microphone type</td>
-                                      <td>
-                                          <select name="q.microphone.type">
-                                              <option value="" selected="selected">-----</option>
-                                              <option value="builtin">built-in</option>
-                                              <option value="headmounted">head mounted</option>
-                                              <option value="desktop">on desktop</option>
-                                          </select>
-                                      </td>
-                                  </tr>
-                              </table>
-                              <p>Please write the make and model of your microphone. If it is built into your computer/laptop please provide the make and model of your computer. If you are unsure write "unknown".</p>
-                              <p><textarea id="microphone_model" name="microphone_model" cols="40" rows="1"></textarea></p>
-                            </fieldset>
-                            <button type="button" class="next" id="end1">Next</button>
-                        </div>
+      <div id="survey">
+        <div id="page1">
+          <p>Phase 3: Survey, there are multiple pages, please complete them all. Do not press your browser's back button.</p>
+          <fieldset>
+            <label>Please answer these questions about you, your computer and microphone and the experiment.</label>
+            <table class="survquest" id="age">
+              <tr>
+                <td>Age</td>
+                <td>
+                  <select name="q.participant.age">
+                    <option value="" selected="selected">-----</option>
+                    {% for a in range(13,85) %}
+                    <option value="{{a}}">{{a}}</option>
+                    {% endfor %}
+                    <option value="85+">85+</option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+            <table class="survquest" id="education">
+              <tr>
+                <td>Education</td>
+                <td>
+                  <select name="q.participant.education">
+                    <option value="" selected="selected">-----</option>
+                    <option value="didn't finish high school">didn't finish high school</option>
+                    <option value="finished high school">finished high school</option>
+                    <option value="attended college">attended college</option>
+                    <option value="finished college">finished college</option>
+                    <option value="attend graduate school">started and/or finished graduate education</option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+            <table class="survquest" id="gender">
+              <tr>
+                <td colspan="3"><p class="sentence">Gender</p></td>
+              </tr>
+              <tr>
+                <td>
+                  <select name="q.participant.gender">
+                    <option value="" selected="selected">-----</option>
+                    <option value="male">male</option>
+                    <option value="female">female</option>
+                    <option value="other">other</option>
+                  </select>
+                </td>
+                <td>If Other:</td>
+                <td><input type="text" name="q.participant.gender.other"/></td>
+              </tr>
+            </table>
+            <table class="survquest" id="accent">
+              <div id="accent_q">
+                <p>These questions are related to how you speak. We are asking these questions to get a better idea about how you speak (if you have a regional accent) and what exposure you have to particular accents.</p>
+                <p>Do you have an accent? For example, would people say you speak like a New Englander or Southnerer? If so what type of accent would you classify yourself as having?</p>
+                <p><textarea id="accent_comment" name="accent_comment" cols="40" rows="1"></textarea></p>
+                <p>Where do you live? Please provide the city and state.</p>
+                <p><textarea id="living_city_state" name="living_city_state" cols="40" rows="1"></textarea></p>
+                <p>Where did you grow up, if different from where you live now?</p>
+                <p><textarea id="born_city_state" name="born_city_state" cols="40" rows="1"></textarea></p>
+              </div>
+            </table>
+            <table class="survquest" id="q.website_responsiveness">
+              <tr>
+                <td colspan="7">
+                  <p class="sentence">Did the website run smoothly?</p>
+                </td>
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td><input type="radio" name="q.website_responsiveness" value="{{x}}" class="likert"></input></td>
+                {% endfor %}
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td>{{x}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td colspan="7">1 not at all; 7 worked very well</td>
+              </tr>
+            </table>
+            <table class="survquest" id="q.speaker_instruction_clarity">
+              <tr>
+                <td colspan="7">
+                  <p class="sentence">Were the instructions at the start of the experiment clear?</p>
+                </td>
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td><input type="radio" name="q.speaker_instruction_clarity" value="{{x}}" class="likert"></input></td>
+                {% endfor %}
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td>{{x}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td colspan="7">1 not at all; 7 very clear</td>
+              </tr>
+            </table>
+            <table class="survquest" id="q.speaker_cue_clarity">
+              <tr>
+                <td colspan="7">
+                  <p class="sentence">Was it clear when and what you were supposed to say?</p>
+                </td>
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td><input type="radio" name="q.speaker_cue_clarity" value="{{x}}" class="likert"></input></td>
+                {% endfor %}
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td>{{x}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td colspan="7">1 not at all; 7 very clear</td>
+              </tr>
+            </table>
+            <table class="survquest" id="internetspeed">
+              <tr>
+                <td>Internet connection</td>
+                <td>
+                  <select name="q.internet.speed">
+                    <option value="" selected="selected">-----</option>
+                    <option value="dialup">dialup</option>
+                    <option value="cabledsl">cable or dsl</option>
+                    <option value="otherhighspeed">other highspeed</option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+            <table class="survquest" id="q.microphone_type">
+              <tr>
+                <td>What type of microphone do you have?</td>
+                <td>
+                  <select name="q.microphone_type">
+                    <option value="" selected="selected">-----</option>
+                    <option value="builtin">built-in</option>
+                    <option value="headmounted">head mounted</option>
+                    <option value="desktop">on desktop</option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+            <p>Please write the make and model of your microphone. If it is built into your computer/laptop please provide the make and model of your computer. If you are unsure write "unknown".</p>
+            <p><textarea id="q.microphone_model" name="q.microphone_model" cols="40" rows="1"></textarea></p>
+          </fieldset>
+          <button type="button" class="next" id="end1">Next</button>
+        </div>
 
-                        <div id="page2">
-                            {% set page2 = [("How clearly do you think your partner heard you?", "q.partner_behavior_clarity", "1 not at all; 6 very clearly"),
-                                            ("How quickly, on average, did your your partner respond?", "q.partner_behavior_responsetime", "1 not at all; 6 absolutely"),
-                                            ("How good at the task do you think your partner was?", "q.partner_behavoir_accuracy", "1 made many mistakes; 6 made no mistakes")] %}
-                            <fieldset>
-                            <label>Please answer these questions about your partner.</label>
-                            {% for question, formname, scale in page2 %}
-                            <table class="survquest" id="{{formname}}">
-                                <tr>
-                                    <td colspan="6">
-                                        <p class="sentence">{{question}}</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    {% for x in range(1,7) %}
-                                    <td><input type="radio" name="{{formname}}" value="{{x}}" class="likert"></input></td>
-                                    {% endfor %}
-                                </tr>
-                                <tr>
-                                    {% for x in range(1,7) %}
-                                    <td>{{x}}</td>
-                                    {% endfor %}
-                                </tr>
-                                <tr>
-                                    <td colspan="6">{{scale}}</td>
-                                </tr>
-                            </table>
-                            {% endfor %}
-                            </fieldset>
-                            <button type="button" class="next" id="end2">Next</button>
-                        </div>
+        <div id="page2">
+          <fieldset>
+            <label>Please answer these questions about your partner.</label>
+            {% if feedbacktype != 'NoFeedback' %}
+              <table class="survquest" id="q.partner_accuracy">
+                <tr>
+                  <td colspan="7">
+                    <p class="sentence">How accurate was your partner?</p>
+                  </td>
+                </tr>
+                <tr>
+                  {% for x in range(1,8) %}
+                  <td><input type="radio" name="q.partner_accuracy" value="{{x}}" class="likert"></input></td>
+                  {% endfor %}
+                </tr>
+                <tr>
+                  {% for x in range(1,8) %}
+                  <td>{{x}}</td>
+                  {% endfor %}
+                </tr>
+                <tr>
+                  <td colspan="7">1 very inaccurate; 7 very accurate</td>
+                </tr>
+              </table>
+              <table class="survquest" id="q.partner_mistakes">
+                <tr>
+                  <td>How many mistakes did your partner make?</td>
+                  <td>
+                    <select name="q.partner_mistakes">
+                      <option value="" selected="selected">-----</option>
+                      {% for a in range(0,101) %}
+                      <option value="{{a}}">{{a}}</option>
+                      {% endfor %}
+                    </select>
+                  </td>
+                </tr>
+              </table>
+            {% endif %}
+            {% if responsetimetype == 1 %}
+              <table class="survquest" id="q.partner_rt_speed">
+                <tr>
+                  <td colspan="7">
+                    <p class="sentence">How fast did your partner respond?</p>
+                  </td>
+                </tr>
+                <tr>
+                  {% for x in range(1,8) %}
+                  <td><input type="radio" name="q.partner_rt_speed" value="{{x}}" class="likert"></input></td>
+                  {% endfor %}
+                </tr>
+                <tr>
+                  {% for x in range(1,8) %}
+                  <td>{{x}}</td>
+                  {% endfor %}
+                </tr>
+                <tr>
+                  <td colspan="7">1 very slow; 7 very fast</td>
+                </tr>
+              </table>
+              <table class="survquest" id="q.partner_rt_failure">
+                <tr>
+                  <td>Did your partner ever fail to respond in time?</td>
+                  <td>
+                    <select name="q.partner_rt_failure">
+                      <option value="" selected="selected">-----</option>
+                      {% for a in range(0,101) %}
+                      <option value="{{a}}">{{a}}</option>
+                      {% endfor %}
+                    </select>
+                  </td>
+                </tr>
+              </table>
+              <table class="survquest" id="q.partner_rt_before_speaker_finish">
+                <tr>
+                  <td>How often did your partner respond before you finished speaking?</td>
+                  <td>
+                    <select name="q.partner_rt_before_speaker_finish">
+                      <option value="" selected="selected">-----</option>
+                      {% for a in range(0,101) %}
+                      <option value="{{a}}">{{a}}</option>
+                      {% endfor %}
+                    </select>
+                  </td>
+                </tr>
+              </table>
+              <table class="survquest" id="q.partner_rt_before_speaker_start">
+                <tr>
+                  <td>How often did your partner respond before you started speaking?</td>
+                  <td>
+                    <select name="q.partner_rt_before_speaker_start">
+                      <option value="" selected="selected">-----</option>
+                      {% for a in range(0,101) %}
+                      <option value="{{a}}">{{a}}</option>
+                      {% endfor %}
+                    </select>
+                  </td>
+                </tr>
+              </table>
+              <table class="survquest" id="q.speech_delay_to_partner">
+                <tr>
+                  <td colspan="7">
+                    <p class="sentence">How much delay in transmitting the sound between you and your partner would you estimate was there?</p>
+                  </td>
+                </tr>
+                <tr>
+                  {% for x in range(1,8) %}
+                  <td><input type="radio" name="q.speech_delay_to_partner" value="{{x}}" class="likert"></input></td>
+                  {% endfor %}
+                </tr>
+                <tr>
+                  {% for x in range(1,8) %}
+                  <td>{{x}}</td>
+                  {% endfor %}
+                </tr>
+                <tr>
+                  <td colspan="7">1 not much; 7 a lot</td>
+                </tr>
+              </table>
+            {% endif %}
+          </fieldset>
+          <button type="button" class="next" id="end2">Next</button>
+        </div>
 
-                        <div id="page3">
-                            <fieldset>
-                                <label>Demographics</label>
-                                <table class="survquest" id="age">
-                                    <tr>
-                                        <td>Age</td>
-                                        <td>
-                                            <select name="q.participant.age">
-                                                <option value="" selected="selected">-----</option>
-                                            {% for a in range(13,85) %}
-                                                <option value="{{a}}">{{a}}</option>
-                                            {% endfor %}
-                                                <option value="85+">85+</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <table class="survquest" id="education">
-                                    <tr>
-                                        <td>Education</td>
-                                        <td>
-                                            <select name="q.participant.education">
-                                                <option value="" selected="selected">-----</option>
-                                                <option value="didn't finish high school">didn't finish high school</option>
-                                                <option value="finished high school">finished high school</option>
-                                                <option value="attended college">attended college</option>
-                                                <option value="finished college">finished college</option>
-                                                <option value="attend graduate school">started and/or finished graduate education</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <table class="survquest" id="gender">
-                                <tr>
-                                    <td colspan="3"><p class="sentence">Gender</p></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <select name="q.participant.gender">
-                                            <option value="" selected="selected">-----</option>
-                                            <option value="male">male</option>
-                                            <option value="female">female</option>
-                                            <option value="other">other</option>
-                                        </select>
-                                    </td>
-                                    <td>If Other:</td>
-                                    <td><input type="text" name="q.participant.gender.other"/></td>
-                                </tr>
-                                </table>
-                                <table class="survquest" id="accent">
-                                </table>
-                                <div id="accent_q">
-                                  <p>These questions are related to how you speak. We are asking these questions to get a better idea about how you speak (if you have a regional accent) and what exposure you have to particular accents.</p>
-                                  <p>Do you have an accent? For example, would people say you speak like a New Englander or Southnerer? If so what type of accent would you classify yourself as having?</p>
-                                  <p><textarea id="accent_comment" name="accent_comment" cols="40" rows="1"></textarea></p>
-                                  <p>Where do you live? Please provide the city and state.</p>
-                                  <p><textarea id="living_city_state" name="living_city_state" cols="40" rows="1"></textarea></p>
-                                  <p>Where did you grow up, if different from where you live now?</p>
-                                  <p><textarea id="born_city_state" name="born_city_state" cols="40" rows="1"></textarea></p>
-                                </div>
-                            </fieldset>
+        <div id="page3">
+          <fieldset>
+            <label>General comments</label>
+            <div class='survquest' id='q.experiment_weirdness'>
+              <p>Did you noticed anything weird during the experiment? Say "No" if not.</p>
+              <p><textarea name="q.experiment_weirdness" cols="40" rows="2"></textarea></p>
+            </div>
+            <div class='survquest' id='q.partner_weirdness'>
+              <p>Did you noticed anything weird about your partner? Say "No" if not.</p>
+              <p><textarea name="q.partner_weirdness" cols="40" rows="2"></textarea></p>
+            </div>
+          </fieldset>
+          <button type="button" class="next" id="end3">Next</button>
+        </div>
 
-                            <button type="button" class="next" id="end3">Next</button>
-                        </div>
+        <div id="page4">
+          <fieldset>
+            <label>If we told you that some people got randomly paired with an actual partner and some were randomly paired with a computer, what would you say about your partner?</label>
+            <table class="survquest" id="q.partner_computer_like">
+              <tr>
+                <td colspan="7">
+                  <p class="sentence">Was your partner:</p>
+                </td>
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td><input type="radio" name="q.partner_computer_like" value="{{x}}" class="likert"></input></td>
+                {% endfor %}
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td>{{x}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td colspan="7">1 definitely a computer; 7 definitely human</td>
+              </tr>
+            </table>
+          </fieldset>
+          <button type="button" class="next" id="end4">Next</button>
+        </div>
 
-                        <div id="page4">
-                            <fieldset>
-                            <label>In this experiment, there was actually no partner. While we did record you and plan to use your recordings we wanted you to speak as if you were talking to another person. All the responses by your partner, and how quickly the responses occured were pre-programmed. Please answer these questions about how believable it was that you were actually speaking to another person.</label>
+        <div id="page5">
+          <fieldset>
+            <label>In this experiment, there was actually no partner. While we did record you and plan to use your recordings we wanted you to speak as if you were talking to another person. All the responses by your partner, and how quickly the responses occured were pre-programmed. Please answer these questions about how believable it was that you were actually speaking to another person.</label>
 
-                            {% for question, formname, scale in [
-                                ("Was the cover story that we gave at the start of the experiment believable?", 'q.coverstory_plausability', '1 not at all; 6 absolutely'),
-                                ("Did the experiment make it seem like you were actually interacting with another person?", 'q.experiment_interactivity', '1 not at all; 6 absolutely'),
-                                ('How real did your partner seem?', 'q.partner_realism', '1 not at all; 6 absolutely'),
-                                ("Did your parter's responses seem natural?", 'q.partner_naturalism', '1 not at all; 6 absolutely'),
-                                ('If your partner made mistakes, did those mistakes seem plausible?', 'q.partner_mistake_plausability', '1 not at all; 6 absolutely')] %}
-                            <table class="survquest" id="{{formname}}">
-                                <tr>
-                                    <td colspan="6">
-                                        <p class="sentence">{{question}}</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    {% for x in range(1,7) %}
-                                    <td><input type="radio" name="{{formname}}" value="{{x}}" class="likert"></input></td>
-                                    {% endfor %}
-                                </tr>
-                                <tr>
-                                    {% for x in range(1,7) %}
-                                    <td>{{x}}</td>
-                                    {% endfor %}
-                                </tr>
-                                <tr>
-                                    <td colspan="6">{{scale}}</td>
-                                </tr>
-                            </table>
-                        {% endfor %}
-                            <p>At any point in the experiment did something make you think you were not interacting with a real person? If so please explain</p>
-                            <p><textarea id="microphone_model" name="microphone_model" cols="40" rows="2"></textarea></p>
-                            </fieldset>
-                        <button type="button" id="endsurvey">Done</button>
-                        </div>
+            <table class="survquest" id="q.coverstory_plausability">
+              <tr>
+                <td colspan="7">
+                  <p class="sentence">Was the cover story that we gave at the start of the experiment believable?</p>
+                </td>
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td><input type="radio" name="q.coverstory_plausability" value="{{x}}" class="likert"></input></td>
+                {% endfor %}
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td>{{x}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td colspan="7">1 not at all; 7 absolutely believable</td>
+              </tr>
+            </table>
+            <table class="survquest" id="q.experiment_interactivity">
+              <tr>
+                <td colspan="7">
+                  <p class="sentence">Did the experiment make it seem like you were actually interacting with another person?</p>
+                </td>
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td><input type="radio" name="q.experiment_interactivity" value="{{x}}" class="likert"></input></td>
+                {% endfor %}
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td>{{x}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td colspan="7">1 not at all; 7 absolutely</td>
+              </tr>
+            </table>
+            <p>If you realized you were not interacting with a human at some point in the experiment, what caused you to come to that conclusion?</p>
+            <p><textarea id="q.partner_computer_realization" name="qpartner_computer_realization" cols="40" rows="2"></textarea></p>
+          </fieldset>
+          <button type="button" id="endsurvey">Done</button>
+        </div>
 
-                    </div>
+      </div>

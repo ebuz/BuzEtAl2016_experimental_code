@@ -9,3 +9,4 @@
 * 2/24/13 - Added practice trial code and removed direct need for itemno variable except in a few spots. Will need to test all of this code but will need to generate some practice trials and shorter experiment lists to be sure everything else is working
 * 2/25/13 - Did a prelim test, experiment moves through all the trials in a list, earlier tests of behavior on submit was good so this experiment should be close to production
 * 2/26/13 - Pushing code to Andrew to see it served on www, still need to finalize the lists but that's OK
+* 2/28/13 - Needed to add some timing variables during the code for later, also have to add in some more survey questions
