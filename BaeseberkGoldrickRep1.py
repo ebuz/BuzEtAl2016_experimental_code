@@ -187,7 +187,7 @@ class BaeseberkGoldrickRep1Server(object):
                                                       req.params['assignmentId'])).hexdigest()
 
             currlist, testtrials, practicetrials = [[] for x in range(3)]
-            feedbackcondition, responsetimetype, experimentname, survey = None, None, None, None
+            feedbacktype, feedbackcondition, responsetimetype, experimentname, survey = None, None, None, None, None
             if worker:
                 if (debug and forcelist is not None):
                 #if (forcelist is not None):

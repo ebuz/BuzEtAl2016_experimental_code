@@ -77,7 +77,7 @@
                 very important to us that you try to answer the questions in the survey
                 to the best of your abilities. Rushing through the survey will make
                 your data completely useless for our research purpose.</p>
-                <p>All together the experiment will take about 20-25 minutes. Thank
+                <p>All together the experiment will take about 45 minutes to an hour. Thank
                 you for your participation </p>
                 <p>Please do not take breaks in the middle of the experiment. It is
                 important that you do the experiment in one go.</p>
@@ -107,6 +107,10 @@
                 <p style="font-weight:bold;">Once you press Start, these instructions
                 will disappear, so make sure you understand them fully before you start.
                 A partner will be found for you.</p>
+                {% if not preview %}
                 <button type="button" id="endinstr">I confirm that I have read and understood the instructions and want to start the experiment</button>
+                {% else %}
+                <button type="button" id="endinstr" disabled>I confirm that I have read and understood the instructions and want to start the experiment</button>
+                {% endif %}
             </div>
         </div>
