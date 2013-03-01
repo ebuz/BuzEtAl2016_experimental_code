@@ -154,7 +154,9 @@ $(document).ready(function() {
           showReady($(this), 400);
           $(this).oneTime(500, function(){
             $trialDiv.children('.pretrialsync').hide();
+            console.log('setting record_start val for trialdiv: ' + $trialDiv.attr('id'));
             $trialDiv.children('.record_start').val(new Date().getTime());
+            console.log('set as: ' + $trialDiv.children('.record_start').val());
             Wami.startRecording(recorder_url + '?workerId=' +
               workerId +
               '&assignmentId=' + assignmentId +
@@ -362,27 +364,32 @@ $(document).ready(function() {
     }
 
     if ($('[name="q.website_responsiveness"]:checked')[0] === undefined) {
-      $('#q.website_responsiveness').css('color', 'red');
+      $('#q\\.website_responsiveness').css('color', 'red');
       p1valid = false;
     }
 
     if ($('[name="q.speaker_instruction_clarity"]:checked')[0] === undefined) {
-      $('#q.speaker_instruction_clarity').css('color', 'red');
+      $('#q\\.speaker_instruction_clarity').css('color', 'red');
       p1valid = false;
     }
 
-    if ($('[name="q.speaker_cue_clarity]:checked')[0] === undefined) {
-      $('#q.speaker_cue_clarity').css('color', 'red');
+    if ($('[name="q.speaker_cue_clarity"]:checked')[0] === undefined) {
+      $('#q\\.speaker_cue_clarity').css('color', 'red');
       p1valid = false;
     }
 
     if ($('[name="q.microphone_type"]').val() === '') {
-      $('#q.microphone_type').css('color', 'red');
+      $('#q\\.microphone_type').css('color', 'red');
+      p1valid = false;
+    }
+
+    if ($('[name="q.internetspeed"]').val() === '') {
+      $('#q\\.internetspeed').css('color', 'red');
       p1valid = false;
     }
 
     if ($('[name="q.microphone_model"]').val() === '') {
-      $('#q.microphone_model').css('color', 'red');
+      $('#q\\.microphone_model').parent().prev().css('color', 'red');
       p1valid = false;
     }
 
@@ -401,39 +408,42 @@ $(document).ready(function() {
   $('#page2 button.next').on('click', function() {
     $('#page2 .survquest').css('color', 'black');
     var p2valid = true;
-    if ($('[name="q.partner_accuracy"]:checked')[0] === undefined) {
-      $('#q.partner_accuracy').css('color', 'red');
-      p2valid = false;
-    }
+    if ($('#responsetimetype').val() == "1"){
+      if ($('[name="q.partner_rt_speed"]:checked')[0] === undefined) {
+        $('#q\\.partner_rt_speed').css('color', 'red');
+        p2valid = false;
+      }
 
-    if ($('[name="q.partner_mistakes"]').val() === '') {
-      $('#q.partner_mistakes').css('color', 'red');
-      p2valid = false;
-    }
+      if ($('[name="q.speech_delay_to_partner"]:checked')[0] === undefined) {
+        $('#q\\.speech_delay_to_partner').css('color', 'red');
+        p2valid = false;
+      }
 
-    if ($('[name="q.partner_rt_speed"]:checked')[0] === undefined) {
-      $('#q.partner_rt_speed').css('color', 'red');
-      p2valid = false;
-    }
+      if ($('[name="q.partner_rt_failure"]').val() === '') {
+        $('#q\\.partner_rt_failure').css('color', 'red');
+        p2valid = false;
+      }
 
-    if ($('[name="q.speech_delay_to_partner"]:checked')[0] === undefined) {
-      $('#q.speech_delay_to_partner').css('color', 'red');
-      p2valid = false;
-    }
+      if ($('[name="q.partner_rt_before_speaker_finish"]').val() === '') {
+        $('#q\\.partner_rt_before_speaker_finish').css('color', 'red');
+        p2valid = false;
+      }
 
-    if ($('[name="q.partner_rt_failure"]').val() === '') {
-      $('#q.partner_rt_failure').css('color', 'red');
-      p2valid = false;
+      if ($('[name="q.partner_rt_before_speaker_start"]').val() === '') {
+        $('#q\\.partner_rt_before_speaker_start').css('color', 'red');
+        p2valid = false;
+      }
     }
+    if ($('#feedbackcondition').val() != "NoFeedback"){
+      if ($('[name="q.partner_accuracy"]:checked')[0] === undefined) {
+        $('#q\\.partner_accuracy').css('color', 'red');
+        p2valid = false;
+      }
 
-    if ($('[name="q.partner_rt_before_speaker_finish"]').val() === '') {
-      $('#q.partner_rt_before_speaker_finish').css('color', 'red');
-      p2valid = false;
-    }
-
-    if ($('[name="q.partner_rt_before_speaker_start"]').val() === '') {
-      $('#q.partner_rt_before_speaker_start').css('color', 'red');
-      p2valid = false;
+      if ($('[name="q.partner_mistakes"]').val() === '') {
+        $('#q\\.partner_mistakes').css('color', 'red');
+        p2valid = false;
+      }
     }
 
     if (p2valid) {
@@ -449,12 +459,12 @@ $(document).ready(function() {
     var p3valid = true;
 
     if ($('[name="q.experiment_weirdness"]').val() === '') {
-      $('#q.experiment_weirdness').css('color', 'red');
+      $('#q\\.experiment_weirdness').css('color', 'red');
       p3valid = false;
     }
 
     if ($('[name="q.partner_weirdness"]').val() === '') {
-      $('#q.partner_weirdness').css('color', 'red');
+      $('#q\\.partner_weirdness').css('color', 'red');
       p3valid = false;
     }
 
@@ -470,7 +480,7 @@ $(document).ready(function() {
     $('#page4 .survquest').css('color', 'black');
     var p4valid = true;
     if ($('[name="q.partner_computer_like"]:checked')[0] === undefined) {
-      $('#q.partner_computer_like').css('color', 'red');
+      $('#q\\.partner_computer_like').css('color', 'red');
       p4valid = false;
     }
 
@@ -486,12 +496,12 @@ $(document).ready(function() {
     $('#page5 .survquest').css('color', 'black');
     var p5valid = true;
     if ($('[name="q.coverstory_plausability"]:checked')[0] === undefined) {
-      $('#q.coverstory_plausability').css('color', 'red');
+      $('#q\\.coverstory_plausability').css('color', 'red');
       p5valid = false;
     }
 
     if ($('[name="q.experiment_interactivity"]:checked')[0] === undefined) {
-      $('#q.experiment_interactivity').css('color', 'red');
+      $('#q\\.experiment_interactivity').css('color', 'red');
       p5valid = false;
     }
 
