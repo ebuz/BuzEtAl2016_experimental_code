@@ -24,8 +24,8 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from random import choice, shuffle
-import cPickle
-import ConfigParser
+from six.moves import cPickle
+from six.moves import configparser
 import os.path
 from hashlib import sha224
 from datetime import datetime
@@ -40,7 +40,7 @@ from models import Worker, TrialList
 
 basepath = os.path.dirname(__file__)
 
-cfg = ConfigParser.SafeConfigParser({'domain': '127.0.0.1', 'port': '', 'path': 'wav_uploader'})
+cfg = configparser.SafeConfigParser({'domain': '127.0.0.1', 'port': '', 'path': 'wav_uploader'})
 cfg.read(os.path.join(basepath, 'expt.cfg'))
 engine_string = cfg.get('db', 'engine_string')
 
