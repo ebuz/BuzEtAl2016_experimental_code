@@ -1,5 +1,5 @@
         <div id="instructions">
-            <h2>Word reading with a partner</h2>
+            <h2>Interactive communication: word naming</h2>
             <div id="audiosetup">
               <p style="font-weight:bold;">In this experiment you will be shown sets
               of words and be asked to say one to a partner that we will connect you
@@ -15,6 +15,9 @@
                 we are recording.</p>
                 {% if not preview %}
                 <p>Now let's adjust your microphone settings.</p>
+                <p>We recommend you use a headworn microphone with the microphone a
+                few inches from your mouth or a desktop microphone that you keep a
+                consistent distance from your mouth. Please try not to whisper or yell.</p>
                 <div id="micsetup">
                     <button type="button" id="startrecordtest">Start Recording</button>
                     <button type="button" id="endrecordtest" disabled="disabled">Stop and Play back</button>
@@ -31,12 +34,9 @@
                     important is that you do this experiment in a quiet room with no
                     other people around, if your speech is not distinguishable from
                     background noise we will not be able to use your data.</p>
-                    <p>We recommend you use a headworn microphone with the microphone a
-                    few inches from your mouth or a desktop microphone that you keep a
-                    consistent distance from your mouth. Please try not to whisper or yell.
                     <p>By clicking the 'Continue to instructions' button below, I
                     confirm that I adjusted my volume and recording settings and that
-                    the recording was clearly understandable</p>
+                    the recording was clearly understandable.</p>
                     {% if debugmode %}
                     <button type="button" id="endsetup">Continue to instructions</button>
                     {% else %}
@@ -48,23 +48,21 @@
             <div id="realinstructions">
                 <p>This experiment consists of two phases.</p>
                 <p>In <span style="font-weight:bold;">phase one</span>, you will be paired
-                up with a partner, this process may take a minute or two while your computer syncs with our server, and while your partner's computer syncs with yours. After a partner is found and yours and their computers are connected, there will be a short practice session that will get the both of you
-                accustomed to the experiment. After the initial practice trials, the real
-                experiment will start.</p>
-                <p>In both the practice and actual trials your task is the same: direct your partner to click on a word from among several that appear on the screen. Each trial will follow this pattern: the software on your computer and your partner's will briefly resyncronize. Then a cross will briefly appear on your screen. You should look at the cross. Shortly after, three words will appear. One will be highlighted and a small microphone symbol will appear above it. You should tell your partner to "Click on the <span style="font-style:italic">word</span>" where <span style="font-style:italic">word</span> is the highlighted word on your screen. A timer bar will let you know how long your partner has to respond. While your partner can hear you, you will not hear your partner.</p>
+                up with a partner, this process may take a minute or two while your computer syncs with our server, and while your partner's computer syncs with yours. After a partner is found and yours and their computers are connected, there will be a short practice session that will get the both of you accustomed to the experiment. After the initial practice trials, the real experiment will start.</p>
+                <p>In both the practice and actual trials your task is the same: direct your partner to click on a word from among several that appear on the screen. Each trial will follow this pattern: the software on your computer and your partner's will briefly resyncronize. Then a cross will briefly appear on your screen. You should look at the cross. Shortly after, three words will appear. A black box will appear around one of the words and a small microphone symbol will appear above it. Please say to your partner: <span style='font-weight:bold'>"Click on the <span style="font-style:italic">word</span>" where <span style="font-style:italic">word</span> is the highlighted word on your screen.</span> A timer bar will let you know how long your partner has to respond. While your partner can hear you, you will not hear your partner. There should be no delay in the sound transmission and our tests showed the sound quality is good (comparable to a good skype connection).</p>
                 <p>
                 {% if debugmode %}
                 Feedback varies in this version of the experiment, sometimes the bar will run out and sometimes it won't. Sometimes you will see which word your partner clicked on and sometimes you won't. Sometimes we will tell you if your partner clicked the right word or wrong word and sometimes we won't.
                 {% else %}
                   {% if responsetimetype == 1 %}
-                  The timer bar will stop when your partner has made a response.
+                  The timer bar will stop when your partner has made a response and a message will appear to let you know your partner has made a response.
                   {% else %}
                   The timer bar will finish and the trial will continue on.
                   {% endif %}
                   {% if feedbacktype == 'Simple' %}
                   You will be told if your partner picked the right word or not.
                   {% elif feedbacktype == 'Choice' %}
-                  On your screen, a little icon of headhpones will appear next to the word your partner picked. The word will also be green if it was the word you said or red if not.
+                  On your screen, a little icon of headhpones will appear next to the word your partner picked. The word will also be green if it was the word you were told to say or red if not.
                   {% endif %}
                 {% endif %}
                 At the end of the trial a pause screen will appear with a 30 second timer.
@@ -73,23 +71,11 @@
                 experiment quickly both for your sake and your partner's. <span style="font-weight:bold">If you wait too long the experiment will terminate, your partner will be disconnected and you'll be taken to phase two</span>.</p>
                 <p><span style="font-weight:bold;">Phase two</span> is a brief survey. This survey consists of questions about the
                 experiment, your partner, you and your computer <span style="font-weight:bold;">phase one</span>.
-                The data we collect with the survey will be non-identifying. It is
-                very important to us that you try to answer the questions in the survey
-                to the best of your abilities. Rushing through the survey will make
-                your data completely useless for our research purpose.</p>
-                <p>All together the experiment will take about 45 minutes to an hour. Thank
-                you for your participation </p>
-                <p>Please do not take breaks in the middle of the experiment. It is
-                important that you do the experiment in one go.</p>
-                <p>Sometimes it can happen that technical difficulties cause experimental
-                scripts to freeze so that you will not be able to submit a HIT. We are trying
-                our best to avoid these problems. Should they nevertheless occur, we urge
-                you to contact us.</p>
-                <p>If you are interested in hearing how the experiments you are participating
-                in help us to understand the human brain, feel free to subscribe to our
-                <a href="http://hlplab.wordpress.com/">lab blog</a> on which we announce
-                new findings. Note that typically about one year passes before an experiment
-                is published.</p>
+                The data we collect with the survey will be non-identifying.</p>
+                <p>You must be a native speaker of American English. If you have not spent almost all of your time until the age of 10 in the United States, you cannot participate. If you have a non-American accent we will not be able to pay you. For example, British or Indian English is not permissible for this experiment.</p>
+                <p>All together the experiment will take about 45 minutes to an hour. Please
+                do not take breaks in the middle of the experiment. It is important that you
+                do the experiment in one go. Thank you for your participation.</p>
                 <div id="consent">
                     By accepting this HIT, you confirm that you have read and understood the
                     <a target="_blank" href="http://www.hlp.rochester.edu/consent/English_2013-05-13.pdf">consent form</a>,
@@ -112,5 +98,16 @@
                 {% else %}
                 <button type="button" id="endinstr" disabled>I confirm that I have read and understood the instructions and want to start the experiment</button>
                 {% endif %}
+
+                <p><span style="font-weight:bold;">Further Information</span></p>
+                <p>Sometimes it can happen that technical difficulties cause experimental
+                scripts to freeze so that you will not be able to submit a HIT. We are trying
+                our best to avoid these problems. Should they nevertheless occur, we urge
+                you to contact us.</p>
+                <p>If you are interested in hearing how the experiments you are participating
+                in help us to understand the human brain, feel free to subscribe to our
+                <a href="http://hlplab.wordpress.com/">lab blog</a> on which we announce
+                new findings. Note that typically about one year passes before an experiment
+                is published.</p>
             </div>
         </div>

@@ -1,6 +1,10 @@
       <div id="survey">
         <div id="page1">
-          <p>Phase 3: Survey, there are multiple pages, please complete them all. Do not press your browser's back button.</p>
+          <p>Phase 2: The survey. There are multiple pages, please complete them all. Do not press your browser's back button.</p>
+          <p>It is very important to us that you try to answer the questions in the survey
+          to the best of your abilities. Rushing through the survey will make your data
+          completely useless for our research purpose. Your answers will in no way affect
+          your payment.</p>
           <fieldset>
             <label>Please answer these questions about you, your computer and microphone and the experiment.</label>
             <table class="survquest" id="age">
@@ -50,15 +54,27 @@
               </tr>
             </table>
             <table class="survquest" id="accent">
-              <div id="accent_q">
+              <tr>
                 <p>These questions are related to how you speak. We are asking these questions to get a better idea about how you speak (if you have a regional accent) and what exposure you have to particular accents.</p>
-                <p>Do you have an accent? For example, would people say you speak like a New Englander or Southnerer? If so what type of accent would you classify yourself as having?</p>
-                <p><textarea id="accent_comment" name="accent_comment" cols="40" rows="1"></textarea></p>
+              </tr>
+              <tr>
+                <td>
+                <p>Do you have an accent? For example, would people say you speak like a New Englander or Southner? What type of accent would you classify yourself as having?</p>
+                <p><textarea id="accent_comment" name="q.accent_comment" cols="40" rows="1"></textarea></p>
+                </td>
+              </tr>
+              <tr>
+                <td>
                 <p>Where do you live? Please provide the city and state.</p>
-                <p><textarea id="living_city_state" name="living_city_state" cols="40" rows="1"></textarea></p>
-                <p>Where did you grow up, if different from where you live now?</p>
-                <p><textarea id="born_city_state" name="born_city_state" cols="40" rows="1"></textarea></p>
-              </div>
+                <p><textarea id="living_city_state" name="q.living_city_state" cols="40" rows="1"></textarea></p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                <p>Where did you grow up? if it is the same as above please say so.</p>
+                <p><textarea id="born_city_state" name="q.born_city_state" cols="40" rows="1"></textarea></p>
+                </td>
+              </tr>
             </table>
             <table class="survquest" id="q.website_responsiveness">
               <tr>
@@ -120,11 +136,11 @@
                 <td colspan="7">1 not at all; 7 very clear</td>
               </tr>
             </table>
-            <table class="survquest" id="internetspeed">
+            <table class="survquest" id="q.internetspeed">
               <tr>
                 <td>Internet connection</td>
                 <td>
-                  <select name="q.internet.speed">
+                  <select name="q.internetspeed">
                     <option value="" selected="selected">-----</option>
                     <option value="dialup">dialup</option>
                     <option value="cabledsl">cable or dsl</option>
@@ -319,7 +335,7 @@
 
         <div id="page5">
           <fieldset>
-            <label>In this experiment, there was actually no partner. While we did record you and plan to use your recordings we wanted you to speak as if you were talking to another person. All the responses by your partner, and how quickly the responses occured were pre-programmed. Please answer these questions about how believable it was that you were actually speaking to another person.</label>
+            <label>It turns out you were assigned to a computer partner: your partner's responses were pre-programmed. Please answer these questions about how believable it was that you were actually speaking to another person.</label>
 
             <table class="survquest" id="q.coverstory_plausability">
               <tr>
@@ -361,8 +377,18 @@
                 <td colspan="7">1 not at all; 7 absolutely</td>
               </tr>
             </table>
-            <p>If you realized you were not interacting with a human at some point in the experiment, what caused you to come to that conclusion?</p>
-            <p><textarea id="q.partner_computer_realization" name="qpartner_computer_realization" cols="40" rows="2"></textarea></p>
+            <table class="survequest" id="q.partner_computer_realization">
+              <tr>
+                <td>
+                  <p>If you realized you were not interacting with a human at some point in the experiment, what caused you to come to that conclusion? If you never realized it please say so.</p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p><textarea name="qpartner_computer_realization" cols="40" rows="2"></textarea></p>
+                </td>
+              </tr>
+            </table>
           </fieldset>
           <button type="button" id="endsurvey">Done</button>
         </div>

@@ -98,10 +98,21 @@ $(document).ready(function() {
     });
   });
 
-  var showReady = function($imgd, duration){
+  var showReady = function($imgd, duration, msg){
+    $imgd.css("background-color", "green");
     $imgd.animate({opacity: 1}, duration, function(){
-      $imgd.css("background-color", "green");
+      if(msg){
+        $('#syncstatusmsg').text(msg);
+      }
     });
+  };
+
+  var opacityBlink = function($obj){
+    if($obj.css('opacity') == "1"){
+      $obj.animate({opacity: .1}, 200);
+    } else {
+      $obj.animate({opacity: 1}, 200);
+    }
   };
 
   var initial_sync_screen = function(){
@@ -111,28 +122,29 @@ $(document).ready(function() {
       $('#synctimer').text(++count + '');
     });
     var $iconList = $('#initialsync').children();
-    $iconList.css('opacity', '.1')
-    showReady($($iconList[0]), 300);
-    var waitTime = 11530;
-    $iconList.oneTime(waitTime, function(){
-      showReady($($iconList[1]), 500);
-      showReady($($iconList[2]), 1000);
-    });
-    waitTime += 16300;
-    $iconList.oneTime(waitTime, function(){
-      showReady($($iconList[3]), 500);
-    });
-    waitTime += 2200;
-    $iconList.oneTime(waitTime, function(){
-      showReady($($iconList[4]), 2000);
-    });
-    waitTime += 3000;
-    $iconList.oneTime(waitTime, function(){
-      $('#initialsync').hide();
-      $('#partnersyncmsg').text("Ready! Please click the start button");
-      $('#partnersyncmsg').next().hide();
-      $('#synctimer').stopTime("synctimer");
-      $('#starttrials').removeAttr('disabled');
+    $iconList.css('opacity', '.1');
+    $iconList.css('background-color', 'red');
+    showReady($($iconList[0]), 300, 'Activated');
+    var waitTime = 400;
+    $($iconList[1]).oneTime(waitTime, function(){
+      showReady($(this), 300, 'Connecting to server');
+      showReady($(this).next(), 400, 'Connected, waiting for a partner');
+      waitTime += 27600;
+      $(this).next().next().oneTime(waitTime, function(){
+        $('#syncstatusmsg').text('Partner found, connecting');
+        showReady($(this), 400, "Connected, activating partner's sound");
+        $(this).next().oneTime(400, function(){
+          showReady($(this), 400, "Activated!");
+          $(this).oneTime(500, function(){
+            $('#syncstatusmsg').hide();
+            $('#initialsync').hide();
+            $('#partnersyncmsg').text("Ready! Please click the start button");
+            $('#partnersyncmsg').next().hide();
+            $('#synctimer').stopTime("synctimer");
+            $('#starttrials').removeAttr('disabled');
+          });
+        });
+      });
     });
   };
 
@@ -275,7 +287,11 @@ $(document).ready(function() {
         $trialDiv.oneTime(parseInt($trialDiv.children(':input.partnerresponsetime').val()), "feedbackwaittime", function(){
           $trialDiv.children('.timer_stop').val(new Date().getTime());
           $trialDiv.find('.timerbar').stop();
-          showFeedback($trialDiv);
+          $trialDiv.find('.responsecontainer').show(0);
+          $trialDiv.find('.responsecontainer').oneTime(2000, function(){
+            $(this).hide(0);
+            showFeedback($trialDiv);
+          });
         });
       }
     });
@@ -358,7 +374,17 @@ $(document).ready(function() {
       p1valid = false;
     }
 
+    if ($('[name="q.accent_comment"]').val() === '') {
+      $('#accent').css('color', 'red');
+      p1valid = false;
+    }
+
     if ($('[name="q.living_city_state"]').val() === '') {
+      $('#accent').css('color', 'red');
+      p1valid = false;
+    }
+
+    if ($('[name="q.born_city_state"]').val() === '') {
       $('#accent').css('color', 'red');
       p1valid = false;
     }
@@ -505,6 +531,11 @@ $(document).ready(function() {
       p5valid = false;
     }
 
+    if ($('[name="q.partner_computer_realization"]').val() == "") {
+      $('#q\\.partner_computer_realization').css('color', 'red');
+      p5valid = false;
+    }
+
     if (p5valid) {
       $('#page5').hide();
       wrapup();
@@ -534,6 +565,8 @@ $(document).ready(function() {
     $('#instructions').show();
   } else { // and this should only happen if we're starting from after the 1st item
     $('#instructions').hide();
+    $('#practice').hide();
+    $('#testing').hide();
     endEarly = true;
     $('#earlyStop').show();
   }

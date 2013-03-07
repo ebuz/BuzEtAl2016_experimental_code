@@ -1,3 +1,6 @@
+# Currently needs to be fixed #
+1. Change the url to something like: interactive_communication
+
 # Files that have to change for any given change of the experiment #
 1. the db_init.py program is hard-coded to generate the possible lists so if the number of lists changes so should this
 1. any changes to the feedback procedure needs to be reflected in the instructions.html file and probably also the survey.html file

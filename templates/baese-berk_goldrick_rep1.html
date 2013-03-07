@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>BaeseberkGoldrickRep1</title>
+    <title>Interactive communication: word naming</title>
     <meta charset=utf-8"/>
     <style type="text/css">
       body {
@@ -9,7 +9,7 @@
         height: auto;
         margin:0;
         padding:0;
-        text-align:center;
+        text-align:justify;
       }
       div#practice {
         position:absolute;
@@ -151,6 +151,13 @@
         right: 0%;
         background-color: gray;
       }
+      div.responsecontainer {
+        position: absolute;
+        width: 50%;
+        height: 5%;
+        bottom: -5%;
+        right: 25%;
+      }
       img.fixationcross{
         position: relative;
         top: 25.5%;
@@ -204,7 +211,6 @@
       label {
         font-weight: bold;
         font-size: 175%;
-        border: 1px dashed black;
       }
       #survey ul {
         list-style: none;
@@ -216,7 +222,7 @@
         margin-top: 2em;
         padding: 1em;
       }
-      #micwarning, #oldBrowserMessage, #startmessage, #earlyStop, #page1, #page2, #page3, #page4, #page5, #submit, #comment, #practice, .practicetrial, #teststart, #testing, .testtrial, .fixation, .stimuliframe, .timerbar, .posttrialwait {display:none;}
+      #micwarning, #oldBrowserMessage, #startmessage, #earlyStop, #page1, #page2, #page3, #page4, #page5, #submit, #comment, #practice, .practicetrial, #teststart, #testing, .testtrial, .fixation, .stimuliframe, .timerbar, .responsecontainer, .posttrialwait {display:none;}
       {% if not preview %}
       #instructions, #realinstructions {display:none;}
       {% endif %}
@@ -284,11 +290,12 @@
               <img src="/mturk/img/arrow.png">
               <img src="/mturk/img/headphone.png">
           </div>
+          <p id='syncstatusmsg'>activating your microphone</p>
         </div>
         {% if debugmode %}
-        <button type="button" id="starttrials">Start</button>
+        <button type="button" id="starttrials">Start practice trials</button>
         {% else %}
-        <button type="button" id="starttrials" disabled>Start</button>
+        <button type="button" id="starttrials" disabled>Start practice trials</button>
         {% endif %}
       </div>
       <div id="practice">
@@ -328,9 +335,12 @@
               </div>
             </div>
             <div class="timerbar"></div>
+            <div class="responsecontainer">
+              <p class="responsemsg">Your partner made a response.</p>
+            </div>
             <div class="posttrialwait">
               <p class="feedbackmsg"></p>
-              <p class="posttrialmsg">Please click the button or press the space bar in the next 30 seconds to start the next trial.</p>
+              <p class="posttrialmsg">Please <span style="font-weight:bold;">click the button or press the space bar</span> in the next 30 seconds to start the next trial.</p>
               <button type="button" id="{{item.ItemID}}" class="nexttrial">30</button>
             </div>
             <button type="button" class="hiddennext" style="display: none !important"></button>
@@ -387,9 +397,12 @@
               </div>
             </div>
             <div class="timerbar"></div>
+            <div class="responsecontainer">
+              <p class="responsemsg"></p>
+            </div>
             <div class="posttrialwait">
               <p class="feedbackmsg"></p>
-              <p class="posttrialmsg">Please click the button or press the space bar in the next 30 seconds to start the next trial.</p>
+              <p class="posttrialmsg">Please <span style="font-weight:bold;">click the button or press the space bar</span> in the next 30 seconds to start the next trial.</p>
               <button type="button" id="{{item.ItemID}}" class="nexttrial">30</button>
             </div>
             <button type="button" class="hiddennext" style="display: none !important"></button>
@@ -407,10 +420,10 @@
       </div>
       <div id="earlyStop">
         <p>You took too long to advance, for the sake of your partner's time we have ended the experiment. Please fill out the post experiment survey.</p>
-        <button type="button" id="tosurvey">Continue</button>
-        {% if debugmode == 1 -%}
+        <button type="button" id="tosurvey">Continue to survey</button>
+        {% if debugmode == 1 %}
         <button type="button" id="reset">Reset</button>
-        {%- endif %}
+        {% endif %}
       </div>
 
         {% include 'survey.html' %}
