@@ -256,5 +256,5 @@ if __name__ == '__main__':
     #app['/mturk/modernizr.canvas.js'] = fileapp.FileApp('modernizr.canvas.js')
     app['/mturk/excanvas.js'] = fileapp.FileApp('excanvas.js')
     app['/mturk/experiments/Wami.swf'] = fileapp.FileApp('Wami.swf')
-    app['/mturk/experiments/baese-berk_goldrick_rep1'] = BaeseberkGoldrickRep1Server(app)
+    app['/mturk/experiments/interactive_communication_1'] = BaeseberkGoldrickRep1Server(app)
     httpserver.serve(app, host='127.0.0.1', port=8080)

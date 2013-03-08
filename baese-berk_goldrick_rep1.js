@@ -18,7 +18,7 @@ $(document).ready(function() {
     endEarly = false;
     $.ajax({
       type: 'POST',
-      url: '/mturk/experiments/baese-berk_goldrick_rep1',
+      url: '/mturk/experiments/interactive_communication_1',
       data: {'ItemNumber': 0, 'Abandoned': false, 'WorkerId': workerId},
       datatype: 'json'
     }).done(function() {
@@ -46,7 +46,7 @@ $(document).ready(function() {
         '&assignmentId=' + assignmentId +
         '&hitId=' + hitId +
         '&hash=' + amzhash +
-        '&experiment=' + experiment +
+        '&experiment=' + endurl +
         '&filename=test', 'onTestRecordStart', 'onTestRecordFinish', 'onError');
     } else {
     alert('Still waiting for recorder to become ready.');
@@ -68,7 +68,7 @@ $(document).ready(function() {
       '&assignmentId=' + assignmentId +
       '&hitId=' + hitId +
       '&hash=' + amzhash +
-      '&experiment=' + experiment +
+      '&experiment=' + endurl +
       '&filename=test', 'onPlayStart', 'onPlayFinish', 'onError');
   });
 
@@ -174,7 +174,7 @@ $(document).ready(function() {
               '&assignmentId=' + assignmentId +
               '&hitId=' + hitId +
               '&hash=' + amzhash +
-              '&experiment=' + experiment +
+              '&experiment=' + endurl +
               '&filename=' + $trialDiv.find(':button.nexttrial').attr('id'), 'onRecordStart', 'onRecordFinishUpdate', 'onError');
             $trialDiv.children('.pretrialsync').hide();
             $trialDiv.children('.fixation').show(0);
@@ -602,7 +602,7 @@ var onRecordFinishUpdate = function() {
   }
   $.ajax({
     type: 'POST',
-    url: '/mturk/experiments/baese-berk_goldrick_rep1',
+    url: '/mturk/experiments/interactive_communication_1',
     data: {'ItemNumber': ++itemno, 'WorkerId': workerId},
     datatype: 'json'
   }).done(function(msg) {
