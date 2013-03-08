@@ -389,43 +389,9 @@ $(document).ready(function() {
       p1valid = false;
     }
 
-    if ($('[name="q.website_responsiveness"]:checked')[0] === undefined) {
-      $('#q\\.website_responsiveness').css('color', 'red');
-      p1valid = false;
-    }
-
-    if ($('[name="q.speaker_instruction_clarity"]:checked')[0] === undefined) {
-      $('#q\\.speaker_instruction_clarity').css('color', 'red');
-      p1valid = false;
-    }
-
-    if ($('[name="q.speaker_cue_clarity"]:checked')[0] === undefined) {
-      $('#q\\.speaker_cue_clarity').css('color', 'red');
-      p1valid = false;
-    }
-
-    if ($('[name="q.microphone_type"]').val() === '') {
-      $('#q\\.microphone_type').css('color', 'red');
-      p1valid = false;
-    }
-
-    if ($('[name="q.internetspeed"]').val() === '') {
-      $('#q\\.internetspeed').css('color', 'red');
-      p1valid = false;
-    }
-
-    if ($('[name="q.microphone_model"]').val() === '') {
-      $('#q\\.microphone_model').parent().prev().css('color', 'red');
-      p1valid = false;
-    }
-
     if (p1valid) {
       $('#page1').hide();
-      if ($('#responsetimetype').val() == "0" && $('#feedbackcondition').val() == "NoFeedback" ){
-        $('#page3').show(function() {$('label:visible')[0].scrollIntoView()});
-      } else {
-        $('#page2').show(function() {$('label:visible')[0].scrollIntoView()});
-      }
+      $('#page2').show(function() {$('label:visible')[0].scrollIntoView()});
     } else {
       alert('Please answer all questions.');
     }
@@ -434,79 +400,114 @@ $(document).ready(function() {
   $('#page2 button.next').on('click', function() {
     $('#page2 .survquest').css('color', 'black');
     var p2valid = true;
-    if ($('#responsetimetype').val() == "1"){
-      if ($('[name="q.partner_rt_speed"]:checked')[0] === undefined) {
-        $('#q\\.partner_rt_speed').css('color', 'red');
-        p2valid = false;
-      }
 
-      if ($('[name="q.speech_delay_to_partner"]:checked')[0] === undefined) {
-        $('#q\\.speech_delay_to_partner').css('color', 'red');
-        p2valid = false;
-      }
-
-      if ($('[name="q.partner_rt_failure"]').val() === '') {
-        $('#q\\.partner_rt_failure').css('color', 'red');
-        p2valid = false;
-      }
-
-      if ($('[name="q.partner_rt_before_speaker_finish"]').val() === '') {
-        $('#q\\.partner_rt_before_speaker_finish').css('color', 'red');
-        p2valid = false;
-      }
-
-      if ($('[name="q.partner_rt_before_speaker_start"]').val() === '') {
-        $('#q\\.partner_rt_before_speaker_start').css('color', 'red');
-        p2valid = false;
-      }
+    if ($('[name="q.website_responsiveness"]:checked')[0] === undefined) {
+      $('#q\\.website_responsiveness').css('color', 'red');
+      p2valid = false;
     }
-    if ($('#feedbackcondition').val() != "NoFeedback"){
-      if ($('[name="q.partner_accuracy"]:checked')[0] === undefined) {
-        $('#q\\.partner_accuracy').css('color', 'red');
-        p2valid = false;
-      }
 
-      if ($('[name="q.partner_mistakes"]').val() === '') {
-        $('#q\\.partner_mistakes').css('color', 'red');
-        p2valid = false;
-      }
+    if ($('[name="q.speaker_instruction_clarity"]:checked')[0] === undefined) {
+      $('#q\\.speaker_instruction_clarity').css('color', 'red');
+      p2valid = false;
+    }
+
+    if ($('[name="q.speaker_cue_clarity"]:checked')[0] === undefined) {
+      $('#q\\.speaker_cue_clarity').css('color', 'red');
+      p2valid = false;
+    }
+
+    if ($('[name="q.microphone_type"]').val() === '') {
+      $('#q\\.microphone_type').css('color', 'red');
+      p2valid = false;
+    }
+
+    if ($('[name="q.internetspeed"]').val() === '') {
+      $('#q\\.internetspeed').css('color', 'red');
+      p2valid = false;
+    }
+
+    if ($('[name="q.internet_quality"]:checked')[0] === undefined) {
+      $('#q\\.internet_quality').css('color', 'red');
+      p2valid = false;
+    }
+
+    if ($('[name="q.microphone_model"]').val() === '') {
+      $('#q\\.microphone_model').parent().prev().css('color', 'red');
+      p2valid = false;
     }
 
     if (p2valid) {
       $('#page2').hide();
-      $('#page3').show(function() {$('label:visible:first')[0].scrollIntoView();});
+      if ($('#responsetimetype').val() == "0" && $('#feedbackcondition').val() == "NoFeedback" ){
+        $('#page4').show(function() {$('label:visible')[0].scrollIntoView()});
+      } else {
+        $('#page3').show(function() {$('label:visible')[0].scrollIntoView()});
+      }
     } else {
-    alert('Please answer all questions.');
+      alert('Please answer all questions.');
     }
   });
 
   $('#page3 button.next').on('click', function() {
     $('#page3 .survquest').css('color', 'black');
     var p3valid = true;
+    if ($('#responsetimetype').val() == "1"){
+      if ($('[name="q.partner_rt_speed"]:checked')[0] === undefined) {
+        $('#q\\.partner_rt_speed').css('color', 'red');
+        p3valid = false;
+      }
 
-    if ($('[name="q.experiment_weirdness"]').val() === '') {
-      $('#q\\.experiment_weirdness').css('color', 'red');
-      p3valid = false;
+      if ($('[name="q.speech_delay_to_partner"]:checked')[0] === undefined) {
+        $('#q\\.speech_delay_to_partner').css('color', 'red');
+        p3valid = false;
+      }
+
+      if ($('[name="q.partner_rt_failure"]').val() === '') {
+        $('#q\\.partner_rt_failure').css('color', 'red');
+        p3valid = false;
+      }
+
+      if ($('[name="q.partner_rt_before_speaker_finish"]').val() === '') {
+        $('#q\\.partner_rt_before_speaker_finish').css('color', 'red');
+        p3valid = false;
+      }
+
+      if ($('[name="q.partner_rt_before_speaker_start"]').val() === '') {
+        $('#q\\.partner_rt_before_speaker_start').css('color', 'red');
+        p3valid = false;
+      }
     }
+    if ($('#feedbackcondition').val() != "NoFeedback"){
+      if ($('[name="q.partner_accuracy"]:checked')[0] === undefined) {
+        $('#q\\.partner_accuracy').css('color', 'red');
+        p3valid = false;
+      }
 
-    if ($('[name="q.partner_weirdness"]').val() === '') {
-      $('#q\\.partner_weirdness').css('color', 'red');
-      p3valid = false;
+      if ($('[name="q.partner_mistakes"]').val() === '') {
+        $('#q\\.partner_mistakes').css('color', 'red');
+        p3valid = false;
+      }
     }
 
     if (p3valid) {
       $('#page3').hide();
-      $('#page4').show(function() {$('label:visible')[0].scrollIntoView()});
+      $('#page4').show(function() {$('label:visible:first')[0].scrollIntoView();});
     } else {
-      alert('Please answer all questions.');
+    alert('Please answer all questions.');
     }
   });
 
   $('#page4 button.next').on('click', function() {
     $('#page4 .survquest').css('color', 'black');
     var p4valid = true;
-    if ($('[name="q.partner_computer_like"]:checked')[0] === undefined) {
-      $('#q\\.partner_computer_like').css('color', 'red');
+
+    if ($('[name="q.experiment_weirdness"]').val() === '') {
+      $('#q\\.experiment_weirdness').css('color', 'red');
+      p4valid = false;
+    }
+
+    if ($('[name="q.partner_weirdness"]').val() === '') {
+      $('#q\\.partner_weirdness').css('color', 'red');
       p4valid = false;
     }
 
@@ -518,26 +519,42 @@ $(document).ready(function() {
     }
   });
 
-  $('#page5 button#endsurvey').on('click', function() {
+  $('#page5 button.next').on('click', function() {
     $('#page5 .survquest').css('color', 'black');
     var p5valid = true;
-    if ($('[name="q.coverstory_plausability"]:checked')[0] === undefined) {
-      $('#q\\.coverstory_plausability').css('color', 'red');
-      p5valid = false;
-    }
-
-    if ($('[name="q.experiment_interactivity"]:checked')[0] === undefined) {
-      $('#q\\.experiment_interactivity').css('color', 'red');
-      p5valid = false;
-    }
-
-    if ($('[name="q.partner_computer_realization"]').val() == "") {
-      $('#q\\.partner_computer_realization').css('color', 'red');
-      p5valid = false;
+    if ($('[name="q.partner_computer_like"]:checked')[0] === undefined) {
+      $('#q\\.partner_computer_like').css('color', 'red');
+      p4valid = false;
     }
 
     if (p5valid) {
       $('#page5').hide();
+      $('#page6').show(function() {$('label:visible')[0].scrollIntoView()});
+    } else {
+      alert('Please answer all questions.');
+    }
+  });
+
+  $('#page6 button#endsurvey').on('click', function() {
+    $('#page6 .survquest').css('color', 'black');
+    var p6valid = true;
+    if ($('[name="q.coverstory_plausability"]:checked')[0] === undefined) {
+      $('#q\\.coverstory_plausability').css('color', 'red');
+      p6valid = false;
+    }
+
+    if ($('[name="q.experiment_interactivity"]:checked')[0] === undefined) {
+      $('#q\\.experiment_interactivity').css('color', 'red');
+      p6valid = false;
+    }
+
+    if ($('[name="q.partner_computer_realization"]').val() == "") {
+      $('#q\\.partner_computer_realization').css('color', 'red');
+      p6valid = false;
+    }
+
+    if (p6valid) {
+      $('#page6').hide();
       wrapup();
     } else {
       alert('Please answer all questions.');

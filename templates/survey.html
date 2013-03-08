@@ -1,6 +1,6 @@
       <div id="survey">
         <div id="page1">
-          <p>Phase 2: The survey. There are multiple pages, please complete them all. Do not press your browser's back button.</p>
+          <p>Phase 2: The survey. There are 6 pages, please complete them all. Do not press your browser's back button.</p>
           <p>It is very important to us that you try to answer the questions in the survey
           to the best of your abilities. Rushing through the survey will make your data
           completely useless for our research purpose. Your answers will in no way affect
@@ -76,6 +76,13 @@
                 </td>
               </tr>
             </table>
+          </fieldset>
+          <button type="button" class="next" id="end1">Next</button>
+        </div>
+
+        <div id="page2">
+          <fieldset>
+            <label>Please answer these questions about your computer, microphone and your experience with the experimental software.</label>
             <table class="survquest" id="q.website_responsiveness">
               <tr>
                 <td colspan="7">
@@ -138,7 +145,7 @@
             </table>
             <table class="survquest" id="q.internetspeed">
               <tr>
-                <td>Internet connection</td>
+                <td>What type of internet connection do you have?</td>
                 <td>
                   <select name="q.internetspeed">
                     <option value="" selected="selected">-----</option>
@@ -147,6 +154,26 @@
                     <option value="otherhighspeed">other highspeed</option>
                   </select>
                 </td>
+              </tr>
+            </table>
+            <table class="survquest" id="q.internet_quality">
+              <tr>
+                <td colspan="7">
+                  <p class="sentence">How would you rate the quality of the internet connection?</p>
+                </td>
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td><input type="radio" name="q.internet_quality" value="{{x}}" class="likert"></input></td>
+                {% endfor %}
+              </tr>
+              <tr>
+                {% for x in range(1,8) %}
+                <td>{{x}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td colspan="7">1 poor quality connection; 7 high quality</td>
               </tr>
             </table>
             <table class="survquest" id="q.microphone_type">
@@ -165,10 +192,9 @@
             <p>Please write the make and model of your microphone. If it is built into your computer/laptop please provide the make and model of your computer. If you are unsure write "unknown".</p>
             <p><textarea id="q.microphone_model" name="q.microphone_model" cols="40" rows="1"></textarea></p>
           </fieldset>
-          <button type="button" class="next" id="end1">Next</button>
         </div>
 
-        <div id="page2">
+        <div id="page3">
           <fieldset>
             <label>Please answer these questions about your partner.</label>
             {% if feedbacktype != 'NoFeedback' %}
@@ -288,10 +314,10 @@
               </table>
             {% endif %}
           </fieldset>
-          <button type="button" class="next" id="end2">Next</button>
+          <button type="button" class="next" id="end3">Next</button>
         </div>
 
-        <div id="page3">
+        <div id="page4">
           <fieldset>
             <label>General comments</label>
             <div class='survquest' id='q.experiment_weirdness'>
@@ -303,10 +329,10 @@
               <p><textarea name="q.partner_weirdness" cols="40" rows="2"></textarea></p>
             </div>
           </fieldset>
-          <button type="button" class="next" id="end3">Next</button>
+          <button type="button" class="next" id="end4">Next</button>
         </div>
 
-        <div id="page4">
+        <div id="page5">
           <fieldset>
             <label>If we told you that some people got randomly paired with an actual partner and some were randomly paired with a computer, what would you say about your partner?</label>
             <table class="survquest" id="q.partner_computer_like">
@@ -330,10 +356,10 @@
               </tr>
             </table>
           </fieldset>
-          <button type="button" class="next" id="end4">Next</button>
+          <button type="button" class="next" id="end5">Next</button>
         </div>
 
-        <div id="page5">
+        <div id="page6">
           <fieldset>
             <label>It turns out you were assigned to a computer partner: your partner's responses were pre-programmed. Please answer these questions about how believable it was that you were actually speaking to another person.</label>
 

@@ -1,4 +1,5 @@
 # Currently needs to be fixed #
+1. Add in some way to skip ahead in a trial while in debug mode.
 1. Change the url to something like: interactive_communication
 
 # Files that have to change for any given change of the experiment #
