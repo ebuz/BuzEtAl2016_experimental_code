@@ -1,8 +1,8 @@
 # Currently needs to be fixed #
 1. Add in some way to skip ahead in a trial while in debug mode.
-1. Try and change the last page screen of the trials instead of what it's currently doing
-1. Stop recording about 2 seconds after feedback and start uploading immediately
-1. Hide the file upload as best as possible, this will be the trickest part and will ideally fix the above to issues as well
+1. Hide the file upload as best as possible, this will be the trickest part and will ideally fix the below subissues to issues as well
+  1. Try and change the last page screen of the trials instead of what it's currently doing
+  1. Stop recording about 2 seconds after feedback and start uploading immediately
 
 # Files that have to change for any given change of the experiment #
 1. the db_init.py program is hard-coded to generate the possible lists so if the number of lists changes so should this
@@ -21,5 +21,4 @@
   1. Network designed by Stephen Boak from The Noun Project
   2. Headphones from The Noun Project
 1. clean up any parts of the code that may speed up functionality
-1. the method that advances the last trial in a list to the next part of the webpage is _super hacky_ and should be corrected
 1. the server, once in a while, spits out some baroquely described errors that may be important to work out, could just be related to reloading the page
