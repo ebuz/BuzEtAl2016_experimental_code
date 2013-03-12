@@ -1,5 +1,8 @@
 # Currently needs to be fixed #
 1. Add in some way to skip ahead in a trial while in debug mode.
+1. Try and change the last page screen of the trials instead of what it's currently doing
+1. Stop recording about 2 seconds after feedback and start uploading immediately
+1. Hide the file upload as best as possible, this will be the trickest part and will ideally fix the above to issues as well
 
 # Files that have to change for any given change of the experiment #
 1. the db_init.py program is hard-coded to generate the possible lists so if the number of lists changes so should this
