@@ -1,5 +1,10 @@
+# Pressing fixes #
+1. Link the start of the experiment to the new practice trial code
+1. test the new practice trial code and if it works, port it to handle all the trials
+
 # Currently needs to be fixed #
 1. Add in some way to skip ahead in a trial while in debug mode.
+1. Add trial numbers to each trial in a curr/total format somewhere on the screen
 1. Hide the file upload as best as possible, this will be the trickest part and will ideally fix the below subissues to issues as well
   1. Try and change the last page screen of the trials instead of what it's currently doing
   1. Stop recording about 2 seconds after feedback and start uploading immediately

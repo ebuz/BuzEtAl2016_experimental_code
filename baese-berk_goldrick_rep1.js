@@ -7,13 +7,11 @@ $(document).ready(function() {
     test: Modernizr.canvas,
     nope: '/mturk/excanvas.js'
   });
-
   if (Modernizr.audio) {
     $('#instructions').show();
   } else {
     $('#oldBrowserMessage').show();
   }
-
   $('button#reset').on('click', function() {
     endEarly = false;
     $.ajax({
@@ -27,13 +25,11 @@ $(document).ready(function() {
       alert('Failed to reset to zero.');
     });
   });
-
   $('button#tosurvey').on('click', function() {
     $(document).find(':input#endearly').val('Yes');
     $('#earlyStop').hide();
     $('#page1').show();
   });
-
   $('button#startrecordtest').on('click', function() {
     if (typeof(Wami.startRecording) === 'function') {
       $(this).attr('disabled', 'disabled');
@@ -52,7 +48,6 @@ $(document).ready(function() {
     alert('Still waiting for recorder to become ready.');
     }
   });
-
   $('button#endrecordtest').on('click', function() {
     Wami.stopRecording();
     $('#micwarning').show();
@@ -61,7 +56,6 @@ $(document).ready(function() {
     $('button#replaytest').removeAttr('disabled');
     $('#teststate').html('Transferring recorded file ... Thank you for your patience.');
   });
-
   $('button#replaytest').on('click', function() {
     Wami.startPlaying(recorder_url + '?workerId=' +
       workerId +
@@ -71,12 +65,10 @@ $(document).ready(function() {
       '&experiment=' + endurl +
       '&filename=test', 'onPlayStart', 'onPlayFinish', 'onError');
   });
-
   $('button#endsetup').on('click', function() {
     $('#audiosetup').hide();
     $('#realinstructions').show();
   });
-
   $('button#endinstr').on('click', function() {
     if (Wami.getSettings().microphone.granted) {
       $('object').attr('height', 0);
@@ -88,7 +80,6 @@ $(document).ready(function() {
       alert('You have to allow microphone access for this experiment!');
     }
   });
-
   $('button#starttrials').on('click', function() {
     $('#startmessage').hide();
     $('#startmessage').next().show();
@@ -97,7 +88,14 @@ $(document).ready(function() {
       pretrial_sync_fixation_screen($nextTrial)
     });
   });
-
+  $('button#startpractice').on('click', function() {
+    $('#startmessage').hide();
+    $('#practice').show();
+    $curTrial = $('#practice').children('.trial').first();
+    $curTrial.show(0, function(){
+      runPracticeTrial($curTrial)
+    });
+  });
   var showReady = function($imgd, duration, msg){
     $imgd.css("background-color", "green");
     $imgd.animate({opacity: 1}, duration, function(){
@@ -106,15 +104,35 @@ $(document).ready(function() {
       }
     });
   };
-
+  var endGreen = function($obj){
+    $obj.css('background-color', 'green');
+    $obj.animate({opacity: 1}, 300);
+  };
+  var downBlink = function($obj){
+    $obj.animate({opacity: .1}, {
+        duration: 300, 
+        complete: function(){ upBlink($(this));},
+        fail: function(){ endGreen($(this))}
+      });
+  };
+  var upBlink = function($obj){
+    $obj.animate({opacity: .5}, {
+        duration: 300, 
+        complete: function(){ downBlink($(this));},
+        fail: function(){ endGreen($(this))}
+      });
+  };
+  var redBlinkEndGreen = function($obj){
+    $obj.css('background-color', 'red');
+    upBlink($obj);
+  };
   var opacityBlink = function($obj){
     if($obj.css('opacity') == "1"){
-      $obj.animate({opacity: .1}, 200);
+      $obj.animate({opacity: .1}, 300);
     } else {
-      $obj.animate({opacity: 1}, 200);
+      $obj.animate({opacity: 1}, 300);
     }
   };
-
   var initial_sync_screen = function(){
     $('#startmessage').show();
     var count = 0;
@@ -147,7 +165,175 @@ $(document).ready(function() {
       });
     });
   };
-
+  var animateSync($syncDiv, callback){
+    var $iconList = $syncDiv.children();
+    $iconList.css('opacity', '.1');
+    var syncTimings = new Array();
+    syncTimings[0] = 100 + Math.random()*100;
+    syncTimings[1] = 200 + Math.random()*200;
+    syncTimings[2] = 200 + Math.random()*200;
+    syncTimings[3] = 400 + Math.random()*400;
+    syncTimings[4] = 200 + Math.random()*200;
+    redBlinkEndGreen($iconList.first());
+    $iconList.first().oneTime(syncTimings[0], function(){
+        $(this).stop();
+        redBlinkEndGreen($(this).next());
+        $(this).next().oneTime(syncTimings[1], function(){
+            $(this).stop();
+            redBlinkEndGreen($(this).next());
+            $(this).next().oneTime(syncTimings[2], function(){
+                $(this).stop();
+                redBlinkEndGreen($(this).next());
+                $(this).next().everyTime(300, function(){ //keep checking if done uploading
+                    if(doneUpload){ //if done then keep going
+                        $(this).stopTime();
+                        redBlinkEndGreen($(this));
+                        $(this).oneTime(syncTimings[3], function(){
+                            $(this).stop();
+                            redBlinkEndGreen($(this).next());
+                            $(this).next().oneTime(syncTimings[4], function(){
+                                $(this).stop();
+                                redBlinkEndGreen($(this).next());
+                                $(this).next().oneTime(syncTimings[5], function(){
+                                    $(this).stop();
+                                    callback.call($syncDiv);
+                                  });
+                              });
+                          });
+                      }
+                  });
+              });
+          });
+      });
+  };
+  var runPracticeFixationAndRec($trialDiv){
+      var fixTime = 750;
+      $trialDiv.show(0, function(){
+          $(this).children().first().show(0, function(){
+              $trialDiv.children('.record_start').val(new Date().getTime());
+              Wami.startRecording(recorder_url + '?workerId=' +
+                workerId +
+                '&assignmentId=' + assignmentId +
+                '&hitId=' + hitId +
+                '&hash=' + amzhash +
+                '&experiment=' + endurl +
+                '&filename=' + $trialDiv.find('.itemID').attr('id'), 'onRecordStartUpdate', 'onRecordFinishUpdate', 'onError');
+              $(this).oneTime(fixTime, function(){
+                  $(this).hide(0, function(){
+                      runPracticeStims($trialDiv);
+                    });
+                });
+            });
+        });
+    };
+  var runPracticeFeedback($trialDiv){
+      var feedbackWait = 3000;
+      switch ($trialDiv.children(':input.partnerfeedback').val()){
+          case "Choice":
+            //show partner choice, green if target, red otherwise
+            var partnerResponse = $trialDiv.children(':input.partnerresponse').val();
+            var positionType  = $trialDiv.children(':input.targetposition').val();
+            var backgroundcolor = "red";
+            if (partnerResponse == "Target"){
+                backgroundcolor = "green";
+              }
+            var $partnerDiv = $trialDiv.find('.position1');
+            if (positionTypeResponseMap[2][positionType] == partnerResponse){
+              //response is position 2
+                $partnerDiv = $trialDiv.find('.position2');
+              } else if (positionTypeResponseMap[3][positionType] == partnerResponse){
+                $partnerDiv = $trialDiv.find('.position3');
+              }
+            $partnerDiv.children('.partnercue').show();
+            $partnerDiv.css("background-color", backgroundcolor);
+            break;
+          case "Simple":
+            //set feedback msg to say the partner picked right/wrong
+            $trialDiv.find(".responsemsg").css("color", "green");
+            if ($trialDiv.children(':input.partnerresponse').val() == "Target"){
+                $trialDiv.find(".responsemsg").text("Your partner picked the right word!");
+              } else {
+                $trialDiv.find(".responsemsg").text("Your partner picked the wrong word!");
+                $trialDiv.find(".responsemsg").css("color", "red");
+              }
+          case "NoFeedback":
+          default:
+            $trialDiv.find(".responsemsg").show(0);
+        }
+      $trialDiv.oneTime(feedbackWait, "feedbackWaitTimer", function(){
+          $trialDiv.children(".stimuliframe").hide(0);
+          $trialDiv.children(".timerbar").hide(0);
+          $trialDiv.children(".responsecontainer").hide(0);
+          runPracticePostTrial($trialDiv);
+        });
+    };
+  var runPracticePostTrial($trialDiv){
+      if($trialDiv[0] === $trialDiv.parent().children('.trial').last()[0]){
+          $trialDiv.parent().hide(0).next().show(0);
+        } else {
+          var count = 30;
+          var $nextButton = $trialDiv.find('button.nexttrial');
+          $trialDiv.children(".posttrialwait").show();
+          $nextButton.everyTime(1000, "buttonTimer", function(){
+              if(count < 1){
+                  endEary = true;
+                  $(this).click();
+                } else {
+                  $(this).text(--count + '');
+                }
+            });
+        }
+    };
+  var runPracticeStims($trialDiv){
+      var previewTime = 1500;
+      var timerTime = 10000;
+      var partnerRT = parseInt($trialDiv.children(':input.partnerresponsetime').val());
+      var $targetDiv = $trialDiv.find('.position1');
+      var positionType = $trialDiv.children(':input.targetposition').val();
+      if (positionType == 2 || positionType == 3) {
+          $targetDiv = $trialDiv.find('.position2');
+        } else if (positionType == 4 || positionType == 5) {
+          $targetDiv = $trialDiv.find('.position3');
+        }
+      $trialDiv.find(".timerbar").show(0, function(){
+          $trialDiv.children('.words_up').val(new Date().getTime());
+          $trialDiv.find(".stimuliframe").show(0, function(){
+              $(this).oneTime(previewTime, function(){
+                  $trialDiv.children('.cue_up').val(new Date().getTime());
+                  $targetDiv.css("border-color", "black");
+                  $targetDiv.children('.speakercue').show(0);
+                  $trialDiv.find(".timerbar").animate({width: "0px"},{
+                      duration: timerTime,
+                      easing: 'linear',
+                      always: function(){
+                          $trialDiv.children('.timer_stop').val(new Date().getTime());
+                          $trialDiv.oneTime(1000, "stopRecorderTimer", function(){
+                              $trialDiv.children('.record_end').val(new Date().getTime());
+                              Wami.stopRecording();
+                            });
+                          runPracticeFeedback($trialDiv);
+                        }
+                    });
+                  if (partnerRT != -1){
+                      $trialDiv.find(".timerbar").oneTime(partnerRT, function(){
+                          $(this).stop();
+                        });
+                    }
+                });
+            });
+        });
+    };
+  var runPracticeTrial($trialDiv){
+// first animate sync screen
+      var $syncDiv = $("#practice").children().first();
+      $syncDiv.show(0, function(){
+          animateSync($(this), function(){
+              $(this).hide(0, function(){
+                  runPracticeFixationAndRec($trialDiv);
+                });
+            });
+        });
+    };
   var pretrial_sync_fixation_screen = function($trialDiv){
     $trialDiv.show();
     $trialDiv.children('.pretrialsync').show();
@@ -187,14 +373,12 @@ $(document).ready(function() {
       });
     });
   };
-
   var positionTypeResponseMap = [
     ["0", "1", "2", "3", "4", "5"],
     ["Target", "Target", "Filler", "Competitor", "Competitor", "Filler"],
     ["Competitor", "Filler", "Target", "Target", "Filler", "Competitor"],
     ["Filler", "Competitor", "Competitor", "Filler", "Target", "Target"]
   ];
-
   var showFeedback = function($trialDiv){
     var count = 30;
     var choicefeedbacktime = 3000;
@@ -257,7 +441,6 @@ $(document).ready(function() {
       }, 40);
     }
   };
-
   var runTrial = function($trialDiv) {
     var $targetDiv = $trialDiv.find('.position1');
     var positionType = $trialDiv.children(':input.targetposition').val();
@@ -296,7 +479,6 @@ $(document).ready(function() {
       }
     });
   };
-
   $('button.nexttrial').on('click', function(){
     $(this).stopTime();
     $(this).stopTime("buttonTimer");
@@ -308,14 +490,12 @@ $(document).ready(function() {
     //because the stop recording function isn't called above we need to run this function
     //onRecordFinishUpdate();
   });
-
   document.addEventListener('keydown', function(event) {
     if(event.keyCode == 32) {
       $('button.nexttrial:visible').click();
       $('#starttest:visible').click();
     }
   });
-
   $('button.hiddennext').on('click', function() {
     $(this).parent().hide();
     var $nextTrial = $(this).parent().next();
@@ -340,7 +520,6 @@ $(document).ready(function() {
       $('#page1').show();
     }
   });
-
   $('button#starttest').on('click', function() {
     $(this).stopTime();
     $(this).stopTime("buttonTimer");
@@ -353,7 +532,6 @@ $(document).ready(function() {
       });
     }
   });
-
   $('#page1 button.next').on('click', function() {
     $('#page1 .survquest').css('color', 'black');
     var p1valid = true;
@@ -396,7 +574,6 @@ $(document).ready(function() {
       alert('Please answer all questions.');
     }
   });
-
   $('#page2 button.next').on('click', function() {
     $('#page2 .survquest').css('color', 'black');
     var p2valid = true;
@@ -447,7 +624,6 @@ $(document).ready(function() {
       alert('Please answer all questions.');
     }
   });
-
   $('#page3 button.next').on('click', function() {
     $('#page3 .survquest').css('color', 'black');
     var p3valid = true;
@@ -496,7 +672,6 @@ $(document).ready(function() {
     alert('Please answer all questions.');
     }
   });
-
   $('#page4 button.next').on('click', function() {
     $('#page4 .survquest').css('color', 'black');
     var p4valid = true;
@@ -518,7 +693,6 @@ $(document).ready(function() {
       alert('Please answer all questions.');
     }
   });
-
   $('#page5 button.next').on('click', function() {
     $('#page5 .survquest').css('color', 'black');
     var p5valid = true;
@@ -534,7 +708,6 @@ $(document).ready(function() {
       alert('Please answer all questions.');
     }
   });
-
   $('#page6 button#endsurvey').on('click', function() {
     $('#page6 .survquest').css('color', 'black');
     var p6valid = true;
@@ -560,7 +733,6 @@ $(document).ready(function() {
       alert('Please answer all questions.');
     }
   });
-
   var wrapup = function() {
     $('#comment').show(function() {$('#commentarea').focus();});
     $('#submit').show(function() {
@@ -568,7 +740,6 @@ $(document).ready(function() {
       finished = true;
     });
   };
-
   $('#results').submit(function() {
     if (!finished) {
       return false;
@@ -576,7 +747,6 @@ $(document).ready(function() {
       return true;
     }
   });
-
   setupRecorder();
   if (itemno === 0) { // this should happen only if starting from the beginning
     $('#instructions').show();
@@ -590,24 +760,26 @@ $(document).ready(function() {
 });
 
 var endEarly = false;
+var curTrial = null;
+var doneUpload = true;
 
+var onRecordStartUpdate = function() {
+    doneUpload = false;
+    recordInterval = setInterval(function () {
+        var level = Wami.getRecordingLevel();
+      }, 200);
+  };
 var onRecordFinishUpdate = function() {
   clearInterval(recordInterval);
-  if (endEarly){
-    $('#practice').hide();
-    $('#testing').hide();
-    $('#earlyStop').show();
-  } else {
-    $('button.nexttrial:visible').parent().siblings('.hiddennext').click();
-  }
+  doneUpload = true;
   $.ajax({
-    type: 'POST',
-    url: '/mturk/experiments/interactive_communication_1',
-    data: {'ItemNumber': ++itemno, 'WorkerId': workerId},
-    datatype: 'json'
-  }).done(function(msg) {
-    if (debugmode) {
-      console.log('Updated to ' + JSON.stringify(msg));
-    }
-  });
-};
+      type: 'POST',
+      url: '/mturk/experiments/interactive_communication_1',
+      data: {'ItemNumber': ++itemno, 'WorkerId': workerId},
+      datatype: 'json'
+    }).done(function(msg) {
+      if (debugmode) {
+          console.log('Updated to ' + JSON.stringify(msg));
+        }
+    });
+  };
