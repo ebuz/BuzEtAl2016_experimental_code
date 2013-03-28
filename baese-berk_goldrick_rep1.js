@@ -80,20 +80,12 @@ $(document).ready(function() {
       alert('You have to allow microphone access for this experiment!');
     }
   });
-  $('button#starttrials').on('click', function() {
-    $('#startmessage').hide();
-    $('#startmessage').next().show();
-    var $nextTrial = $('#startmessage').next().children().first();
-    $nextTrial.show(0, function(){
-      pretrial_sync_fixation_screen($nextTrial)
-    });
-  });
   $('button#startpractice').on('click', function() {
     $('#startmessage').hide();
     $('#practice').show();
     $curTrial = $('#practice').children('.trial').first();
     $curTrial.show(0, function(){
-      runPracticeTrial($curTrial)
+      runTrial($curTrial)
     });
   });
   var showReady = function($imgd, duration, msg){
@@ -165,39 +157,49 @@ $(document).ready(function() {
       });
     });
   };
-  var animateSync($syncDiv, callback){
+  var animateSync = function($syncDiv, callback){
+    console.log('animating syncscreen for trial');
     var $iconList = $syncDiv.children();
     $iconList.css('opacity', '.1');
     var syncTimings = new Array();
-    syncTimings[0] = 100 + Math.random()*100;
-    syncTimings[1] = 200 + Math.random()*200;
+    syncTimings[0] = 50 + Math.random()*50;
+    syncTimings[1] = 400 + Math.random()*200;
     syncTimings[2] = 200 + Math.random()*200;
     syncTimings[3] = 400 + Math.random()*400;
-    syncTimings[4] = 200 + Math.random()*200;
+    syncTimings[4] = 50 + Math.random()*50;
+    console.log('animating microphone icon');
     redBlinkEndGreen($iconList.first());
     $iconList.first().oneTime(syncTimings[0], function(){
+        console.log('stopping microphone icon');
         $(this).stop();
         redBlinkEndGreen($(this).next());
+        console.log('animating server connection icon');
         $(this).next().oneTime(syncTimings[1], function(){
+            console.log('stopping server connection icon');
             $(this).stop();
+            console.log('animating server icon');
             redBlinkEndGreen($(this).next());
             $(this).next().oneTime(syncTimings[2], function(){
+                console.log('stopping server icon');
                 $(this).stop();
-                redBlinkEndGreen($(this).next());
+                console.log('Starting timer to check for complete upload');
                 $(this).next().everyTime(300, function(){ //keep checking if done uploading
+                    console.log('Checking if done');
                     if(doneUpload){ //if done then keep going
+                        console.log('Done uploading, stopping timer');
                         $(this).stopTime();
+                        console.log('Animating partner connection icon');
                         redBlinkEndGreen($(this));
                         $(this).oneTime(syncTimings[3], function(){
+                            console.log('stopping partner connection icon');
                             $(this).stop();
+                            console.log('animating partner icon');
                             redBlinkEndGreen($(this).next());
                             $(this).next().oneTime(syncTimings[4], function(){
+                                console.log('stopping partner icon');
                                 $(this).stop();
-                                redBlinkEndGreen($(this).next());
-                                $(this).next().oneTime(syncTimings[5], function(){
-                                    $(this).stop();
-                                    callback.call($syncDiv);
-                                  });
+                                console.log('callling callback');
+                                callback.call($syncDiv);
                               });
                           });
                       }
@@ -206,7 +208,7 @@ $(document).ready(function() {
           });
       });
   };
-  var runPracticeFixationAndRec($trialDiv){
+  var runFixationAndRec = function($trialDiv){
       var fixTime = 750;
       $trialDiv.show(0, function(){
           $(this).children().first().show(0, function(){
@@ -220,13 +222,13 @@ $(document).ready(function() {
                 '&filename=' + $trialDiv.find('.itemID').attr('id'), 'onRecordStartUpdate', 'onRecordFinishUpdate', 'onError');
               $(this).oneTime(fixTime, function(){
                   $(this).hide(0, function(){
-                      runPracticeStims($trialDiv);
+                      runStims($trialDiv);
                     });
                 });
             });
         });
     };
-  var runPracticeFeedback($trialDiv){
+  var runFeedback = function($trialDiv){
       var feedbackWait = 3000;
       switch ($trialDiv.children(':input.partnerfeedback').val()){
           case "Choice":
@@ -264,27 +266,50 @@ $(document).ready(function() {
           $trialDiv.children(".stimuliframe").hide(0);
           $trialDiv.children(".timerbar").hide(0);
           $trialDiv.children(".responsecontainer").hide(0);
-          runPracticePostTrial($trialDiv);
+          runPostTrial($trialDiv);
         });
     };
-  var runPracticePostTrial($trialDiv){
+  var runPostTrial = function($trialDiv){
+      console.log('running post trial screen');
       if($trialDiv[0] === $trialDiv.parent().children('.trial').last()[0]){
-          $trialDiv.parent().hide(0).next().show(0);
+          console.log('Just finished last trial in this container, if practice move to test, if not go to survey');
+          $trialDiv.parent().hide(0);
+          if($trialDiv.parent().attr('id') == 'practice'){
+            $('#teststart').show(0, function(){
+                var count = 30;
+                var $nextButton = $(this).find('#starttest');
+                $nextButton.everyTime(1000, "buttonTimer", function(){
+                  if(count < 1){
+                      console.log('Took too long to advance, moving on to survey');
+                      endEarly = true;
+                      $(this).parent().hide(0);
+                      $(this).click();
+                    } else {
+                      $(this).text(--count + '');
+                    }
+                  });
+              });
+          } else {
+            $('#page1').show();
+          }
         } else {
+          console.log('Running timer downdown');
           var count = 30;
           var $nextButton = $trialDiv.find('button.nexttrial');
           $trialDiv.children(".posttrialwait").show();
           $nextButton.everyTime(1000, "buttonTimer", function(){
               if(count < 1){
-                  endEary = true;
-                  $(this).click();
+                  console.log('Took too long to advance, moving on to survey');
+                  endEarly = true;
+                  $trialDiv.parent().hide(0);
+                  $('#earlyStop').show();
                 } else {
                   $(this).text(--count + '');
                 }
             });
         }
     };
-  var runPracticeStims($trialDiv){
+  var runStims = function($trialDiv){
       var previewTime = 1500;
       var timerTime = 10000;
       var partnerRT = parseInt($trialDiv.children(':input.partnerresponsetime').val());
@@ -311,7 +336,7 @@ $(document).ready(function() {
                               $trialDiv.children('.record_end').val(new Date().getTime());
                               Wami.stopRecording();
                             });
-                          runPracticeFeedback($trialDiv);
+                          runFeedback($trialDiv);
                         }
                     });
                   if (partnerRT != -1){
@@ -323,201 +348,37 @@ $(document).ready(function() {
             });
         });
     };
-  var runPracticeTrial($trialDiv){
+  var runTrial = function($trialDiv){
 // first animate sync screen
-      var $syncDiv = $("#practice").children().first();
+      var $syncDiv = $trialDiv.parent().find('.pretrialsync');
       $syncDiv.show(0, function(){
           animateSync($(this), function(){
               $(this).hide(0, function(){
-                  runPracticeFixationAndRec($trialDiv);
+                  runFixationAndRec($trialDiv);
                 });
             });
         });
     };
-  var pretrial_sync_fixation_screen = function($trialDiv){
-    $trialDiv.show();
-    $trialDiv.children('.pretrialsync').show();
-    var $iconList = $trialDiv.children('.pretrialsync').children();
-    $iconList.css('opacity', '.1')
-    showReady($($iconList[0]), 100);
-    var waitTime = 100 + Math.random()*100;
-    $($iconList[1]).oneTime(waitTime, function(){
-      showReady($(this), 300);
-      showReady($(this).next(), 400);
-      waitTime += 300 + Math.random()*300;
-      $(this).next().next().oneTime(waitTime, function(){
-        showReady($(this), 400);
-        waitTime += 400 + Math.random()*400;
-        $(this).next().oneTime(waitTime, function(){
-          showReady($(this), 400);
-          $(this).oneTime(500, function(){
-            $trialDiv.children('.pretrialsync').hide();
-            console.log('setting record_start val for trialdiv: ' + $trialDiv.attr('id'));
-            $trialDiv.children('.record_start').val(new Date().getTime());
-            console.log('set as: ' + $trialDiv.children('.record_start').val());
-            Wami.startRecording(recorder_url + '?workerId=' +
-              workerId +
-              '&assignmentId=' + assignmentId +
-              '&hitId=' + hitId +
-              '&hash=' + amzhash +
-              '&experiment=' + endurl +
-              '&filename=' + $trialDiv.find(':button.nexttrial').attr('id'), 'onRecordStart', 'onRecordFinishUpdate', 'onError');
-            $trialDiv.children('.pretrialsync').hide();
-            $trialDiv.children('.fixation').show(0);
-            $trialDiv.children('.fixation').oneTime(500, function(){
-              $trialDiv.children('.fixation').hide();
-              runTrial($trialDiv);
-            });
-          });
-        });
-      });
-    });
-  };
   var positionTypeResponseMap = [
     ["0", "1", "2", "3", "4", "5"],
     ["Target", "Target", "Filler", "Competitor", "Competitor", "Filler"],
     ["Competitor", "Filler", "Target", "Target", "Filler", "Competitor"],
     ["Filler", "Competitor", "Competitor", "Filler", "Target", "Target"]
   ];
-  var showFeedback = function($trialDiv){
-    var count = 30;
-    var choicefeedbacktime = 3000;
-    switch ($trialDiv.children(':input.partnerfeedback').val()){
-      case "Choice":
-        count += 3;
-        //show partner choice, green if target, red otherwise for 2 seconds, then move to post trial wait
-        var partnerResponse = $trialDiv.children(':input.partnerresponse').val();
-        var positionType  = $trialDiv.children(':input.targetposition').val();
-        var backgroundcolor = "red";
-        if (partnerResponse == "Target"){
-          backgroundcolor = "green";
-        }
-        var $partnerDiv = $trialDiv.find('.position1');
-        if (positionTypeResponseMap[2][positionType] == partnerResponse){
-          //response is position 2
-          $partnerDiv = $trialDiv.find('.position2');
-        } else if (positionTypeResponseMap[3][positionType] == partnerResponse){
-          $partnerDiv = $trialDiv.find('.position3');
-        }
-        $partnerDiv.children('.partnercue').show();
-        $partnerDiv.css("background-color", backgroundcolor);
-        $trialDiv.children(".stimuliframe").oneTime(choicefeedbacktime, function(){
-          $trialDiv.children(".stimuliframe").hide();
-          $trialDiv.children(".timerbar").hide();
-          $trialDiv.children(".posttrialwait").show();
-        });
-        break;
-      case "Simple":
-        //set feedback msg to say the partner picked right/wrong
-        if ($trialDiv.children(':input.partnerresponse').val() == "Target"){
-          $trialDiv.find(".feedbackmsg").text("Your partner picked the right word!");
-        } else {
-          $trialDiv.find(".feedbackmsg").text("Your partner picked the wrong word!");
-        }
-      case "NoFeedback":
-      default:
-        choicefeedbacktime = 1000
-        $trialDiv.children(".timerbar").hide();
-        //move to post trial wait
-        $trialDiv.children(".stimuliframe").hide();
-        $trialDiv.children(".posttrialwait").show();
-    }
-
-    var $nextButton = $trialDiv.find('button.nexttrial')
-    if ($nextButton.parents('.practicetrial')[0] === $('.practicetrial').last()[0] || $nextButton.parents('.testtrial')[0] === $('.testtrial').last()[0]) {
-      $nextButton.text('wait');
-      $nextButton.siblings('.posttrialmsg').text('Trial done, one moment.');
-      $nextButton.oneTime(choicefeedbacktime + 1000, "buttonTimer", function(){
-        $(this).click();
-      });
-    } else {
-      $nextButton.everyTime(1000, "buttonTimer", function(){
-        if (count < 1){
-          endEarly = true;
-          $(this).click();
-        } else {
-          $(this).text(--count + '');
-        }
-      }, 40);
-    }
-  };
-  var runTrial = function($trialDiv) {
-    var $targetDiv = $trialDiv.find('.position1');
-    var positionType = $trialDiv.children(':input.targetposition').val();
-    if (positionType == 2 || positionType == 3) {
-      $targetDiv = $trialDiv.find('.position2');
-    } else if (positionType == 4 || positionType == 5) {
-      $targetDiv = $trialDiv.find('.position3');
-    }
-    var previewTime = 1000;
-    var timerLength = 10000;
-    $trialDiv.find(".timerbar").show(0);
-    $trialDiv.children('.words_up').val(new Date().getTime());
-    $trialDiv.find(".stimuliframe").show(0);
-    $trialDiv.oneTime(previewTime, "preview", function(){
-      $trialDiv.children('.cue_up').val(new Date().getTime());
-      $targetDiv.css("border-color", "black");
-      $targetDiv.children('.speakercue').show();
-      if (parseInt($trialDiv.children(':input.partnerresponsetime').val()) == -1){
-        //let timer go out then show feedback
-        $trialDiv.find(".timerbar").animate({width: "0px"}, timerLength, 'linear', function(){
-          $trialDiv.children('.timer_stop').val(new Date().getTime());
-          showFeedback($trialDiv);
-        });
-      } else {
-        //end timer at partnerresponsetime and then show feedback
-        $trialDiv.find(".timerbar").animate({width: "0px"}, timerLength, 'linear');
-        $trialDiv.oneTime(parseInt($trialDiv.children(':input.partnerresponsetime').val()), "feedbackwaittime", function(){
-          $trialDiv.children('.timer_stop').val(new Date().getTime());
-          $trialDiv.find('.timerbar').stop();
-          $trialDiv.find('.responsecontainer').show(0);
-          $trialDiv.find('.responsecontainer').oneTime(2000, function(){
-            $(this).hide(0);
-            showFeedback($trialDiv);
-          });
-        });
-      }
-    });
-  };
   $('button.nexttrial').on('click', function(){
-    $(this).stopTime();
-    $(this).stopTime("buttonTimer");
-    $(this).parent().siblings('.record_end').val(new Date().getTime());
-    Wami.stopRecording();
-    $(this).text('wait');
-    $(this).attr("disabled", "disabled");;
-    //$(this).parent().hide();
-    //because the stop recording function isn't called above we need to run this function
-    //onRecordFinishUpdate();
-  });
+        console.log('moving to next trial');
+        $(this).stopTime();
+        $(this).stopTime("buttonTimer");
+        $(this).parent().parent().hide();
+        $curTrial = $(this).parent().parent().next();
+        $curTrial.show(0, function(){
+          runTrial($curTrial)
+        });
+      });
   document.addEventListener('keydown', function(event) {
     if(event.keyCode == 32) {
       $('button.nexttrial:visible').click();
       $('#starttest:visible').click();
-    }
-  });
-  $('button.hiddennext').on('click', function() {
-    $(this).parent().hide();
-    var $nextTrial = $(this).parent().next();
-    $nextTrial.show(0, function(){
-      pretrial_sync_fixation_screen($nextTrial)
-    });
-    if ($(this).parents('.practicetrial')[0] === $('.practicetrial').last()[0]) {
-      $('#practice').hide();
-      $('#teststart').show();
-      var count = 30;
-      $('#starttest').everyTime(1000, "buttonTimer", function(){
-        if (count < 1){
-          endEarly = true;
-          $(this).click();
-        } else {
-          $(this).text(--count + '');
-        }
-      }, 40);
-    }
-    if ($(this).parents('.testtrial')[0] === $('.testtrial').last()[0]) {
-      $('#testing').hide();
-      $('#page1').show();
     }
   });
   $('button#starttest').on('click', function() {
@@ -528,7 +389,10 @@ $(document).ready(function() {
       $('#earlyStop').show();
     } else {
       $(this).parent().hide().next().show(0, function(){
-        pretrial_sync_fixation_screen($(this).children().first());
+        $curTrial = $('#testing').children('.trial').first();
+        $curTrial.show(0, function(){
+          runTrial($curTrial)
+        });
       });
     }
   });

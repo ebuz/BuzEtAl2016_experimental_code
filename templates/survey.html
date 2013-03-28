@@ -1,4 +1,4 @@
-      <div id="survey">
+      <div id="survey" class="textdisplay">
         <div id="page1">
           <p>Phase 2: The survey. There are 6 pages, please complete them all. Do not press your browser's back button.</p>
           <p>It is very important to us that you try to answer the questions in the survey
@@ -6,7 +6,7 @@
           completely useless for our research purpose. Your answers will in no way affect
           your payment.</p>
           <fieldset>
-            <label>Please answer these questions about you, your computer and microphone and the experiment.</label>
+            <label>Please answer these questions about you.</label>
             <table class="survquest" id="age">
               <tr>
                 <td>Age</td>
@@ -192,6 +192,7 @@
             <p>Please write the make and model of your microphone. If it is built into your computer/laptop please provide the make and model of your computer. If you are unsure write "unknown".</p>
             <p><textarea id="q.microphone_model" name="q.microphone_model" cols="40" rows="1"></textarea></p>
           </fieldset>
+          <button type="button" class="next" id="end2">Next</button>
         </div>
 
         <div id="page3">
@@ -201,7 +202,7 @@
               <table class="survquest" id="q.partner_accuracy">
                 <tr>
                   <td colspan="7">
-                    <p class="sentence">How accurate was your partner?</p>
+                    <p class="sentence">How accurate was your partner at clicking the right word?</p>
                   </td>
                 </tr>
                 <tr>
@@ -220,7 +221,7 @@
               </table>
               <table class="survquest" id="q.partner_mistakes">
                 <tr>
-                  <td>How many mistakes did your partner make?</td>
+                  <td>About how many mistakes would you say your partner made?</td>
                   <td>
                     <select name="q.partner_mistakes">
                       <option value="" selected="selected">-----</option>
@@ -236,7 +237,7 @@
               <table class="survquest" id="q.partner_rt_speed">
                 <tr>
                   <td colspan="7">
-                    <p class="sentence">How fast did your partner respond?</p>
+                    <p class="sentence">How fast would you say your partner responded?</p>
                   </td>
                 </tr>
                 <tr>
@@ -255,7 +256,7 @@
               </table>
               <table class="survquest" id="q.partner_rt_failure">
                 <tr>
-                  <td>How often did your partner fail to respond in time?</td>
+                  <td>About how often would you say your partner failed to respond in time?</td>
                   <td>
                     <select name="q.partner_rt_failure">
                       <option value="" selected="selected">-----</option>
@@ -361,12 +362,12 @@
 
         <div id="page6">
           <fieldset>
-            <label>It turns out you were assigned to a computer partner: your partner's responses were pre-programmed. Please answer these questions about how believable it was that you were actually speaking to another person.</label>
+            <label>It turns out you were assigned to a computer partner: your partner's responses were pre-programmed. Part of our research aims at developing believable and natural (robot) partners for experiments like this one. Please answer these questions about how believable it was that you were speaking to another person. Your answers will help us improve our future versions of this experiment.</label>
 
             <table class="survquest" id="q.coverstory_plausability">
               <tr>
                 <td colspan="7">
-                  <p class="sentence">Was the cover story that we gave at the start of the experiment believable?</p>
+                  <p class="sentence">How convincing was the cover story that we gave at the start of the experiment?</p>
                 </td>
               </tr>
               <tr>
@@ -386,7 +387,7 @@
             <table class="survquest" id="q.experiment_interactivity">
               <tr>
                 <td colspan="7">
-                  <p class="sentence">Did the experiment make it seem like you were actually interacting with another person?</p>
+                  <p class="sentence">During the experiment did you feel like you were interacting with another person?</p>
                 </td>
               </tr>
               <tr>
@@ -406,7 +407,7 @@
             <table class="survequest" id="q.partner_computer_realization">
               <tr>
                 <td>
-                  <p>If you realized you were not interacting with a human at some point in the experiment, what caused you to come to that conclusion? If you never realized it please say so.</p>
+                  <p>If you realized you were not interacting with a human at some point in the experiment, what caused you to come to that conclusion? If you rated our robot as convincing above you can leave this empty.</p>
                 </td>
               </tr>
               <tr>

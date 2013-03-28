@@ -1,13 +1,10 @@
 # Pressing fixes #
-1. Link the start of the experiment to the new practice trial code
-1. test the new practice trial code and if it works, port it to handle all the trials
+1. test the new code port
 
 # Currently needs to be fixed #
 1. Add in some way to skip ahead in a trial while in debug mode.
 1. Add trial numbers to each trial in a curr/total format somewhere on the screen
-1. Hide the file upload as best as possible, this will be the trickest part and will ideally fix the below subissues to issues as well
-  1. Try and change the last page screen of the trials instead of what it's currently doing
-  1. Stop recording about 2 seconds after feedback and start uploading immediately
+1. The survey qs are still a little off, follow the lead on the ones that are fixed to make the rest look the same
 
 # Files that have to change for any given change of the experiment #
 1. the db_init.py program is hard-coded to generate the possible lists so if the number of lists changes so should this

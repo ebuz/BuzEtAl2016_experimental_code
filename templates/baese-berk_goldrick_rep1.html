@@ -11,6 +11,15 @@
         padding:0;
         text-align:justify;
       }
+      div.textdisplay {
+        position:absolute;
+        width: 400px;
+        top: 1%;
+        left: 1%;
+        height: auto;
+        margin: 0 auto;
+        padding:0;
+      }
       div#practice {
         position:absolute;
         width: 98%;
@@ -334,7 +343,6 @@
               <p class="posttrialmsg">Please <span style="font-weight:bold;">click the button or press the space bar</span> in the next 30 seconds to start the next trial.</p>
               <button type="button" class="nexttrial">30</button>
             </div>
-            <button type="button" class="hiddennext" style="display: none !important"></button>
             <input type="hidden" class="itemID", id="{{item.ItemID}}" name="{{item.ItemID}}" value="{{item.ItemID}}"/>
             <input type="hidden" class = "targetposition", id="targetposition_{{item.ItemID}}" name="targetposition_{{item.ItemID}}" value="{{item.TargetCompetitorPositions}}"/>
             <input type="hidden" class = "partnerresponsetime", id="partnerresponsetime_{{item.ItemID}}" name="partnerresponsetime_{{item.ItemID}}" value="{{item.PartnerResponseTime}}"/>
@@ -349,19 +357,19 @@
         {% endfor %}
       </div>
       <div id="teststart">
-        <p class="teststartmsg">That was the end of the practice set, please click the button below or press the space bar to begin the start of the actual experiment. Again, try to do so in less than 30 seconds as your partner is waiting for you.</p>
+        <p class="teststartmsg"><span style="font-weight:bold;">That was the end of the practice set</span>, please click the button below or press the space bar to begin the start of the actual experiment. Again, try to do so in less than 30 seconds as your partner is waiting for you.</p>
         <button type="button" id="starttest">30</button>
       </div>
       <div id="testing">
+        <div class="pretrialsync">
+            <img src="/mturk/img/microphone.png">
+            <img src="/mturk/img/arrow.png">
+            <img src="/mturk/img/internet.png">
+            <img src="/mturk/img/arrow.png">
+            <img src="/mturk/img/headphone.png">
+        </div>
         {% for item in testtrials %}
           <div id="trial{{loop.index}}" class="trial">
-            <div class="pretrialsync">
-                <img src="/mturk/img/microphone.png">
-                <img src="/mturk/img/arrow.png">
-                <img src="/mturk/img/internet.png">
-                <img src="/mturk/img/arrow.png">
-                <img src="/mturk/img/headphone.png">
-            </div>
             <div class="fixation">
               <img class="fixationcross" src="/mturk/img/fixation.png">
             </div>
@@ -397,7 +405,7 @@
               <p class="posttrialmsg">Please <span style="font-weight:bold;">click the button or press the space bar</span> in the next 30 seconds to start the next trial.</p>
               <button type="button" id="{{item.ItemID}}" class="nexttrial">30</button>
             </div>
-            <button type="button" class="hiddennext" style="display: none !important"></button>
+            <input type="hidden" class="itemID", id="{{item.ItemID}}" name="{{item.ItemID}}" value="{{item.ItemID}}"/>
             <input type="hidden" class = "targetposition", id="targetposition_{{item.ItemID}}" name="targetposition_{{item.ItemID}}" value="{{item.TargetCompetitorPositions}}"/>
             <input type="hidden" class = "partnerresponsetime", id="partnerresponsetime_{{item.ItemID}}" name="partnerresponsetime_{{item.ItemID}}" value="{{item.PartnerResponseTime}}"/>
             <input type="hidden" class = "partnerresponse", id="partnerresponse_{{item.ItemID}}" name="partnerresponse_{{item.ItemID}}" value="{{item.PartnerResponse}}"/>
@@ -431,8 +439,8 @@
             <input type="hidden" id="responsetimetype" name="responsetimetype" value="{{responsetimetype}}"/>
             <input type="hidden" id="feedbackcondition" name="feedbackcondition" value="{{feedbackcondition}}"/>
           </div>
-          <div id="comment">
-            <p id="debriefmsg"><span style="font-color:red;"><span style="font-weight:bold;">Important!</span> We created this experiment to give you the illusion that you were speaking to another person and later, we told you you had been speaking to a computer. However, this experiment was never designed to pair participants with another person; all participants like yourself were interacting with a computer. This experiment is aimed at understanding how people speak to eachother. In order to do this in a controlled way it was critical for us to hide the fact that you were not actually speaking to another person.</span></p>
+          <div id="comment" class="textdisplay">
+            <p id="debriefmsg"><span style="font-color:red;"><span style="font-weight:bold;">Debriefing</span> This experiment is aimed at understanding how people speak to eachother. In order to do this in a controlled way it was critical for us to hide the fact that you were not actually speaking to another person until the end of the experiment. We would appreciate that, for the next 6 months you not post this information anywhere on the web to allow our experiment to continue. HLP lab will always debrief participants at the end of the experiment.</span></p>
             <p>Thank you, again, for participating in this experiment. If you are interested in hearing how the experiments you are participating in help us to understand the human brain, feel free to subscribe to our <a href="http://hlplab.wordpress.com/">lab blog</a> on which we announce new findings. Note that typically about one year passes before an experiment is published.</p>
             <p>Feedback on this HIT (optional):</p>
             <p><textarea id="commentarea" name="comment" cols="80" rows="3"></textarea></p>
