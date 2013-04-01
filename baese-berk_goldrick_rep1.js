@@ -344,6 +344,13 @@ $(document).ready(function() {
                           $(this).stop();
                         });
                     }
+                  if ($('[name="stimuliframe_width"]').val() === ''){
+                      $('[name="stimuliframe_width"]').val($trialDiv.find('.stimuliframe').width());
+                      $('[name="stimuliframe_height"]').val($trialDiv.find('.stimuliframe').height());
+                      $('[name="stimuli_width"]').val($trialDiv.find('.position1').find('.stimulus').width());
+                      $('[name="stimuli_height"]').val($trialDiv.find('.position1').find('.stimulus').height());
+                      $('[name="stimuli_fontsize"]').val($trialDiv.find('.position1').find('.stimulus').css("font-size"));
+                    }
                 });
             });
         });

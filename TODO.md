@@ -4,7 +4,6 @@
 # Currently needs to be fixed #
 1. Add in some way to skip ahead in a trial while in debug mode.
 1. Add trial numbers to each trial in a curr/total format somewhere on the screen
-1. The survey qs are still a little off, follow the lead on the ones that are fixed to make the rest look the same
 
 # Files that have to change for any given change of the experiment #
 1. the db_init.py program is hard-coded to generate the possible lists so if the number of lists changes so should this

@@ -13,23 +13,14 @@
       }
       div.textdisplay {
         position:absolute;
-        width: 400px;
+        width: 500px;
         top: 1%;
         left: 1%;
         height: auto;
         margin: 0 auto;
         padding:0;
       }
-      div#practice {
-        position:absolute;
-        width: 98%;
-        top: 1%;
-        left: 1%;
-        height: 500px;
-        text-align: center;
-        margin: 0 auto;
-      }
-      div#testing {
+      div#practice, div#testing {
         position:absolute;
         width: 98%;
         top: 1%;
@@ -438,6 +429,11 @@
             <input type="hidden" id="endearly" name="endearly" value="NA"/>
             <input type="hidden" id="responsetimetype" name="responsetimetype" value="{{responsetimetype}}"/>
             <input type="hidden" id="feedbackcondition" name="feedbackcondition" value="{{feedbackcondition}}"/>
+            <input type="hidden" id="stimuliframe_width" name="stimuliframe_width" value=""/>
+            <input type="hidden" id="stimuliframe_height" name="stimuliframe_height" value=""/>
+            <input type="hidden" id="stimuli_width" name="stimuli_width" value=""/>
+            <input type="hidden" id="stimuli_height" name="stimuli_height" value=""/>
+            <input type="hidden" id="stimuli_fontsize" name="stimuli_fontsize" value=""/>
           </div>
           <div id="comment" class="textdisplay">
             <p id="debriefmsg"><span style="font-color:red;"><span style="font-weight:bold;">Debriefing</span> This experiment is aimed at understanding how people speak to eachother. In order to do this in a controlled way it was critical for us to hide the fact that you were not actually speaking to another person until the end of the experiment. We would appreciate that, for the next 6 months you not post this information anywhere on the web to allow our experiment to continue. HLP lab will always debrief participants at the end of the experiment.</span></p>
