@@ -1,7 +1,7 @@
 # Pressing fixes #
-1. test the new code port
+1. Add back in the full stimuli set
 
-# Currently needs to be fixed #
+# Nice things to add #
 1. Add in some way to skip ahead in a trial while in debug mode.
 1. Add trial numbers to each trial in a curr/total format somewhere on the screen
 

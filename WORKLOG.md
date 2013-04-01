@@ -10,7 +10,8 @@
 * 2/25/13 - Did a prelim test, experiment moves through all the trials in a list, earlier tests of behavior on submit was good so this experiment should be close to production
 * 2/26/13 - Pushing code to Andrew to see it served on www, still need to finalize the lists but that's OK
 * 2/28/13 - Needed to add some timing variables during the code for later, also have to add in some more survey questions
-* 2/11/13 - New branch to handle the few TODO items, named it and it should be folded back into the master branch when the code is finished and tested
-* 2/14/13 - Started out to build the new timing codes, at the moment it only handles the practice and further it is not yet linked to the start experiment button nor does it correctly start the actual experimental trials
-* 2/27/13 - Tested the practice code and got it working mostly, need to do some small timing changes.
-* 2/28/13 - Ported the practice code over to the rest of the experiment, did some other small fixes
+* 3/11/13 - New branch to handle the few TODO items, named it and it should be folded back into the master branch when the code is finished and tested
+* 3/14/13 - Started out to build the new timing codes, at the moment it only handles the practice and further it is not yet linked to the start experiment button nor does it correctly start the actual experimental trials
+* 3/27/13 - Tested the practice code and got it working mostly, need to do some small timing changes.
+* 3/28/13 - Ported the practice code over to the rest of the experiment, did some other small fixes
+* 4/1/13 - More small fixes to the code, currently the last code wise issues that need to be addressed are putting back in the full stimuli lists and adding in the instructional video

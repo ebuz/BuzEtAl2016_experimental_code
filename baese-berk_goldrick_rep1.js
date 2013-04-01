@@ -198,8 +198,10 @@ $(document).ready(function() {
                             $(this).next().oneTime(syncTimings[4], function(){
                                 console.log('stopping partner icon');
                                 $(this).stop();
-                                console.log('callling callback');
-                                callback.call($syncDiv);
+                                $(this).oneTime(300, function(){
+                                    console.log('callling callback');
+                                    callback.call($syncDiv);
+                                  });
                               });
                           });
                       }

@@ -12,7 +12,7 @@
         text-align:justify;
       }
       div.textdisplay {
-        position:absolute;
+        position:relative;
         width: 500px;
         top: 1%;
         left: 1%;
@@ -347,7 +347,7 @@
           </div>
         {% endfor %}
       </div>
-      <div id="teststart">
+      <div class="textdisplay" id="teststart">
         <p class="teststartmsg"><span style="font-weight:bold;">That was the end of the practice set</span>, please click the button below or press the space bar to begin the start of the actual experiment. Again, try to do so in less than 30 seconds as your partner is waiting for you.</p>
         <button type="button" id="starttest">30</button>
       </div>
@@ -409,7 +409,7 @@
           </div>
         {% endfor %}
       </div>
-      <div id="earlyStop">
+      <div class="textdisplay" id="earlyStop">
         <p>You took too long to advance, for the sake of your partner's time we have ended the experiment. Please fill out the post experiment survey.</p>
         <button type="button" id="tosurvey">Continue to survey</button>
         {% if debugmode == 1 %}
