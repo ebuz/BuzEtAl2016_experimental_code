@@ -1,6 +1,5 @@
 # Pressing fixes #
 1. Test the feedback code, this is something that I forgot to do before the last commit
-1. Add back in the full stimuli set
 
 # Nice things to add #
 1. Add in some way to skip ahead in a trial while in debug mode.
