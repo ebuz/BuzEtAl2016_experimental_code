@@ -3,6 +3,7 @@
 
 # Nice things to add #
 1. Add in some way to skip ahead in a trial while in debug mode.
+1. Add in some way to skip to the test trials while in debug mode.
 1. Add trial numbers to each trial in a curr/total format somewhere on the screen
 
 # Files that have to change for any given change of the experiment #

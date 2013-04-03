@@ -89,6 +89,14 @@ $(document).ready(function() {
       runTrial($curTrial)
     });
   });
+  $('button#skippractice').on('click', function() {
+    $('#startmessage').hide();
+    $('#testing').show();
+    $curTrial = $('#testing').children('.trial').first();
+    $curTrial.show(0, function(){
+      runTrial($curTrial)
+    });
+  });
   var showReady = function($imgd, duration, msg){
     $imgd.css("background-color", "green");
     $imgd.animate({opacity: 1}, duration, function(){
