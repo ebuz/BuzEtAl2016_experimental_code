@@ -68,6 +68,7 @@ $(document).ready(function() {
   $('button#endsetup').on('click', function() {
     $('#audiosetup').hide();
     $('#realinstructions').show();
+    $('#realinstructions').scrollTop(0);
   });
   $('button#endinstr').on('click', function() {
     if (Wami.getSettings().microphone.granted) {
@@ -151,7 +152,7 @@ $(document).ready(function() {
             $('#partnersyncmsg').text("Ready! Please click the start button");
             $('#partnersyncmsg').next().hide();
             $('#synctimer').stopTime("synctimer");
-            $('#starttrials').removeAttr('disabled');
+            $('#startpractice').removeAttr('disabled');
           });
         });
       });
