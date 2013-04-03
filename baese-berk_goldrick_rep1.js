@@ -68,7 +68,7 @@ $(document).ready(function() {
   $('button#endsetup').on('click', function() {
     $('#audiosetup').hide();
     $('#realinstructions').show();
-    $('#realinstructions').scrollTop(0);
+    window.scrollTo(0, 0);
   });
   $('button#endinstr').on('click', function() {
     if (Wami.getSettings().microphone.granted) {
@@ -291,6 +291,8 @@ $(document).ready(function() {
                 var $nextButton = $(this).find('#starttest');
                 $nextButton.everyTime(1000, "buttonTimer", function(){
                   if(count < 1){
+                      $(this).stopTime();
+                      $(this).stopTime("buttonTimer");
                       console.log('Took too long to advance, moving on to survey');
                       endEarly = true;
                       $(this).parent().hide(0);
@@ -310,6 +312,8 @@ $(document).ready(function() {
           $trialDiv.children(".posttrialwait").show();
           $nextButton.everyTime(1000, "buttonTimer", function(){
               if(count < 1){
+                  $(this).stopTime();
+                  $(this).stopTime("buttonTimer");
                   console.log('Took too long to advance, moving on to survey');
                   endEarly = true;
                   $trialDiv.parent().hide(0);
