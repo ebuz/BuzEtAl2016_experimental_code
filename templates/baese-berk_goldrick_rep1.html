@@ -182,6 +182,16 @@
         float:0 auto;
         margin: 0 auto;
       }
+      .trialCount {
+        position: absolute;
+        width: 100px;
+        height: 50px;
+        top: 0%;
+        right: 0%;
+        text-align: right;
+        color: gray;
+        font-size: 1em;
+      }
       table.survquest {
         width: 400px;
         border: solid 1px;
@@ -212,15 +222,54 @@
         margin-top: 2em;
         padding: 1em;
       }
-      #micwarning, #oldBrowserMessage, #startmessage, #earlyStop, #page1, #page2, #page3, #page4, #page5, #page6, #submit, #comment, #practice, .trial, #teststart, #testing, .fixation, .stimuliframe, .timerbar, .responsecontainer, .posttrialwait {display:none;}
-      {% if not preview %}
-      #instructions, #realinstructions {display:none;}
-      {% endif %}
+      ul.instructionlist {
+        margin: 0px;
+        padding: 0px;
+      }
+      li.instructionlistitem {
+        width: 100%;
+        height: auto;
+      }
+      div.listcontent{
+        display: none;
+      }
+      #instructions #micwarning, #oldBrowserMessage, #startmessage, #earlyStop, #surveyStart, #page1, #page2, #page3, #page4, #page5, #page6, #submit, #comment, #practice, .trial, #teststart, #testing, .fixation, .stimuliframe, .timerbar, .responsecontainer, .posttrialwait {display:none;}
     </style>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="/mturk/jquery.timers-1.2.js"></script>
     <script type="text/javascript" src="/mturk/modernizr.audiocanvas.js"></script>
-    {% if not preview %}
+    <script type="text/javascript">
+      $(function(){
+          $('#noJavaScript').hide();
+          if(!debugmode){
+              $('#intro').children('.listcontent').show(500);
+            } else {
+              $('#startexperiment').children('.listcontent').show(500);
+            }
+          $('#instructions label').on('click', function(e){
+              $(this).children('button').first().click();
+            });
+          $('.instructionlistitem').on('click', function(){
+              $(this).children('.listcontent').toggle(500);
+            });
+          $('div :checkbox').on('click', function(e){
+              e.stopPropagation();
+              $(this).parents('.listcontent').hide(500);
+              $(this).parents('.instructionlistitem').next().children('.listcontent').show(500, function(){
+                  var pos = $(this).offset();
+                  $('html,body').animate({scrollTop: pos.top}, 500);
+                });
+            });
+          $('.instructionbutton').on('click', function(e){
+              e.stopPropagation();
+              $(this).parents('.listcontent').hide(500);
+              $(this).parents('.instructionlistitem').next().children('.listcontent').show(500, function(){
+                  var pos = $(this).offset();
+                  $('html,body').animate({scrollTop: pos.top}, 500);
+                });
+            });
+        });
+    </script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
     <script type="text/javascript" src="/mturk/recorder.js"></script>
     <script type="text/javascript" src="/mturk/wami-helpers.js"></script>
@@ -231,15 +280,21 @@
       var assignmentId = "{{amz.assignmentId}}";
       var amzhash = "{{amz.hash}}"
       var debugmode = {{debugmode}};
+      var feedbackType = {{feedbacktype}};
       var recorder_url = "{{recorder_url}}";
       var itemno = {{startitem}};
       var experiment = "{{experimentname}}";
       var endurl = "interactive_communication_1";
     </script>
-    {% endif %}
     </head>
 
     <body>
+      <div id="noJavaScript" class="textdisplay">
+        <p>
+          You do not have javascript enabled and you will not be able to complete this HIT without it.
+          Please enable javascript and reload the page.
+        </p>
+      </div>
       {% include 'instructions.html' %}
       {#
       Loading items is not necessary on preview. In fact, the flash in
@@ -285,7 +340,8 @@
         </div>
         {% if debugmode %}
         <button type="button" id="startpractice">Start practice trials</button>
-        <button type="button" id="skippractice">Start test trials</button>
+        <button type="button" id="skipPractice">Start test trials</button>
+        <button type="button" id="skipTrials">Start survey</button>
         {% else %}
         <button type="button" id="startpractice" disabled>Start practice trials</button>
         {% endif %}
@@ -300,6 +356,9 @@
         </div>
         {% for item in practicetrials %}
           <div id="practice_trial{{loop.index}}" class="trial">
+            <div class="trialCount">
+              {{loop.index}} of {{loop.length}}
+            </div>
             <div class="fixation">
               <img class="fixationcross" src="/mturk/img/fixation.png">
             </div>

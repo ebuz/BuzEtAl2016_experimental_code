@@ -1,121 +1,501 @@
         <div id="instructions" class="textdisplay">
-            <h2>Interactive communication: word naming</h2>
-            <div id="audiosetup">
-              <p style="font-weight:bold;">In this experiment you will be shown sets
-              of words and be asked to say one to a partner that we will connect you
-              to automatically. You need a working head set and microphone.
-                This experiment requires Flash and javascript to be enabled.
-                <span style="color:red;">If this is the first time you're visiting
-                this page, you might see a dialogue asking you to give us permission
-                to record from your microphone while you are participating in this
-                experiment.</span> Depending on your browser, this dialogue may show
-                up at the very bottom of this page. Make sure to scroll down before
-                you start recording. Please select "Allow" and "Remember" and then
-                click "Close". We will always tell you when during the experiment
-                we are recording.</p>
-                {% if not preview %}
-                <p>Now let's adjust your microphone settings.</p>
-                <p>We recommend you use a head mounted microphone with the microphone a
-                few inches from your mouth or a desktop microphone that you keep a
-                consistent distance from your mouth. Please try not to whisper or yell.</p>
-                <p>The recording software is sensitive to the window focus and presence of
-                other audio or video recorders. If you switch to another window midway
-                through the experiment it may case errors that could prevent you from
-                being able to finish the hit. Please do not switch to other windows. If
-                you have other programs running (e.g. Skype, G-Chat) that are
-                simultaneously recording audio or video please close them now. If your
-                recordings are poor we will not be able to use them and you will not be
-                paid.</p>
-                <div id="micsetup">
-                    <button type="button" id="startrecordtest">Start Recording</button>
-                    <button type="button" id="endrecordtest" disabled="disabled">Stop and Play back</button>
-                    <button type="button" id="replaytest" disabled="disabled">Replay</button>
-                    <p id="teststate"></p>
-                    <canvas id="micgraph" width="250" height="100">Your browser needs to support &lt;canvas&gt; to see the volume chart.</canvas>
-                    <p id="micwarning" style="color: red;">If you see no plot of
-                    volume intensity in black in the plot above, you either have not given
-                    Flash permissions to record sound from your microphone (see
-                    the pop-up that might show up at the bottom of this page) or
-                    your microphone is muted or not working. Please do not continue
-                    with the experiment if you cannot resolve this issue. We won't
-                    be able to use your recordings and you will not be paid. Equally
-                    important is that you do this experiment in a quiet room with no
-                    other people around, if your speech is not distinguishable from
-                    background noise we will not be able to use your data.</p>
-                <p>You must be a native speaker of American English. If you have not spent almost all of your time until the age of 10 in the United States, you cannot participate. If you have a non-American accent we will not be able to pay you. For example, British or Indian English is not permissible for this experiment.</p>
-                    <p>By clicking the 'Continue to instructions' button below, I
-                    confirm that I adjusted my volume and recording settings and that
-                    the recording was clearly understandable.</p>
-                    {% if debugmode %}
-                    <button type="button" id="endsetup">Continue to instructions</button>
-                    {% else %}
-                    <button type="button" id="endsetup" disabled>Continue to instructions</button>
-                    {% endif %}
-                </div>
-                {% endif %}
-            </div>
-            <div id="realinstructions" class="textdisplay">
-                <p>This experiment consists of two phases.</p>
-                <p>In <span style="font-weight:bold;">phase one</span>, you will be paired
-                up with a partner, this process may take a minute or two while your computer syncs with our server, and while your partner's computer syncs with yours. After a partner is found and your computers are connected, there will be a short practice session that will get the both of you accustomed to the experiment. After the initial practice trials, the real experiment will start.</p>
-                <p>In both the practice and actual trials your task is the same: direct your partner to click on a word from among several that appear on the screen. Each trial will follow this pattern: the software on your computer and your partner's will briefly resyncronize, while this will not take as long as the initial connection there may be some delays at this point. Then a cross will briefly appear on your screen. You should look at the cross. Shortly after, three words will appear. A black box will appear around one of the words and a small microphone symbol will appear above it. Please say to your partner: <span style='font-weight:bold'>"Click on the <span style="font-style:italic">word</span>" where <span style="font-style:italic">word</span> is the highlighted word on your screen.</span> A timer bar will let you know how long your partner has to respond. While your partner can hear you, you will not hear your partner. There should be no delay in the sound transmission and our tests showed the sound quality is good (comparable to a good skype connection).</p>
+          <img src="http://www.hlp.rochester.edu/URlogo.png"></img>
+          <h2>Interactive communication: word naming</h2>
+          <ul class="instructionlist">
+            <li id="intro" class="instructionlistitem">
+              <h3>Welcome!</h3>
+              <div class="listcontent">
                 <p>
-                {% if debugmode %}
-                Feedback varies in this version of the experiment, sometimes the bar will run out and sometimes it won't. Sometimes you will see which word your partner clicked on and sometimes you won't. Sometimes we will tell you if your partner clicked the right word or wrong word and sometimes we won't.
-                {% else %}
-                  {% if responsetimetype == 1 %}
-                  The timer bar will stop when your partner has made a response. It may happen that your partner responds before you finish speaking, if so please just continue as you have been on the next trial.
-                  {% else %}
-                  The timer bar will finish and the trial will continue on.
-                  {% endif %}
-                  {% if feedbacktype == 'Simple' %}
-                  You will be told if your partner picked the right word or not.
-                  {% elif feedbacktype == 'Choice' %}
-                  On your screen, a little icon of headhpones will appear next to the word your partner picked. The word will also be green if it was the word you were told to say or red if not.
-                  {% endif %}
+                  Thanks for your interest in our experiment. In this experiment you will be interacting with another person over the web. Please read through each of following items to inform you about the study and its requirements. Click each item to expand it or close it. In order to continue you must read the "Microphone testing and setup", "Experiment instructions" and "Informed consent" sections; be sure to check the boxes in each of those sections!
+                </p>
+                {% if preview %}
+                <p>
+                  This experiment is in preview mode, you will have to start the HIT in order to continue to the instructions and rest of the experiment.
+                </p>
                 {% endif %}
-                At the end of the trial a pause screen will appear with a 30 second timer.
-                Press the button or press your spacebar to advance to the next trial.
-                If you need a break please take it but we encourage you to finish the
-                experiment quickly both for your sake and your partner's. <span style="font-weight:bold">If you wait too long the experiment will terminate, your partner will be disconnected and you'll be taken to phase two</span>.</p>
-                <p><span style="font-weight:bold;">Phase two</span> is a brief survey. This survey consists of questions about the
-                experiment, your partner, you and your computer.
-                The data we collect with the survey will be non-identifying.</p>
-                <p>All together the experiment will take about 45 minutes to an hour. Please
-                do not take breaks in the middle of the experiment. It is important that you
-                do the experiment in one go. Thank you for your participation.</p>
-                <div id="consent">
-                    By accepting this HIT, you confirm that you have read and understood the
-                    <a target="_blank" href="http://www.hlp.rochester.edu/consent/English_2013-05-13.pdf">consent form</a>,
-                    that you are willing to participate in this experiment, and that you
-                    agree that the data you provide by participating can be used in
-                    scientific publications (no identifying information will be used).
-                    Sometimes it is necessary to share the data elicited from you
-                    &mdash; including sound files &mdash; with other researchers for scientific
-                    purposes (for replication purposes). That is the only reason for
-                    which we will share data and we will only share data with other
-                    researchers and only if it is for non-commercial use. Identifying
-                    information will <span style="font-weight:bold;">never</span> be shared (your MTurk ID will be replaced
-                    with an arbitrary alphanumeric code).
-                </div>
-                <p style="font-weight:bold;">Once you press Start, these instructions
-                will disappear, so make sure you understand them fully before you start.
-                A partner will be found for you.</p>
+                <button type="button" class="instructionbutton">Take me to the next section</button>
+              </div>
+            </li>
+            <li id="eligibility" class="instructionlistitem">
+              <h3>Eligibility</h3>
+              <div class="listcontent">
+                <h4>Language requirements</h4>
+                <p>
+                  <span style="font-weight:bold;">You must be a native speaker of American English.</span>
+                  If you have not spent almost all of your time until the age of 10 in the United States, you cannot participate.
+                  If you have a non-American accent we will not be able to pay you.
+                  For example, British or Indian English is not permissible for this experiment.
+                </p>
+                <h4>Computer requirements</h4>
+                <p>
+                    This experiment requires that your browser support Flash and javascript.
+                </p>
+                <p>
+                    <span style="font-weight:bold;">This experiment requires that your computer have a working microphone.</span>
+                    We recommend you use a head mounted microphone with the microphone a few inches from your mouth or a desktop microphone that you keep a consistent distance from your mouth.
+                    Please try not to whisper or yell.
+                    {% if not preview %}
+                    <span style="color:red;">If this is the first time you're visiting this page, you might see a dialogue asking you to give us permission to record from your microphone while you are participating in this experiment.</span>
+                    Depending on your browser, this dialogue may show up at the very bottom of this page. Make sure to scroll down before you start recording.
+                    Please select "Allow" and "Remember" and then click "Close".
+                    We will always tell you when during the experiment we are recording.
+                    {% endif %}
+                </p>
+                <button type="button" class="instructionbutton">Take me to the next section</button>
+              </div>
+            </li>
+            <li id="experimentlength" class="instructionlistitem">
+              <h3>Experiment length</h3>
+              <div class="listcontent">
+                <p>
+                  In total, this experiment will take <span style="font-weight:bold;">about 45 minutes</span>.
+                  This experiment is split up into multiple parts.
+                  This first part includes instructions and tests to make sure you're able to complete the rest, this should take about 5 minutes.
+                  After this we will have you do 6 practice trials which should take about 2 minutes.
+                  Then you will do the real experiment, made up of 90 trials, which should take about 25 minutes.
+                  Finally, we will ask you to fill out a survey which should take about 10 minutes.
+                </p>
+                <button type="button" class="instructionbutton">Take me to the next section</button>
+              </div>
+            </li>
+            <li id="microphonesetup" class="instructionlistitem">
+              <h3>Microphone testing and setup</h3>
+              <div id="audiosetup" class="listcontent">
                 {% if not preview %}
-                <button type="button" id="endinstr">I confirm that I have read and understood the instructions and want to start the experiment</button>
+                <p>
+                  Let's adjust your microphone settings.
+                  Click the "Start Recording" button to begin recording with your microphone.
+                  Click the "Stop and Play back" button to stop recording and play back what your recorded.
+                  The "Replay" button will play it again.
+                </p>
+                <p>
+                  <span style="font-weight:bold;">The recording software is sensitive to the window focus and presence of other audio or video recorders.</span>
+                  If you switch to another window midway through the experiment it may case errors that could prevent you from being able to finish the hit.
+                  Please do not switch to other windows.
+                  If you have other programs running (e.g. Skype, G-Chat) that are simultaneously recording audio or video please close them now.
+                  If your recordings are poor we will not be able to use them and you will not be paid.
+                </p>
+                <div id="micsetup">
+                  <button type="button" id="startrecordtest">Start Recording</button>
+                  <button type="button" id="endrecordtest" disabled="disabled">Stop and Play back</button>
+                  <button type="button" id="replaytest" disabled="disabled">Replay</button>
+                  <p id="teststate"></p>
+                  <canvas id="micgraph" width="250" height="100">Your browser needs to support &lt;canvas&gt; to see the volume chart.</canvas>
+                  <p id="micwarning" style="color: red;">
+                    If you see no plot of volume intensity in black in the plot above, you either have not given Flash permissions to record sound from your microphone (see the pop-up that might show up at the bottom of this page) or your microphone is muted or not working.
+                    Please do not continue with the experiment if you cannot resolve this issue.
+                    We won't be able to use your recordings and you will not be paid.
+                    Equally important is that you do this experiment in a quiet room with no other people around, if your speech is not distinguishable from background noise we will not be able to use your data.
+                  </p>
+                  <p>
+                    By checking the box next to 'My microphone is ready' below, I confirm that I adjusted my volume and recording settings and that the recording was clearly understandable.
+                  </p>
+                  {% if debugmode %}
+                  <input id="audioSetupDone" type="checkbox" name="audioSetupDone" checked="checked">My microphone is ready</input>
+                  {% else %}
+                  <input id="audioSetupDone" type="checkbox" name="audioSetupDone" disabled>My microphone is ready</input>
+                  {% endif %}
+                </div>
                 {% else %}
-                <button type="button" id="endinstr" disabled>I confirm that I have read and understood the instructions and want to start the experiment</button>
+                <p>
+                Due to system limitations you must attempt this HIT in order to test your microphone functionality. We hope to have this resolved soon.
+                </p>
+                <label>
+                {% if debugmode %}
+                <input type="checkbox" checked="checked" />
+                {% else %}
+                <input type="checkbox"/>
                 {% endif %}
-
-                <p><span style="font-weight:bold;">Further Information</span></p>
-                <p>Sometimes it can happen that technical difficulties cause experimental
-                scripts to freeze so that you will not be able to submit a HIT. We are trying
-                our best to avoid these problems. Should they nevertheless occur, we urge
-                you to contact us.</p>
-                <p>If you are interested in hearing how the experiments you are participating
-                in help us to understand the human brain, feel free to subscribe to our
-                <a href="http://hlplab.wordpress.com/">lab blog</a> on which we announce
-                new findings. Note that typically about one year passes before an experiment
-                is published.</p>
-            </div>
+                  I have read and completed this section
+                </label>
+                {% endif %}
+              </div>
+            </li>
+            <li id="taskinstructions" class="instructionlistitem">
+              <h3>Experiment instructions</h3>
+              <div class="listcontent">
+                <h4>Partner task</h4>
+                <p>
+                  The slideshow below will show you what you'll see on your screen and tell you what you'll be doing. So you understand the task better it will also show you what your partner will be doing. The left side (blue) is your screen and instructions. The right side (orange) is your partner's. Click the 'next' button to advance to the next slide.
+                </p>
+                  <style type="text/css">
+                    .left,.center,.right {
+                      top: 37%;
+                    }
+                    .left {
+                      left: 15%;
+                    }
+                    .right {
+                      right: 15%;
+                    }
+                    .center {
+                      left: 42%;
+                    }
+                    .pos1 {
+                      top: 10%;
+                      left: 55%;
+                    }
+                    .pos2 {
+                      top: 70%;
+                      left: 45%;
+                    }
+                    .pos3 {
+                      top: 47%;
+                      left: 75%;
+                    }
+                    .pos4 {
+                      top: 47%;
+                      left: 45%;
+                    }
+                    .cPos1 {
+                      top: 38.5%;
+                      left: 70.5%;
+                    }
+                    .cPos2 {
+                      top: 38.5%;
+                      left: 40.5%;
+                    }
+                    .timerbar {
+                      position: absolute;
+                      height: 5%;
+                      bottom: 0%;
+                      right: 0%;
+                      background-color: gray;
+                    }
+                    .full {
+                      width: 100%;
+                    }
+                    .step1 {
+                      width: 90%;
+                    }
+                    .step2 {
+                      width: 75%;
+                    }
+                    .step3 {
+                      width: 55%;
+                    }
+                    .end {
+                      width: 45%;
+                    }
+                    #instructionPanel img {
+                      position: absolute;
+                      height: 50px;
+                      width: 50px;
+                    }
+                    #instructionPanel img.cursor {
+                      height: 25px;
+                      width: 25px;
+                    }
+                    .fakeimg {
+                      position: absolute;
+                      width: 50px;
+                      height: 50px;
+                      line-height: 50px;
+                      border: 1px solid white;
+                      text-align: center;
+                    }
+                    span.imgcontent {
+                      position: relative;
+                      display: inline-block;
+                      vertical-align: middle;
+                      line-height: normal;
+                    }
+                    #instructionPanel {
+                      position: relative;
+                      width: 99%;
+                      height: 200px;
+                      margin: auto;
+                    }
+                    #instructionPanelLeft,#instructionPanelRight {
+                      position: absolute;
+                      width: 49.5%;
+                      height: 200px;
+                      margin: auto;
+                      border: 1px dotted black;
+                    }
+                    #instructionPanelLeft {
+                      border-color: teal;
+                      left: 0%;
+                    }
+                    #instructionPanelRight {
+                      border-color: orange;
+                      right: 0%;
+                    }
+                    #instructionCaption {
+                      position: relative;
+                      width: 99%;
+                      height: 150px;
+                      margin: auto;
+                    }
+                    #instructionCaptionLeft,#instructionCaptionRight {
+                      position: absolute;
+                      width: 49.5%;
+                      height: 140px;
+                      margin: auto;
+                      border: 1px dotted black;
+                    }
+                    #instructionCaptionLeft {
+                      border-color: teal;
+                      left: 0%;
+                    }
+                    #instructionCaptionRight {
+                      border-color: orange;
+                      right: 0%;
+                    }
+                    .instructionText {
+                      list-style-type: none;
+                      padding: 2px;
+                    }
+                    .instructionText li {
+                      display: none;
+                    }
+                  </style>
+                  <script type="text/javascript">
+                    function Set(imgs, texts){
+                      this.items = imgs.add(texts);
+                    };
+                    Set.prototype.showSet = function(){
+                      $(this.items).show();
+                    };
+                    Set.prototype.hideSet = function(){
+                      $(this.items).hide();
+                    };
+                    $(function() {
+                      var set1 = new Set($('.set1'));
+                      var set2 = new Set($('.set2'));
+                      var set3 = new Set($('.set3'));
+                      var set4 = new Set($('.set4'));
+                      var set5 = new Set($('.set5'));
+                      var set6 = new Set($('.set6'));
+                      var set7 = new Set($('.set7'));
+                      var set8 = new Set($('.set8'));
+                      var set9 = new Set($('.set9'));
+                      var set10 = new Set($('.set10'));
+                      if(feedbackType == 'Choice'){
+                          var sets = Array(set1, set2, set3, set4, set5, set6, set7, set8, set9, set10);
+                        } else {
+                          var sets = Array(set1, set2, set3, set4, set5, set6, set7, set10);
+                        }
+                      $('#instructionPanel').find("img,.fakeimg,.timerbar,.postmsg").delay(1000).hide(500, function(){
+                        sets[0].showSet();
+                      });
+                      $("#instructionPanel,#instructionCaption").on('click', function(e){
+                          e.stopPropagation();
+                        });
+                      $("#nextSet").on('click', function(e){
+                        e.stopPropagation();
+                        if(sets.length > 0){
+                            sets[0].hideSet();
+                            sets[1].showSet();
+                            sets = sets.slice(1);
+                            if(sets.length == 1){
+                              $(this).attr('disabled', 'disabled');
+                              $(this).text('done');
+                              $('#instructionDone').removeAttr('disabled');
+                            }
+                          }
+                      });
+                    });
+                  </script>
+                  <div id="instructionPanel">
+                    <div id="instructionPanelLeft">
+                      <img src="../img/microphone.png" class="left set1">
+                      <img src="../img/arrow.png" class="center set1">
+                      <img src="../img/headphone.png" class="right set1">
+                      <img src="../img/fixation.png" class="center set2">
+                      <div class="fakeimg left set3 set4 set5 set6 set7 set8">
+                        <span class="imgcontent" style="font-size: 1.25em;">loot</span>
+                      </div>
+                      <div class="fakeimg left set9" style="background-color: red;">
+                        <span class="imgcontent" style="font-size: 1.25em;">loot</span>
+                      </div>
+                      <div class="fakeimg center set3">
+                        <span class="imgcontent" style="font-size: 1.25em;">guide</span>
+                      </div>
+                      <div class="fakeimg center set4 set5 set6 set7 set9" style="border-color: black;">
+                        <span class="imgcontent" style="font-size: 1.25em;">guide</span>
+                      </div>
+                      <div class="fakeimg center set8" style="border-color: black; background-color: green;">
+                        <span class="imgcontent" style="font-size: 1.25em;">guide</span>
+                      </div>
+                      <div class="fakeimg right set3 set4 set5 set6 set7 set8 set9">
+                        <span class="imgcontent" style="font-size: 1.25em;">voice</span>
+                      </div>
+                      <div class="timerbar full set3"></div>
+                      <div class="timerbar step1 set4"></div>
+                      <div class="timerbar step2 set5"></div>
+                      <div class="timerbar step3 set6"></div>
+                      <div class="timerbar step3 set7 set8 set9"></div>
+                      <div class="postmsg set10" style="padding: 5px;">
+                        <p>Please press the space bar to move to the next trial. You have 30 seconds.</p>
+                      </div>
+                    </div>
+                    <div id="instructionPanelRight">
+                      <img src="../img/microphone.png" class="right set1">
+                      <img src="../img/arrow.png" class="center set1">
+                      <img src="../img/headphone.png" class="left set1">
+                      <img src="../img/fixation.png" class="center set2">
+                      <div class="fakeimg center set3 set4 set5 set6 set7 set8 set9">
+                        <span class="imgcontent" style="font-size: 1.25em;">loot</span>
+                      </div>
+                      <div class="fakeimg right set3 set4 set5 set6 set7 set8 set9">
+                        <span class="imgcontent" style="font-size: 1.25em;">guide</span>
+                      </div>
+                      <div class="fakeimg left set3 set4 set5 set6 set7 set8 set9">
+                        <span class="imgcontent" style="font-size: 1.25em;">voice</span>
+                      </div>
+                      <div class="timerbar full set3"></div>
+                      <div class="timerbar step1 set4"></div>
+                      <div class="timerbar step2 set5"></div>
+                      <div class="timerbar step3 set6"></div>
+                      <div class="timerbar step3 set7 set8 set9"></div>
+                      <img src="../img/cursor.png" class="cursor pos1 set3 set4">
+                      <img src="../img/cursor.png" class="cursor pos2 set5">
+                      <img src="../img/cursor.png" class="cursor pos3 set6">
+                      <img src="../img/cursor.png" class="cursor pos3 set7 set8">
+                      <img src="../img/cursor.png" class="cursor pos4 set9">
+                      <img src="../img/circle.png" class="cPos1 set6 set8" style="opacity: 0.6;">
+                      <img src="../img/circle.png" class="cPos2 set9" style="opacity: 0.6;">
+                      <div class="postmsg set10" style="padding: 5px;">
+                        <p>Please wait for your partner to be ready to start the next trial.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="instructionCaption">
+                    <div id="instructionCaptionLeft">
+                      <ul class="instructionText">
+                        <li class="set1">
+                        <p>First we'll find and connect you to a partner.</p>
+                        </li>
+                        <li class="set2">
+                        <p>Once connected, the trials will start. You'll see a little cross on the screen.</p>
+                        </li>
+                        <li class="set3">
+                        <p>Next you'll see three words. You should read all of them. Below a timer bar will appear too.</p>
+                        </li>
+                        <li class="set4">
+                        <p>After a moment, one will be highlighted. The timer bar will also start.</p>
+                        </li>
+                        <li class="set5">
+                        <p>Read the highlighted word, in this case 'guide', to your partner. They will hear your with very little delay but remember you won't hear them.</p>
+                        </li>
+                        <li class="set6">
+                        <p>During or after you finish talking your partner will respond.</p>
+                        </li>
+                        <li class="set7">
+                        <p>If the timer bar finishes then the trial will end even without a response from your partner. Although your partner is instructed to wait for you to speak they may respond early. Don't let this frustrate you.</p>
+                        </li>
+                        <li class="set8">
+                        <p>If your partner picks the right word you'll see the word you said highlighted in green.</p>
+                        </li>
+                        <li class="set9">
+                        <p>If your partner picks the wrong word you'll see the word they picked in red. If they pick the wrong word don't get frustrated, just continue to the next trial.</p>
+                        </li>
+                        <li class="set10">
+                        <p>After the trial ends you'll have 30 seconds to start the next one. Press the space bar to start the next trial. If you wait too long the experiment will end and the survey will start. There are 90 trials total.</p>
+                        </li>
+                      </ul>
+                    </div>
+                    <div id="instructionCaptionRight">
+                      <ul class="instructionText">
+                        <li class="set1">
+                        <p>Your partner will hear you but it's a one way connection; you can't hear them.</p>
+                        </li>
+                        <li class="set2">
+                        <p>Your partner will see the same thing.</p>
+                        </li>
+                        <li class="set3">
+                        <p>Your partner will see the same words but not necessarily in the same order.</p>
+                        </li>
+                        <li class="set4">
+                        <p>Your partner's timer bar will start too but nothing else will change on their screen.</p>
+                        </p>
+                        </li>
+                        <li class="set5">
+                        <p>Your partner will listen to you. Their goal is to click on the word you are saying.</p>
+                        </li>
+                        <li class="set6">
+                        <p>Your partner will click what they are hearing as quickly as possible.</p>
+                        </li>
+                        <li class="set7">
+                        <p>They are trying to respond as quickly and accurately as possible so they may not wait for you to finish.</p>
+                        </li>
+                        <li class="set8">
+                        <p></p>
+                        </li>
+                        <li class="set9">
+                        <p>Your partner will <em>not</em> be told if they got it right or not.</p>
+                        </li>
+                        <li class="set10">
+                        <p>Your partner will be waiting for you so try not to make them wait too long.</p>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <button id="nextSet">next</button>
+                <h4>Survey questions</h4>
+                <p>
+                  The survey will be a series of questions about you.
+                  Please answer the questions to the best of your abilities.
+                  All of the information we collect will be non-identifying.
+                </p>
+                <p>
+                  Please check the "I have read and understand the instructions" box before continuing.
+                </p>
+                <label>
+                {% if debugmode %}
+                <input id="instructionDone" type="checkbox" name="instructionDone" checked="checked" />
+                {% else %}
+                <input id="instructionDone" type="checkbox" name="instructionDone" />
+                {% endif %}
+                  I have read and understand the instructions
+                </label>
+              </div>
+            </li>
+            <li id="consent" class="instructionlistitem">
+              <h3>Informed consent</h3>
+              <div class="listcontent">
+                <p>
+                  By accepting this HIT, you confirm that you have read and understood the <a target="_blank" href="http://www.hlp.rochester.edu/consent/English_2014-05-13.pdf">consent form (requires a pdf reader)</a>, that you are willing to participate in this experiment, and that you agree that the data you provide by participating can be used in scientific publications (no identifying information will be used).
+                  Sometimes it is necessary to share the data elicited from you &mdash; including sound files &mdash; with other researchers for scientific purposes (for replication purposes). That is the only reason for which we will share data and we will only share data with other researchers and only if it is for non-commercial use.
+                  Identifying information will <span style="font-weight:bold;">never</span> be shared (your MTurk ID will be replaced with an arbitrary alphanumeric code).
+                </p>
+                <label>
+                {% if debugmode %}
+                  <input id="consentDone" type="checkbox" name="consentDone" checked="checked" />
+                {% else %}
+                  <input id="consentDone" type="checkbox" name="consentDone" />
+                {% endif %}
+                  I consent to participating in this experiment
+                </label>
+              </div>
+            </li>
+            <li id="startexperiment" class="instructionlistitem">
+              <h3>Begin the experiment</h3>
+              <div class="listcontent">
+                <p style="font-weight:bold;">
+                  Once you press Start, these instructions will disappear, so make sure you understand them fully before you start.
+                </p>
+                {% if not preview %}
+                <button type="button" id="endinstr">I confirm that I have read and understood the eligibility and computer requirements, the instructions, the consent and want to start the experiment</button>
+                {% else %}
+                <button type="button" id="endinstr" disabled>I confirm that I have read and understood the eligibility and computer requirements, the instructions, the consent and want to start the experiment</button>
+                {% endif %}
+                <p>
+              </div>
+            </li>
+            <li id="moreinformation" class="instructionlistitem">
+              <h3>Further (optional) information</h3>
+              <div class="listcontent">
+                <p>
+                  Sometimes it can happen that technical difficulties cause experimental scripts to freeze so that you will not be able to submit a HIT.
+                  We are trying our best to avoid these problems. Should they nevertheless occur, we urge you to contact us.
+                </p>
+                <p>
+                  If you are interested in hearing how the experiments you are participating in help us to understand the human brain, feel free to subscribe to our <a href="http://hlplab.wordpress.com/">lab blog</a> on which we announce new findings.
+                  Note that typically about one year passes before an experiment is published.
+                </p>
+              </div>
+            </li>
+          </ul>
         </div>

@@ -1,25 +1,12 @@
 # Pressing fixes #
+1. Format the top UofR image so that HLP is listed first then the UofR logo/name
 1. Check again for typos
 1. Check again for typos, seriously
 1. The instructions are way too long, we need to make it easier and read.
-  1. One thing to do first: move all the eligibility stuff to the start of the experiment
-  1. Split up the stuff by putting them in their own divs and having users click to move from div to div
   1. Replace some of the stuff with pictures or pictures and images, or videos
-1. Test the feedback code, this is something that I forgot to do before the last commit
-1. There is an odd bug about how WAMI 
-1. During the playback test there is an issue where in the file is not being made availble to the playback function
-1. The endEarly window reappears for no reason.
-1. Rework the initial sync to randomize the length from 20 to 40 seconds.
-1. Survey question about accent: change it to a pull down menu (yes; no; not sure) and have it say "if yes or not sure"
-1. Rework the question to ask them about what accent they have, provide them a pull down with the accents found at http://aschmann.net/AmEng and link to the small map to clarify it if they need it.
-1. To the follow up for the "where do you live" question, add a question for how long
-  1. maybe scrap this and just ask what dialect region they live in
-1. Ask about other language experience
-1. For the birth question, add a pulldown that asks "different from above? (yes; no;) if no then where and for how long (pulldown)"
-1. Last microphone question needs to be put in a table, at the moment the javascript check can't turn it red.
-1. Add some timing information about how long the survey will take (add page numbers)
 
 # Nice things to add #
+1. Catch trials where we have speakers type in the three words that are presented instead of speaking the cued word.
 1. Add in some way to skip ahead in a trial while in debug mode.
 1. Add in some way to skip to the test trials while in debug mode.
 1. Add trial numbers to each trial in a curr/total format somewhere on the screen

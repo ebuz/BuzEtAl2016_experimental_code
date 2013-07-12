@@ -120,13 +120,15 @@ var onTestRecordFinish = function() {
         // canvas-unsupported code here
     }
 
-    Wami.startPlaying(recorder_url + "?workerId=" +
-    workerId +
-    "&assignmentId=" + assignmentId +
-    "&hitId=" + hitId +
-    "&hash=" + amzhash +
-    "&experiment=" + endurl +
-    "&filename=test", "onPlayStart", "onPlayFinish", "onError");
+    $('#micsetup').oneTime(500, function(){
+        Wami.startPlaying(recorder_url + "?workerId=" +
+        workerId +
+        "&assignmentId=" + assignmentId +
+        "&hitId=" + hitId +
+        "&hash=" + amzhash +
+        "&experiment=" + endurl +
+        "&filename=test", "onPlayStart", "onPlayFinish", "onError");
+      });
 
     //var micmean = miclevel.reduce(function(a,b) {return a+b;}) / miclevel.length;
     //miclevel.sort(function(a,b) {return a-b;});

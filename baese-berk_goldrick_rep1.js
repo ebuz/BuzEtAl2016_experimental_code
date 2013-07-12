@@ -2,6 +2,12 @@ $(document).ready(function() {
   $(':checked').removeAttr('checked');
   $('input[name="browserid"]').val(navigator.userAgent);
   var finished = false;
+  var p1Nudge = false;
+  var p2Nudge = false;
+  var p3Nudge = false;
+  var p4Nudge = false;
+  var p5Nudge = false;
+  var p6Nudge = false;
 
   Modernizr.load({
     test: Modernizr.canvas,
@@ -28,9 +34,10 @@ $(document).ready(function() {
   $('button#tosurvey').on('click', function() {
     $(document).find(':input#endearly').val('Yes');
     $('#earlyStop').hide();
-    $('#page1').show();
+    $('#surveyStart').show();
   });
-  $('button#startrecordtest').on('click', function() {
+  $('button#startrecordtest').on('click', function(e) {
+    e.stopPropagation();
     if (typeof(Wami.startRecording) === 'function') {
       $(this).attr('disabled', 'disabled');
       $('button#replaytest').attr('disabled', 'disabled');
@@ -44,11 +51,13 @@ $(document).ready(function() {
         '&hash=' + amzhash +
         '&experiment=' + endurl +
         '&filename=test', 'onTestRecordStart', 'onTestRecordFinish', 'onError');
+      $('#audioSetupDone').removeAttr('disabled');
     } else {
-    alert('Still waiting for recorder to become ready.');
+      alert('Still waiting for recorder to become ready.');
     }
   });
-  $('button#endrecordtest').on('click', function() {
+  $('button#endrecordtest').on('click', function(e) {
+    e.stopPropagation();
     Wami.stopRecording();
     $('#micwarning').show();
     $(this).attr('disabled', 'disabled');
@@ -56,7 +65,8 @@ $(document).ready(function() {
     $('button#replaytest').removeAttr('disabled');
     $('#teststate').html('Transferring recorded file ... Thank you for your patience.');
   });
-  $('button#replaytest').on('click', function() {
+  $('button#replaytest').on('click', function(e) {
+    e.stopPropagation();
     Wami.startPlaying(recorder_url + '?workerId=' +
       workerId +
       '&assignmentId=' + assignmentId +
@@ -72,11 +82,28 @@ $(document).ready(function() {
   });
   $('button#endinstr').on('click', function() {
     if (Wami.getSettings().microphone.granted) {
-      $('object').attr('height', 0);
-      $('object').attr('width', 0);
-      $('#instructions').hide(0);
-      $('#startmessage').show(0);
-      initial_sync_screen();
+      var instructionDone = true;
+      if(!$('#consentDone').prop('checked')){
+        instructionDone = false;
+        $('#consent').children().first().css('color', 'red');
+      }
+      if(!$('#instructionDone').prop('checked')){
+        instructionDone = false;
+        $('#taskinstructions').children().first().css('color', 'red');
+      }
+      if(!$('#audioSetupDone').prop('checked')){
+        instructionDone = false;
+        $('#microphonesetup').children().first().css('color', 'red');
+      }
+      if (instructionDone){
+        $('object').attr('height', 0);
+        $('object').attr('width', 0);
+        $('#instructions').hide(0);
+        $('#startmessage').show(0);
+        initial_sync_screen();
+      } else {
+        alert('Please read and check the necessary items before you continue.');
+      }
     } else {
       alert('You have to allow microphone access for this experiment!');
     }
@@ -89,13 +116,18 @@ $(document).ready(function() {
       runTrial($curTrial)
     });
   });
-  $('button#skippractice').on('click', function() {
+  $('button#skipPractice').on('click', function() {
     $('#startmessage').hide();
     $('#testing').show();
     $curTrial = $('#testing').children('.trial').first();
     $curTrial.show(0, function(){
       runTrial($curTrial)
     });
+  });
+  $('button#skipTrials').on('click', function() {
+    $('#startmessage').hide();
+    $(document).find(':input#endearly').val('Yes');
+    $('#surveyStart').show();
   });
   var showReady = function($imgd, duration, msg){
     $imgd.css("background-color", "green");
@@ -147,13 +179,13 @@ $(document).ready(function() {
     var waitTime = 400;
     $($iconList[1]).oneTime(waitTime, function(){
       showReady($(this), 300, 'Connecting to server');
-      showReady($(this).next(), 400, 'Connected, waiting for a partner');
+      showReady($(this).next(), 300, 'Connected, waiting for a partner');
       waitTime += 27600;
       $(this).next().next().oneTime(waitTime, function(){
         $('#syncstatusmsg').text('Partner found, connecting');
-        showReady($(this), 400, "Connected, activating partner's sound");
+        showReady($(this), 300, "Connected, activating partner's sound");
         $(this).next().oneTime(400, function(){
-          showReady($(this), 400, "Activated!");
+          showReady($(this), 300, "Activated!");
           $(this).oneTime(500, function(){
             $('#syncstatusmsg').hide();
             $('#initialsync').hide();
@@ -303,7 +335,7 @@ $(document).ready(function() {
                   });
               });
           } else {
-            $('#page1').show();
+            $('#SurveyStart').show();
           }
         } else {
           console.log('Running timer downdown');
@@ -418,38 +450,36 @@ $(document).ready(function() {
       });
     }
   });
+  $('#surveyStart button.next').on('click', function() {
+      $('#surveyStart').hide();
+      $('#page1').show();
+    });
   $('#page1 button.next').on('click', function() {
     $('#page1 .survquest').css('color', 'black');
     var p1valid = true;
 
-    if ($('[name="q.participant.age"]').val() === '') {
-      $('#age').css('color', 'red');
+    if ($('[name="q.dialect_region"]').val() === '') {
+      $('#current_dialect').css('color', 'red');
       p1valid = false;
     }
 
-    if ($('[name="q.participant.education"]').val() === '') {
-      $('#education').css('color', 'red');
+    if ($('[name="q.dialect_region"]').val() === 'other' && $('[name="q.dialect_region_other"]').val() === '') {
+      $('#current_dialect').css('color', 'red');
       p1valid = false;
     }
 
-    if ($('[name="q.participant.gender"]').val() === '' &&
-      $('[name="q.participant.gender.other"]').val() === '') {
-      $('#gender').css('color', 'red');
+    if ($('[name="q.dialect_region_same_at_birth"]').val() === '') {
+      $('#birth_dialect').css('color', 'red');
       p1valid = false;
     }
 
-    if ($('[name="q.accent_comment"]').val() === '') {
-      $('#accent').css('color', 'red');
+    if ($('[name="q.dialect_region_same_at_birth"]').val() === 'no' && $('[name="q.dialect_region_at_birth"]').val() === '') {
+      $('#birth_dialect').css('color', 'red');
       p1valid = false;
     }
 
-    if ($('[name="q.living_city_state"]').val() === '') {
-      $('#accent').css('color', 'red');
-      p1valid = false;
-    }
-
-    if ($('[name="q.born_city_state"]').val() === '') {
-      $('#accent').css('color', 'red');
+    if ($('[name="q.dialect_region_same_at_birth"]').val() === 'no' && $('[name="q.dialect_region_at_birth"]').val() === 'other' && $('[name="q.dialect_region_other"]').val() === '') {
+      $('#birth_dialect').css('color', 'red');
       p1valid = false;
     }
 
@@ -457,7 +487,13 @@ $(document).ready(function() {
       $('#page1').hide();
       $('#page2').show(function() {$('label:visible')[0].scrollIntoView()});
     } else {
-      alert('Please answer all questions.');
+      if (!p1Nudge){
+        p1Nudge = true;
+        alert("Please answer all the question, it will greatly help our work. This message will appear only once per page as a reminder.");
+      } else {
+        $('#page1').hide();
+        $('#page2').show(function() {$('label:visible')[0].scrollIntoView()});
+      }
     }
   });
   $('#page2 button.next').on('click', function() {
@@ -495,7 +531,7 @@ $(document).ready(function() {
     }
 
     if ($('[name="q.microphone_model"]').val() === '') {
-      $('#q\\.microphone_model').parent().prev().css('color', 'red');
+      $('#q\\.microphone_model').css('color', 'red');
       p2valid = false;
     }
 
@@ -507,7 +543,17 @@ $(document).ready(function() {
         $('#page3').show(function() {$('label:visible')[0].scrollIntoView()});
       }
     } else {
-      alert('Please answer all questions.');
+      if (!p2Nudge){
+        p2Nudge = true;
+        alert("Please answer all the question, it will greatly help our work. This message will appear only once per page as a reminder.");
+      } else {
+        $('#page2').hide();
+        if ($('#responsetimetype').val() == "0" && $('#feedbackcondition').val() == "NoFeedback" ){
+          $('#page4').show(function() {$('label:visible')[0].scrollIntoView()});
+        } else {
+          $('#page3').show(function() {$('label:visible')[0].scrollIntoView()});
+        }
+      }
     }
   });
   $('#page3 button.next').on('click', function() {
@@ -555,7 +601,13 @@ $(document).ready(function() {
       $('#page3').hide();
       $('#page4').show(function() {$('label:visible:first')[0].scrollIntoView();});
     } else {
-    alert('Please answer all questions.');
+      if (!p3Nudge){
+        p3Nudge = true;
+        alert("Please answer all the question, it will greatly help our work. This message will appear only once per page as a reminder.");
+      } else {
+        $('#page3').hide();
+        $('#page4').show(function() {$('label:visible:first')[0].scrollIntoView();});
+      }
     }
   });
   $('#page4 button.next').on('click', function() {
@@ -576,7 +628,13 @@ $(document).ready(function() {
       $('#page4').hide();
       $('#page5').show(function() {$('label:visible')[0].scrollIntoView()});
     } else {
-      alert('Please answer all questions.');
+      if (!p4Nudge){
+        p4Nudge = true;
+        alert("Please answer all the question, it will greatly help our work. This message will appear only once per page as a reminder.");
+      } else {
+        $('#page4').hide();
+        $('#page5').show(function() {$('label:visible')[0].scrollIntoView()});
+      }
     }
   });
   $('#page5 button.next').on('click', function() {
@@ -591,7 +649,13 @@ $(document).ready(function() {
       $('#page5').hide();
       $('#page6').show(function() {$('label:visible')[0].scrollIntoView()});
     } else {
-      alert('Please answer all questions.');
+      if (!p5Nudge){
+        p5Nudge = true;
+        alert("Please answer all the question, it will greatly help our work. This message will appear only once per page as a reminder.");
+      } else {
+        $('#page5').hide();
+        $('#page6').show(function() {$('label:visible')[0].scrollIntoView()});
+      }
     }
   });
   $('#page6 button#endsurvey').on('click', function() {
@@ -616,7 +680,13 @@ $(document).ready(function() {
       $('#page6').hide();
       wrapup();
     } else {
-      alert('Please answer all questions.');
+      if (!p6Nudge){
+        p6Nudge = true;
+        alert("Please answer all the question, it will greatly help our work. This message will appear only once per page as a reminder.");
+      } else {
+        $('#page6').hide();
+        wrapup();
+      }
     }
   });
   var wrapup = function() {

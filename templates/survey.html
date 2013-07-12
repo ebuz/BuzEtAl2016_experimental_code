@@ -1,26 +1,16 @@
       <div id="survey" class="textdisplay">
-        <div id="page1">
-          <p>Phase 2: The survey. There are 6 pages, please complete them all. Do not press your browser's back button.</p>
+        <div id="surveyStart">
+          <p>Phase 2: The survey. There are 7 pages including this one, please complete them all. Do not press your browser's back button.</p>
           <p>It is very important to us that you try to answer the questions in the survey
           to the best of your abilities. Rushing through the survey will make your data
           completely useless for our research purpose. Your answers will in no way affect
           your payment.</p>
+          {% include 'rsrb_survey.html' %}
+          <button type="button" class="next" id="endSurveyStart">Next</button>
+        </div>
+        <div id="page1">
           <fieldset>
             <label>Please answer these questions about you.</label>
-            <table class="survquest" id="age">
-              <tr>
-                <td>Age</td>
-                <td>
-                  <select name="q.participant.age">
-                    <option value="" selected="selected">-----</option>
-                    {% for a in range(13,85) %}
-                    <option value="{{a}}">{{a}}</option>
-                    {% endfor %}
-                    <option value="85+">85+</option>
-                  </select>
-                </td>
-              </tr>
-            </table>
             <table class="survquest" id="education">
               <tr>
                 <td>Education</td>
@@ -36,43 +26,59 @@
                 </td>
               </tr>
             </table>
-            <table class="survquest" id="gender">
-              <tr>
-                <td colspan="3"><p class="sentence">Gender</p></td>
-              </tr>
-              <tr>
-                <td>
-                  <select name="q.participant.gender">
-                    <option value="" selected="selected">-----</option>
-                    <option value="male">male</option>
-                    <option value="female">female</option>
-                    <option value="other">other</option>
-                  </select>
-                </td>
-                <td>If Other:</td>
-                <td><input type="text" name="q.participant.gender.other"/></td>
-              </tr>
-            </table>
-            <table class="survquest" id="accent">
+            <table class="survquest" id="current_dialect">
               <tr>
                 <p>These questions are related to how you speak. We are asking these questions to get a better idea about how you speak (if you have a regional accent) and what exposure you have to particular accents.</p>
               </tr>
               <tr>
                 <td>
-                <p>Do you have an accent? For example, would people say you speak like a New Englander or Southner? What type of accent would you classify yourself as having?</p>
-                <p><textarea id="accent_comment" name="q.accent_comment" cols="40" rows="1"></textarea></p>
+                  <p>What dialect region do you live in? If you are unsure please look at <a target="_blank" href="http://www.aschmann.net/AmEng/#SmallMap">this map</a>. If you think your dialect is specific to a smaller region then please specify it with your city and state.</p>
+                  <p>
+                    <select name='q.dialect_region'>
+                      <option value=""  selected="selected"></option>
+                      <option value="midland">The Midland</option>
+                      <option value="south">The South</option>
+                      <option value="north">The North</option>
+                      <option value="north_central">The North Central</option>
+                      <option value="west">The West</option>
+                      <option value="north_new_england">The Northern New England</option>
+                      <option value="nyc">Greater New York City</option>
+                      <option value="other">Other. Please specify.</option>
+                    </select>
+                  </p>
+                  <p>
+                    <textarea name="q.dialect_region_other" cols="40" rows="1"></textarea>
+                  </p>
                 </td>
               </tr>
+            </table>
+            <table class="survquest" id="birth_dialect">
               <tr>
                 <td>
-                <p>Where do you live? Please provide the city and state.</p>
-                <p><textarea id="living_city_state" name="q.living_city_state" cols="40" rows="1"></textarea></p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                <p>Where did you grow up? if it is the same as above please say so.</p>
-                <p><textarea id="born_city_state" name="q.born_city_state" cols="40" rows="1"></textarea></p>
+                <p>Did you grow up in a different region than the one above?</p>
+                  <p>
+                    <select name='q.dialect_region_same_at_birth'>
+                      <option value="" selected="selected"></option>
+                      <option value="yes">Yes</option>
+                      <option value="no">No. Please specify.</option>
+                    </select>
+                  </p>
+                  <p>
+                    <select name='q.dialect_region_at_birth'>
+                      <option value="" selected="selected"></option>
+                      <option value="midland">The Midland</option>
+                      <option value="south">The South</option>
+                      <option value="north">The North</option>
+                      <option value="north_central">The North Central</option>
+                      <option value="west">The West</option>
+                      <option value="north_new_england">The Northern New England</option>
+                      <option value="nyc">Greater New York City</option>
+                      <option value="other">Other. Please specify.</option>
+                    </select>
+                  </p>
+                  <p>
+                    <textarea id="dialect_region_at_birth_other" name="q.dialect_region_at_birth_other" cols="40" rows="1"></textarea>
+                  </p>
                 </td>
               </tr>
             </table>
@@ -189,12 +195,12 @@
                 </td>
               </tr>
             </table>
-            <table>
+            <table class="survquest" id='q.microphone_model'>
               <tr>
                 <td>Please write the make and model of your microphone. If it is built into your computer/laptop please provide the make and model of your computer. If you are unsure write "unknown".</td>
               </tr>
               <tr>
-                <td><textarea id="q.microphone_model" name="q.microphone_model" cols="40" rows="1"></textarea></td>
+                <td><textarea name="q.microphone_model" cols="40" rows="1"></textarea></td>
               </tr>
             </table>
           </fieldset>
