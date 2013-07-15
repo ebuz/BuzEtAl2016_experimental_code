@@ -90,25 +90,28 @@
                   <p>
                     By checking the box next to 'My microphone is ready' below, I confirm that I adjusted my volume and recording settings and that the recording was clearly understandable.
                   </p>
+                  <label style="font-size: 100%;">
                   {% if debugmode %}
-                  <input id="audioSetupDone" type="checkbox" name="audioSetupDone" checked="checked">My microphone is ready</input>
+                  <input type="checkbox" id="audioSetupDone" name="audioSetupDone" checked="checked" />
                   {% else %}
-                  <input id="audioSetupDone" type="checkbox" name="audioSetupDone" disabled>My microphone is ready</input>
+                  <input type="checkbox" id="audioSetupDone" name="audioSetupDone" />
                   {% endif %}
+                    My microphone is ready
+                  </label>
                 </div>
                 {% else %}
                 <p>
                 Due to system limitations you must attempt this HIT in order to test your microphone functionality. We hope to have this resolved soon.
                 </p>
-                <label>
+                <label style="font-size: 100%;">
                 {% if debugmode %}
                 <input type="checkbox" checked="checked" />
                 {% else %}
                 <input type="checkbox"/>
                 {% endif %}
                   I have read and completed this section
-                </label>
                 {% endif %}
+                </label>
               </div>
             </li>
             <li id="taskinstructions" class="instructionlistitem">
@@ -442,7 +445,7 @@
                 <p>
                   Please check the "I have read and understand the instructions" box before continuing.
                 </p>
-                <label>
+                <label style="font-size: 100%;">
                 {% if debugmode %}
                 <input id="instructionDone" type="checkbox" name="instructionDone" checked="checked" />
                 {% else %}
@@ -460,7 +463,7 @@
                   Sometimes it is necessary to share the data elicited from you &mdash; including sound files &mdash; with other researchers for scientific purposes (for replication purposes). That is the only reason for which we will share data and we will only share data with other researchers and only if it is for non-commercial use.
                   Identifying information will <span style="font-weight:bold;">never</span> be shared (your MTurk ID will be replaced with an arbitrary alphanumeric code).
                 </p>
-                <label>
+                <label style="font-size: 100%;">
                 {% if debugmode %}
                   <input id="consentDone" type="checkbox" name="consentDone" checked="checked" />
                 {% else %}
