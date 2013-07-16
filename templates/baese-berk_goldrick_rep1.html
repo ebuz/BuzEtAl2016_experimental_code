@@ -421,6 +421,9 @@
         </div>
         {% for item in testtrials %}
           <div id="trial{{loop.index}}" class="trial">
+            <div class="trialCount">
+              {{loop.index}} of {{loop.length}}
+            </div>
             <div class="fixation">
               <img class="fixationcross" src="/mturk/img/fixation.png">
             </div>
