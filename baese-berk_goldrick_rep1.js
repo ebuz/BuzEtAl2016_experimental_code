@@ -429,8 +429,9 @@ $(document).ready(function() {
           runTrial($curTrial)
         });
       });
-  document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 32) {
+  document.addEventListener('keydown', function(e) {
+    if(e.keyCode == 32) {
+      e.preventDefault();
       $('button.nexttrial:visible').click();
       $('#starttest:visible').click();
     }
