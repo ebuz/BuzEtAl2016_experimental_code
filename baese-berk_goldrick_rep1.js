@@ -335,7 +335,7 @@ $(document).ready(function() {
                   });
               });
           } else {
-            $('#SurveyStart').show();
+            $('#surveyStart').show();
           }
         } else {
           console.log('Running timer downdown');
