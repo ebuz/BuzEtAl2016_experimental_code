@@ -20,6 +20,9 @@ The stimuli are a subset of the voiced onset minimal pair stimuli from Kirov & W
 90 total test trials.
 6 practice trials are given before hand.
 
+### List Count
+There are 12 lists total.
+
 ## rep1 design changes
 PositiveNegative feedback changes:
 1. Have the second filler trial be wrong and the first, second and third neighbor trial.
