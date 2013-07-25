@@ -44,7 +44,7 @@ Worker.metadata.create_all(engine)
 TrialList.metadata.create_all(engine)
 
 # create our lists
-for i in range(0,MAX_LIST):
+for i in range(1,MAX_LIST+1):
     triallist = TrialList(number = i)
     session.add(triallist)
 
