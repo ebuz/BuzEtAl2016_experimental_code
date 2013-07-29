@@ -431,9 +431,11 @@ $(document).ready(function() {
       });
   document.addEventListener('keydown', function(e) {
     if(e.keyCode == 32) {
-      e.preventDefault();
-      $('button.nexttrial:visible').click();
-      $('#starttest:visible').click();
+      if(!$(e.target).is('textarea')){
+        e.preventDefault();
+        $('button.nexttrial:visible').click();
+        $('#starttest:visible').click();
+      }
     }
   });
   $('button#starttest').on('click', function() {
