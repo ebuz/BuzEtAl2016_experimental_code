@@ -431,7 +431,7 @@ $(document).ready(function() {
       });
   document.addEventListener('keydown', function(e) {
     if(e.keyCode == 32) {
-      if(!$(e.target).is('textarea')){
+      if(!($(e.target).is('textarea') || $(e.target).is('input'))){
         e.preventDefault();
         $('button.nexttrial:visible').click();
         $('#starttest:visible').click();
