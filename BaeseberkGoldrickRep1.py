@@ -37,6 +37,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 from simplejson import loads, dumps
 from models import Worker, TrialList
+import sys
 
 basepath = os.path.dirname(__file__)
 
@@ -62,16 +63,44 @@ try:
 except IOError:
   pass
 
+def get_or_make_worker(amz_dict, session):
+    try:
+        worker = session.query(Worker).filter_by(workerid = amz_dict['workerId']).one()
+        worker.list_id = amz_dict['list']
+        session.commit()
+        return worker
+    except NoResultFound:
+        worker = Worker(workerid = amz_dict['workerId'], list_id = amz_dict['list'])
+        session.add(worker)
+        session.commit()
+        return worker
+
 def check_worker_exists(workerid, session):
     try:
         worker = session.query(Worker).filter_by(workerid = workerid).one()
         return worker
     except NoResultFound:
-        worker = Worker(workerid = workerid, triallist = random_lowest_list(session))
+        worker = Worker(workerid = workerid, list_id = random_lowest_list(session))
         #worker = Worker(workerid = workerid, triallist = static_list(session, 25))
         session.add(worker)
         session.commit()
         return worker
+
+def get_worker(workerid, session):
+    return session.query(Worker).filter_by(workerid = workerid).one()
+
+def make_new_worker(amz_dict, session):
+    worker = Worker(workerid = amz_dict['workerId'], list_id = amz_dict['list'])
+    session.add(worker)
+    session.commit()
+    return worker
+
+def worker_exists(workerid, session):
+    try:
+        worker = session.query(Worker).filter_by(workerid = workerid).one()
+        return True
+    except NoResultFound:
+        return False
 
 def random_lowest_list(session):
     all_lists = session.query(TrialList).all()
@@ -84,12 +113,12 @@ def random_lowest_list(session):
 
     # if the lists are all the same length return a random one
     if len(all_lists[0].workers) == len(all_lists[-1].workers):
-        return choice(all_lists)
+        return choice(all_lists).id
     else:
         wk = [len(i.workers) for i in all_lists]
         # find out how many lists are the same length as the smallest
         # and return a random one from that subset
-        return choice(all_lists[0:wk.count(wk[0])])
+        return choice(all_lists[0:wk.count(wk[0])]).id
 
 def static_list(session, listno):
     return session.query(TrialList).filter(TrialList.number == listno).one()
@@ -141,6 +170,24 @@ class BaeseberkGoldrickRep1Server(object):
                 else:
                     worker.abandoned = False
 
+            if 'FinishedTrials' in req.params:
+                if req.params['FinishedTrials'] == "true":
+                    worker.finished_trials = True
+                else:
+                    worker.finished_trials = False
+
+            if 'FinishedSurvey' in req.params:
+                if req.params['FinishedSurvey'] == "true":
+                    worker.finished_survey = True
+                else:
+                    worker.finished_survey = False
+
+            if 'FinishedHIT' in req.params:
+                if req.params['FinishedHIT'] == "true":
+                    worker.finished_hit = True
+                else:
+                    worker.finished_hit = False
+
             session.commit()
 
             resp = Response(charset='utf8')
@@ -150,7 +197,7 @@ class BaeseberkGoldrickRep1Server(object):
         else:
             env = Environment(loader=FileSystemLoader(os.path.join(basepath,'templates')))
             env.filters['shuffle'] = shuffle_filter
-            amz_dict = {'workerId': '', 'assignmentId': '', 'hitId': ''}
+            amz_dict = {'workerId': '', 'assignmentId': '', 'hitId': '', 'list': ''}
             templ, listid, condition, template, resp = [None for x in range(5)]
             required_keys = ['assignmentId', 'hitId']
             key_error_msg = 'Missing parameter: {0}. Required keys: {1}'
@@ -158,10 +205,6 @@ class BaeseberkGoldrickRep1Server(object):
             debug = False
             if 'debug' in req.params:
                 debug = True if req.params['debug'] == '1' else False
-
-            forcelist = None
-            if 'list' in req.params:
-                forcelist = int(req.params['list'])
 
             try:
                 amz_dict['assignmentId'] = req.params['assignmentId']
@@ -173,6 +216,7 @@ class BaeseberkGoldrickRep1Server(object):
             in_preview = True if amz_dict['assignmentId'] == 'ASSIGNMENT_ID_NOT_AVAILABLE' else False
 
             worker = None
+            old_worker = False
             if not in_preview:
                 try:
                     amz_dict['workerId'] = req.params['workerId']
@@ -180,7 +224,19 @@ class BaeseberkGoldrickRep1Server(object):
                     required_keys.append('workerId')
                     resp = HTTPBadRequest(key_error_msg.format(e, required_keys))
                     return resp(environ, start_response)
-                worker = check_worker_exists(amz_dict['workerId'], session)
+                try:
+                    amz_dict['list'] = req.params['list']
+                except KeyError as e:
+                    amz_dict['list'] = random_lowest_list(session)
+                if debug:
+                  worker = get_or_make_worker(amz_dict, session)
+                elif worker_exists(amz_dict['workerId'], session):
+                  worker = get_worker(amz_dict['workerId'], session)
+                  if worker.finished_hit:
+                    old_worker = True
+                    worker = None
+                else:
+                  worker = make_new_worker(amz_dict, session)
 
                 amz_dict['hash'] = sha224("{}{}{}".format(req.params['workerId'],
                                                       req.params['hitId'],
@@ -189,11 +245,7 @@ class BaeseberkGoldrickRep1Server(object):
             currlist, testtrials, practicetrials = [[] for x in range(3)]
             feedbacktype, feedbackcondition, responsetimetype, experimentname, survey = None, None, None, None, None
             if worker:
-                if (debug and forcelist is not None):
-                #if (forcelist is not None):
-                    listid = forcelist
-                else:
-                    listid = worker.triallist.number
+                listid = worker.triallist.number
                 currlist = [x for x in stims if int(x['ListID']) == listid]
                 practicetrials = [z for z in currlist if z['TrialType'] == 'Practice']
                 testtrials = [z for z in currlist if z['TrialType'] == 'Test']
@@ -201,8 +253,6 @@ class BaeseberkGoldrickRep1Server(object):
                 feedbacktype = testtrials[0]['PartnerFeedbackType']
                 feedbackcondition = testtrials[0]['PartnerFeedbackCondition']
                 responsetimetype = 0 if testtrials[0]['PartnerResponseTime'] == '-1' else 1
-            else:
-                pass
 
             recorder_url = 'http://' + domain
             if port != '':
@@ -210,7 +260,7 @@ class BaeseberkGoldrickRep1Server(object):
             recorder_url += '/' + urlpath
 
             t = None
-            if (type(worker) != type(None) and worker.workerid in oldworkers):
+            if old_worker or (type(worker) != type(None) and worker.workerid in oldworkers):
                 template = env.get_template('sorry.html')
                 t = template.render()
             else:

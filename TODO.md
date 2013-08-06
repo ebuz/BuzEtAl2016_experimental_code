@@ -1,15 +1,13 @@
 # Pressing fixes #
-1. Format the top UofR image so that HLP is listed first then the UofR logo/name
 1. Check again for typos
 1. Check again for typos, seriously
-1. The instructions are way too long, we need to make it easier and read.
-  1. Replace some of the stuff with pictures or pictures and images, or videos
+1. Change the WAMI file name to be something more parseable
+1. Get this WAMI playback error fixed
+1. Allow those who leave and didn't finish to do the survey
 
 # Nice things to add #
 1. Catch trials where we have speakers type in the three words that are presented instead of speaking the cued word.
 1. Add in some way to skip ahead in a trial while in debug mode.
-1. Add in some way to skip to the test trials while in debug mode.
-1. Add trial numbers to each trial in a curr/total format somewhere on the screen
 1. Catch trials: words show up, all three words are boxed, they all go away, a new screen appears that gives a forced choice asking about something (i.e. asking about if a word was or was not present on the previous screen, half yes half no, if yes randomly drawn from one of the positions, the no should be monosyllabic and similar looking to the other stimuli).
 
 # Files that have to change for any given change of the experiment #

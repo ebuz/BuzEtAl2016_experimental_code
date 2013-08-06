@@ -193,6 +193,7 @@ $(document).ready(function() {
             $('#partnersyncmsg').next().hide();
             $('#synctimer').stopTime("synctimer");
             $('#startpractice').removeAttr('disabled');
+            window.alert("Your partner is connected, please start!");
           });
         });
       });
@@ -335,6 +336,16 @@ $(document).ready(function() {
                   });
               });
           } else {
+            $.ajax({
+                type: 'POST',
+                url: '/mturk/experiments/interactive_communication_1',
+                data: {'FinishedTrials': "true", 'WorkerId': workerId},
+                datatype: 'json'
+              }).done(function(msg) {
+                if (debugmode) {
+                    console.log('Updated to ' + JSON.stringify(msg));
+                  }
+              });
             $('#surveyStart').show();
           }
         } else {
@@ -680,6 +691,16 @@ $(document).ready(function() {
     }
 
     if (p6valid) {
+      $.ajax({
+          type: 'POST',
+          url: '/mturk/experiments/interactive_communication_1',
+          data: {'FinishedSurvey': "true", 'WorkerId': workerId},
+          datatype: 'json'
+        }).done(function(msg) {
+          if (debugmode) {
+              console.log('Updated to ' + JSON.stringify(msg));
+            }
+        });
       $('#page6').hide();
       wrapup();
     } else {
@@ -687,6 +708,16 @@ $(document).ready(function() {
         p6Nudge = true;
         alert("Please answer all the question, it will greatly help our work. This message will appear only once per page as a reminder.");
       } else {
+        $.ajax({
+            type: 'POST',
+            url: '/mturk/experiments/interactive_communication_1',
+            data: {'FinishedSurvey': "true", 'WorkerId': workerId},
+            datatype: 'json'
+          }).done(function(msg) {
+            if (debugmode) {
+                console.log('Updated to ' + JSON.stringify(msg));
+              }
+          });
         $('#page6').hide();
         wrapup();
       }
@@ -703,6 +734,16 @@ $(document).ready(function() {
     if (!finished) {
       return false;
     } else {
+      $.ajax({
+          type: 'POST',
+          url: '/mturk/experiments/interactive_communication_1',
+          data: {'FinishedHIT': "true", 'WorkerId': workerId},
+          datatype: 'json'
+        }).done(function(msg) {
+          if (debugmode) {
+              console.log('Updated to ' + JSON.stringify(msg));
+            }
+        });
       return true;
     }
   });

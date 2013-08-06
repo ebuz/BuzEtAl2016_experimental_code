@@ -19,8 +19,9 @@
 #    If not, see <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>.
 
 """
-Database models for Kathryn Campbell-Kibler, Kodi Weatherholtz, and T. Florian
-Jaeger's experiment. Based onCamber Hansen-Karr's EmoPrm1 experiment
+Modified from the database models for Kathryn Campbell-Kibler, Kodi Weatherholtz,
+and T. Florian Jaeger's experiment. Based onCamber Hansen-Karr's EmoPrm1 experiment
+Modifications by Esteban Buz <esteban.buz@gmail.com>
 """
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
@@ -48,6 +49,9 @@ class Worker(Base, MyMixin):
 
     workerid = Column(String(32), unique=True)
     abandoned = Column(Boolean, default = False)
+    finished_trials = Column(Boolean, default = False)
+    finished_survey = Column(Boolean, default = False)
+    finished_hit = Column(Boolean, default = False)
     lastitem = Column(Integer, default = 0)
     firstseen = Column(DateTime, default = datetime.datetime.now, nullable = False)
     lastseen = Column(DateTime, default = datetime.datetime.now, nullable = False)
