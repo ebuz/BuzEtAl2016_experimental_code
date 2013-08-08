@@ -120,7 +120,7 @@ var onTestRecordFinish = function() {
         // canvas-unsupported code here
     }
 
-    $('#micsetup').oneTime(500, function(){
+    $('#micsetup').oneTime(1000, function(){
         Wami.startPlaying(recorder_url + "?workerId=" +
         workerId +
         "&assignmentId=" + assignmentId +

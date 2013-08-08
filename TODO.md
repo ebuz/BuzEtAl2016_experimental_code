@@ -1,9 +1,7 @@
 # Pressing fixes #
 1. Check again for typos
 1. Check again for typos, seriously
-1. Change the WAMI file name to be something more parseable
-1. Get this WAMI playback error fixed
-1. Allow those who leave and didn't finish to do the survey
+1. Make a parser for the mturk hit results
 
 # Nice things to add #
 1. Catch trials where we have speakers type in the three words that are presented instead of speaking the cued word.
