@@ -393,6 +393,9 @@
               <p class="feedbackmsg"></p>
               <p class="posttrialmsg">Please <span style="font-weight:bold;">click the button or press the space bar</span> in the next 30 seconds to start the next trial.</p>
               <button type="button" class="nexttrial">30</button>
+              <p class="extendPauseInstructions">If you would like to take a longer pause you may ask your partner by clicking the button below. Requesting a break does not stop the timer so make sure you give your partner enough time to respond (we recommend at least 15 seconds). If they agree you'll both receive a 5 minute pause with the ability to end it earlier.</p>
+              <button type="button" class="extendPause">Ask for long pause.</button>
+              <button type="button"  class="readyToContinue" disabled='disabled'>Click when ready to continue.</button>
             </div>
             <input type="hidden" class="itemID", id="{{item.ItemID}}" name="{{item.ItemID}}" value="{{item.ItemID}}"/>
             <input type="hidden" class = "targetposition", id="targetposition_{{item.ItemID}}" name="targetposition_{{item.ItemID}}" value="{{item.TargetCompetitorPositions}}"/>
@@ -458,6 +461,9 @@
               <p class="feedbackmsg"></p>
               <p class="posttrialmsg">Please <span style="font-weight:bold;">click the button or press the space bar</span> in the next 30 seconds to start the next trial.</p>
               <button type="button" id="{{item.ItemID}}" class="nexttrial">30</button>
+              <p>If you would like to take a longer pause you may ask your partner by clicking the button below. Requesting a break does not stop the timer so make sure you give your partner enough time to respond (we recommend at least 15 seconds). If they agree you'll both receive a 5 minute pause with the ability to end it earlier.</p>
+              <button type="button" class="extendPause">Ask for long pause.</button>
+              <button type="button"  class="readyToContinue" disabled='disabled'>Click when ready to continue.</button>
             </div>
             <input type="hidden" class="itemID", id="{{item.ItemID}}" name="{{item.ItemID}}" value="{{item.ItemID}}"/>
             <input type="hidden" class = "targetposition", id="targetposition_{{item.ItemID}}" name="targetposition_{{item.ItemID}}" value="{{item.TargetCompetitorPositions}}"/>

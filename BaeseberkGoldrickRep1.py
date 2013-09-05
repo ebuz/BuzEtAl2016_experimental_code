@@ -70,18 +70,7 @@ def get_or_make_worker(amz_dict, session):
         session.commit()
         return worker
     except NoResultFound:
-        worker = Worker(workerid = amz_dict['workerId'], list_id = amz_dict['list'])
-        session.add(worker)
-        session.commit()
-        return worker
-
-def check_worker_exists(workerid, session):
-    try:
-        worker = session.query(Worker).filter_by(workerid = workerid).one()
-        return worker
-    except NoResultFound:
-        worker = Worker(workerid = workerid, list_id = random_lowest_list(session))
-        #worker = Worker(workerid = workerid, triallist = static_list(session, 25))
+        worker = Worker(workerid = amz_dict['workerId'], assignmentid = amz_dict['assignmentId'], hitid = amz_dict['hitId'], list_id = amz_dict['list'])
         session.add(worker)
         session.commit()
         return worker
@@ -90,7 +79,7 @@ def get_worker(workerid, session):
     return session.query(Worker).filter_by(workerid = workerid).one()
 
 def make_new_worker(amz_dict, session):
-    worker = Worker(workerid = amz_dict['workerId'], list_id = amz_dict['list'])
+    worker = Worker(workerid = amz_dict['workerId'], assignmentid = amz_dict['assignmentId'], hitid = amz_dict['hitId'], list_id = amz_dict['list'])
     session.add(worker)
     session.commit()
     return worker
@@ -260,7 +249,7 @@ class BaeseberkGoldrickRep1Server(object):
             recorder_url += '/' + urlpath
 
             t = None
-            if old_worker or (type(worker) != type(None) and worker.workerid in oldworkers):
+            if old_worker or (type(worker) != type(None) and not debug and worker.workerid in oldworkers):
                 template = env.get_template('sorry.html')
                 t = template.render()
             else:

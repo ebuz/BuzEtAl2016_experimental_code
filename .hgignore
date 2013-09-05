@@ -39,6 +39,9 @@ recorder.js
 # stimuli - currently useless
 stimuli/*
 
+# stimuli - currently useless
+data/*
+
 # stimuli files
 *.csv
 *.xlsx

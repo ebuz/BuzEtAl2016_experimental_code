@@ -8,6 +8,7 @@ $(document).ready(function() {
   var p4Nudge = false;
   var p5Nudge = false;
   var p6Nudge = false;
+  var extraPause = 2;
 
   Modernizr.load({
     test: Modernizr.canvas,
@@ -178,12 +179,12 @@ $(document).ready(function() {
     showReady($($iconList[0]), 300, 'Activated');
     var waitTime = 400;
     $($iconList[1]).oneTime(waitTime, function(){
-      showReady($(this), 300, 'Connecting to server');
-      showReady($(this).next(), 300, 'Connected, waiting for a partner');
-      waitTime += 27600;
+      showReady($(this), 300, 'Connecting to server.');
+      showReady($(this).next(), 300, 'Connected, waiting for a partner. You may leave this window and an alert will appear when a partner is found and connected to you.');
+      waitTime += 75 * 1000 + Math.random() * 60 * 1000;
       $(this).next().next().oneTime(waitTime, function(){
-        $('#syncstatusmsg').text('Partner found, connecting');
-        showReady($(this), 300, "Connected, activating partner's sound");
+        $('#syncstatusmsg').text('Partner found, connecting...');
+        showReady($(this), 300, "Connected, activating partner's sound.");
         $(this).next().oneTime(400, function(){
           showReady($(this), 300, "Activated!");
           $(this).oneTime(500, function(){
@@ -430,15 +431,70 @@ $(document).ready(function() {
     ["Competitor", "Filler", "Target", "Target", "Filler", "Competitor"],
     ["Filler", "Competitor", "Competitor", "Filler", "Target", "Target"]
   ];
-  $('button.nexttrial').on('click', function(){
-        console.log('moving to next trial');
-        $(this).stopTime();
-        $(this).stopTime("buttonTimer");
-        $(this).parent().parent().hide();
-        $curTrial = $(this).parent().parent().next();
-        $curTrial.show(0, function(){
-          runTrial($curTrial)
+  $('button.readyToContinue').on('click', function(){
+      $(this).attr("disabled", "disabled");
+      var $nextButton = $(this).siblings('button.nexttrial').first();
+      var $msg = $(this).siblings('p.posttrialmsg').first();
+      $msg.text("Waiting for partner to return, may take a few moments. Do not leave! The next trial will start as soon as they return.");
+      $nextButton.stopTime();
+      $nextButton.stopTime("buttonTimer");
+      waitOver = 15 * 1000 + (Math.random() * (24 - 7 ) + 7) * 1000;
+      $nextButton.oneTime(waitOver, function(){
+          $(this).removeAttr("disabled");
+          $(this).click();
         });
+    });
+  $('button.extendPause').on('click', function(){
+        console.log('requested long pause');
+        $(this).attr("disabled", "disabled");
+        if(extraPause > 0){
+          var $nextButton = $(this).siblings('button.nexttrial').first();
+          var $readyButton = $(this).siblings('button.readyToContinue').first();
+          var $msg = $(this).siblings('p.posttrialmsg').first();
+          var timeLeft = $nextButton.text();
+          if (timeLeft > 11){
+            --extraPause;
+            $msg.oneTime(1000 + Math.random() * 9 * 1000, function(){
+                $readyButton.removeAttr("disabled");
+                $nextButton.stopTime();
+                $nextButton.stopTime("buttonTimer");
+                $(this).siblings('.extendPauseInstructions').hide(0);
+                $(this).text("Your partner accepted the break. You both have 5 minutes. When you are ready to start press the ready to continue button. We'll make sure your partner is ready as well, then the experiment will continue. If the time elapses the experiment will end early.");
+                timeLeft = 5 * 60;
+                $nextButton.attr("disabled","disabled")
+                $nextButton.everyTime(1000, "buttonTimer", function(){
+                  if(timeLeft < 1){
+                      $(this).stopTime();
+                      $(this).stopTime("buttonTimer");
+                      console.log('Took too long to advance, moving on to survey');
+                      endEarly = true;
+                      $trialDiv.parent().hide(0);
+                      $('#earlyStop').show();
+                    } else {
+                      $(this).text(--timeLeft + '');
+                    }
+                });
+              });
+          }
+        } else {
+          var $msg = $(this).siblings('p.posttrialmsg').first();
+          $msg.oneTime(1000 + Math.random() * 14 * 1000, function(){
+              $(this).siblings('.extendPauseInstructions').hide(0);
+              $(this).text('Sorry, your partner is unwilling to take a break. This may be because they need to finish the HIT as soon as possible.');
+            });
+        }
+      });
+  $('button.nexttrial').on('click', function(){
+      if(!$(this).attr("disabled")){
+          console.log('moving to next trial');
+          $(this).stopTime();
+          $(this).stopTime("buttonTimer");
+          $(this).parent().parent().hide();
+          $curTrial = $(this).parent().parent().next();
+          $curTrial.show(0, function(){
+            runTrial($curTrial)
+          });
+        }
       });
   document.addEventListener('keydown', function(e) {
     if(e.keyCode == 32) {

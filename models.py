@@ -48,6 +48,8 @@ class Worker(Base, MyMixin):
     __tablename__ = 'worker'
 
     workerid = Column(String(32), unique=True)
+    assignmentid = Column(String(32))
+    hitid = Column(String(32))
     abandoned = Column(Boolean, default = False)
     finished_trials = Column(Boolean, default = False)
     finished_survey = Column(Boolean, default = False)

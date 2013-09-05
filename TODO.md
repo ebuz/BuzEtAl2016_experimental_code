@@ -1,7 +1,7 @@
 # Pressing fixes #
 1. Check again for typos
 1. Check again for typos, seriously
-1. Make a parser for the mturk hit results
+1. Change the payment to something like $.50 plus bonus based on trials completed.
 
 # Nice things to add #
 1. Catch trials where we have speakers type in the three words that are presented instead of speaking the cued word.

@@ -28,3 +28,8 @@ PositiveNegative feedback changes:
 1. Have the second filler trial be wrong and the first, second and third neighbor trial.
 1. Three more wrong trials placed among the final trials such that increasing distance between the last wrong trial is tied to trial number.
 
+## Rep1_v2
+Same design as above with the addition of the rep1 changes to the PositiveNegative.
+Additionally the fillers have been changed, now there are no filler targets that start with a voiced or voiceless stop (/bdg/,/kpt/).
+This latter change is due to the discovered issue that the targets have up to this point been biased towards voiceless targets.
+Note: this change doesn't actually fix this, that will be addressed in other versions.
