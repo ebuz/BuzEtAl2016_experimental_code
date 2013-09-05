@@ -60,7 +60,7 @@ def main(argv=None):
   if argv is None:
     argv = sys.argv[1:]
   args = PARSER.parse_args(argv)
-  logging.basicConfig(filename = PROG_NAME + '.log', filemode='w', level=LOG_LEVELS[args.logging_level])
+  logging.basicConfig(filename = PROG_NAME + '.log', filemode='a', level=LOG_LEVELS[args.logging_level])
   logging.info('Using the sql database: {}'.format(args.sqlite_db))
   old_workers = set()
   if args.old_pickle_file:
