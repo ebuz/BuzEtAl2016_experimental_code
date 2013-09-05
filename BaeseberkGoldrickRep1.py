@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 #Author: Andrew Watts
+#Modifications by Esteban Buz <esteban.buz@gmail.com>
 #
 #    Copyright 2009-2013 Andrew Watts and
 #        the University of Rochester BCS Department
@@ -236,8 +237,8 @@ class BaeseberkGoldrickRep1Server(object):
             if worker:
                 listid = worker.triallist.number
                 currlist = [x for x in stims if int(x['ListID']) == listid]
-                practicetrials = [z for z in currlist if z['TrialType'] == 'Practice']
-                testtrials = [z for z in currlist if z['TrialType'] == 'Test']
+                practicetrials = [z for z in currlist if z['TrialType'] in ['Practice', 'practice']]
+                testtrials = [z for z in currlist if z['TrialType'] in ['Test', 'test']]
                 experimentname = testtrials[0]['ExperimentName']
                 feedbacktype = testtrials[0]['PartnerFeedbackType']
                 feedbackcondition = testtrials[0]['PartnerFeedbackCondition']
