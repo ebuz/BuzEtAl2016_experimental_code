@@ -39,7 +39,7 @@ recorder.js
 # stimuli - currently useless
 stimuli/*
 
-# stimuli - currently useless
+# used for audiofiles
 data/*
 
 # stimuli files

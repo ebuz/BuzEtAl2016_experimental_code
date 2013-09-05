@@ -33,3 +33,13 @@ Wami.swf
 
 # Wami recorder helper JS functions. Changes upstream frequently
 recorder.js
+
+# stimuli - currently useless
+stimuli/*
+
+# used for audiofiles
+data/*
+
+# stimuli files
+*.csv
+*.xlsx
