@@ -12,6 +12,9 @@ syntax: glob
 # old versions
 *.old
 
+# archives
+*.arch
+
 # compiled Python files
 *.py[co]
 
