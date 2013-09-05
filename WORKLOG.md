@@ -15,3 +15,4 @@
 * 3/27/13 - Tested the practice code and got it working mostly, need to do some small timing changes.
 * 3/28/13 - Ported the practice code over to the rest of the experiment, did some other small fixes
 * 4/1/13 - More small fixes to the code, currently the last code wise issues that need to be addressed are putting back in the full stimuli lists and adding in the instructional video
+* Well so much for keeping this updated
