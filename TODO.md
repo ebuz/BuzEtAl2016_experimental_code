@@ -2,6 +2,7 @@
 1. Check again for typos
 1. Check again for typos, seriously
 1. Change the payment to something like $.50 plus bonus based on trials completed.
+1. There is a replay issue when wami is being set up in the instructions. It's because wami-helper.js that is in this repo is not the one that is used on www.
 
 # Nice things to add #
 1. Catch trials where we have speakers type in the three words that are presented instead of speaking the cued word.
