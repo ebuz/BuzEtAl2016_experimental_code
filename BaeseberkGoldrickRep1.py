@@ -154,26 +154,26 @@ class BaeseberkGoldrickRep1Server(object):
                 #print("Setting {} to {} at {}".format(worker.workerid, worker.lastitem, worker.lastseen))
 
             if 'Abandoned' in req.params:
-                if req.params['Abandoned'] == "true":
+                if req.params['Abandoned'] == 'true':
                     worker.abandoned = True
                     #print("{} has abandoned the hit".format(worker.workerid))
                 else:
                     worker.abandoned = False
 
             if 'FinishedTrials' in req.params:
-                if req.params['FinishedTrials'] == "true":
+                if req.params['FinishedTrials'] == 'true':
                     worker.finished_trials = True
                 else:
                     worker.finished_trials = False
 
             if 'FinishedSurvey' in req.params:
-                if req.params['FinishedSurvey'] == "true":
+                if req.params['FinishedSurvey'] == 'true':
                     worker.finished_survey = True
                 else:
                     worker.finished_survey = False
 
             if 'FinishedHIT' in req.params:
-                if req.params['FinishedHIT'] == "true":
+                if req.params['FinishedHIT'] == 'true':
                     worker.finished_hit = True
                 else:
                     worker.finished_hit = False
@@ -195,7 +195,6 @@ class BaeseberkGoldrickRep1Server(object):
             debug = False
             if 'debug' in req.params:
                 debug = True if req.params['debug'] == '1' else False
-
             try:
                 amz_dict['assignmentId'] = req.params['assignmentId']
                 amz_dict['hitId'] = req.params['hitId']
@@ -224,7 +223,6 @@ class BaeseberkGoldrickRep1Server(object):
                   worker = get_worker(amz_dict['workerId'], session)
                   if worker.finished_hit:
                     old_worker = True
-                    worker = None
                 else:
                   worker = make_new_worker(amz_dict, session)
 

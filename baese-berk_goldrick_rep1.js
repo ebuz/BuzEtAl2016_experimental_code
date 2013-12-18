@@ -793,7 +793,7 @@ $(document).ready(function() {
       $.ajax({
           type: 'POST',
           url: '/mturk/experiments/interactive_communication_1',
-          data: {'FinishedHIT': "true", 'WorkerId': workerId},
+          data: {'FinishedHIT': 'true', 'WorkerId': workerId},
           datatype: 'json'
         }).done(function(msg) {
           if (debugmode) {
