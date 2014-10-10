@@ -1,8 +1,8 @@
 # Pressing fixes #
+1. ADD IN TIMING INFOR FOR WHEN WAMI STARTS BECAUSE IT IS A SLUGGISH PIECE OF SHIT
 1. Check again for typos
 1. Check again for typos, seriously
 1. Change the payment to something like $.50 plus bonus based on trials completed.
-1. There is a replay issue when wami is being set up in the instructions. It's because wami-helper.js that is in this repo is not the one that is used on www.
 
 # Nice things to add #
 1. Catch trials where we have speakers type in the three words that are presented instead of speaking the cued word.
@@ -27,3 +27,14 @@
   2. Headphones from The Noun Project
 1. clean up any parts of the code that may speed up functionality
 1. the server, once in a while, spits out some baroquely described errors that may be important to work out, could just be related to reloading the page
+1. 
+
+
+# Analysis followups
+
+Look for effects of VOT on non-competitor trials where negative feedback occurs early on.
+Further, start to look at time course of VOT times.
+
+
+# Survey additions
+Ask: A random assignment to conditions so that for some people, the feedback had no relation to what was being said. On a scale of 1 to 7, how likely do you think it is that you were in that condition?

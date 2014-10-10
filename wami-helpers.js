@@ -126,7 +126,7 @@ var onTestRecordFinish = function() {
         "&assignmentId=" + assignmentId +
         "&hitId=" + hitId +
         "&hash=" + amzhash +
-        "&experiment=" + endurl +
+        "&experiment=" + experiment +
         "&filename=test", "onPlayStart", "onPlayFinish", "onError");
       });
 

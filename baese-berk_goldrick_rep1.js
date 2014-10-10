@@ -50,8 +50,8 @@ $(document).ready(function() {
         '&assignmentId=' + assignmentId +
         '&hitId=' + hitId +
         '&hash=' + amzhash +
-        '&experiment=' + endurl +
-        '&filename=test', 'onTestRecordStart', 'onTestRecordFinish', 'onError');
+        '&experiment=' + experiment +
+        '&filename=test', 'onTestRecordStart', 'onTestRecordFinishUpdate', 'onError');
       $('#audioSetupDone').removeAttr('disabled');
     } else {
       alert('Still waiting for recorder to become ready.');
@@ -73,7 +73,7 @@ $(document).ready(function() {
       '&assignmentId=' + assignmentId +
       '&hitId=' + hitId +
       '&hash=' + amzhash +
-      '&experiment=' + endurl +
+      '&experiment=' + experiment +
       '&filename=test', 'onPlayStart', 'onPlayFinish', 'onError');
   });
   $('button#endsetup').on('click', function() {
@@ -263,7 +263,7 @@ $(document).ready(function() {
                 '&assignmentId=' + assignmentId +
                 '&hitId=' + hitId +
                 '&hash=' + amzhash +
-                '&experiment=' + endurl +
+                '&experiment=' + experiment +
                 '&filename=' + $trialDiv.find('.itemID').attr('id'), 'onRecordStartUpdate', 'onRecordFinishUpdate', 'onError');
               $(this).oneTime(fixTime, function(){
                   $(this).hide(0, function(){
@@ -823,7 +823,7 @@ var onRecordStartUpdate = function() {
     doneUpload = false;
     recordInterval = setInterval(function () {
         var level = Wami.getRecordingLevel();
-      }, 200);
+      }, 25);
   };
 var onRecordFinishUpdate = function() {
   clearInterval(recordInterval);
@@ -839,3 +839,63 @@ var onRecordFinishUpdate = function() {
         }
     });
   };
+
+var onTestRecordFinishUpdate = function() {
+    clearInterval(recordInterval);
+    var G_vmlCanvasManager; // For IE < 9
+    var canvas = document.getElementById('micgraph');
+    if (G_vmlCanvasManager !== undefined) { // for IE < 9
+        G_vmlCanvasManager.initElement(canvas);
+    }
+
+    if (canvas.getContext){ // still test, just in case excanvas failed to init
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        var barwidth = canvas.width / miclevel.length;
+        var barx = 0;
+
+        var grad = ctx.createLinearGradient(0,0, 0,canvas.height);
+        grad.addColorStop(0, 'rgba(255,0,0,0.5)'); // red
+        grad.addColorStop(1/3, 'rgba(255,255,0,0.5)'); // yellow
+        grad.addColorStop(1/2, 'rgba(0,255,0,0.5)'); // green
+        grad.addColorStop(9.7/10, 'rgba(255,255,0,0.5)'); //yellow
+        grad.addColorStop(9.8/10, 'rgba(255,0,0,0.5)'); // red
+        ctx.fillStyle=grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle="rgba(0,0,0,1.0)";
+        ctx.strokeStyle="rgba(0,0,0,1.0)";
+        ctx.beginPath();
+        ctx.moveTo(0,canvas.height);
+        for(i=0; i < miclevel.length; i++) {
+            if (miclevel[i] === -1) miclevel[i] = 0;
+            ctx.lineTo(barx, canvas.height - miclevel[i]);
+            barx += barwidth;
+        }
+        ctx.moveTo(canvas.width, canvas.height);
+        ctx.closePath();
+        ctx.stroke();
+
+        if (Modernizr.canvastext) {
+            ctx.fillStyle="black";
+            ctx.font = "8pt Helvetica"
+            ctx.fillText('100', 1, 8);
+            ctx.fillText('75', 1, (canvas.height/4) + 4);
+            ctx.fillText('50', 1, (canvas.height/2) + 4);
+            ctx.fillText('25', 1, (canvas.height / (4/3)) + 4);
+            ctx.fillText('0', 1, canvas.height);
+        }
+    } else {
+        // canvas-unsupported code here
+    }
+
+    $('#micsetup').oneTime(500, function(){
+        Wami.startPlaying(recorder_url + "?workerId=" +
+        workerId +
+        "&assignmentId=" + assignmentId +
+        "&hitId=" + hitId +
+        "&hash=" + amzhash +
+        "&experiment=" + experiment +
+        "&filename=test", "onPlayStart", "onPlayFinish", "onError");
+      });
+};

@@ -28,7 +28,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import ConfigParser
 
-MAX_LIST = 12
+MAX_LIST = 8
 
 cfg = ConfigParser.SafeConfigParser()
 cfg.read('expt.cfg')

@@ -242,7 +242,7 @@ class BaeseberkGoldrickRep1Server(object):
                 feedbackcondition = testtrials[0]['PartnerFeedbackCondition']
                 responsetimetype = 0 if testtrials[0]['PartnerResponseTime'] == '-1' else 1
 
-            recorder_url = 'https://' + domain
+            recorder_url = 'http://' + domain
             if port != '':
                 recorder_url += ':' + port
             recorder_url += '/' + urlpath
