@@ -33,7 +33,7 @@ well, so you can support canvas on IE < 9.
 Run the command `db_init.py` to create the test SQLite database.
 
 If you run the command `python BaeseberkGoldrickRep1.py`, Paste will serve the 
-experiment at <http://127.0.0.1:8080/mturk/experiments/baese-berk_goldrick_rep1> Be sure to 
+experiment at <http://127.0.0.1:8080/mturk/experiments/interactive_communication1> Be sure to 
 pass it 'assignmentId', 'hitId', and 'workerId' parameters. Use whatever values
 you want for testing. These are the parameters that MTurk will pass the script.
  If you pass the additional parameter of  "debug=1", then the rendered version
