@@ -374,9 +374,10 @@ $(document).ready(function() {
       var partnerRT = parseInt($trialDiv.children(':input.partnerresponsetime').val());
       var $targetDiv = $trialDiv.find('.position1');
       var positionType = $trialDiv.children(':input.targetposition').val();
-      if (positionType == 2 || positionType == 3) {
+      if (positionTypeResponseMap[2][positionType] == "Target"){
+        //Target is position 2
           $targetDiv = $trialDiv.find('.position2');
-        } else if (positionType == 4 || positionType == 5) {
+        } else if (positionTypeResponseMap[3][positionType] == "Target"){
           $targetDiv = $trialDiv.find('.position3');
         }
       $trialDiv.find(".timerbar").show(0, function(){
@@ -426,7 +427,7 @@ $(document).ready(function() {
         });
     };
   var positionTypeResponseMap = [
-    ["0", "1", "2", "3", "4", "5"],
+    ["1", "2", "3", "4", "5", "6"],
     ["Target", "Target", "Filler", "Competitor", "Competitor", "Filler"],
     ["Competitor", "Filler", "Target", "Target", "Filler", "Competitor"],
     ["Filler", "Competitor", "Competitor", "Filler", "Target", "Target"]
