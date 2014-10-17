@@ -285,10 +285,10 @@ $(document).ready(function() {
                 backgroundcolor = "green";
               }
             var $partnerDiv = $trialDiv.find('.position1');
-            if (positionTypeResponseMap[2][positionType] == partnerResponse){
+            if (positionTypeResponseMap[2][positionType - 1] == partnerResponse){
               //response is position 2
                 $partnerDiv = $trialDiv.find('.position2');
-              } else if (positionTypeResponseMap[3][positionType] == partnerResponse){
+              } else if (positionTypeResponseMap[3][positionType - 1] == partnerResponse){
                 $partnerDiv = $trialDiv.find('.position3');
               }
             $partnerDiv.children('.partnercue').show();
@@ -374,10 +374,10 @@ $(document).ready(function() {
       var partnerRT = parseInt($trialDiv.children(':input.partnerresponsetime').val());
       var $targetDiv = $trialDiv.find('.position1');
       var positionType = $trialDiv.children(':input.targetposition').val();
-      if (positionTypeResponseMap[2][positionType] == "Target"){
+      if (positionTypeResponseMap[2][positionType - 1] == "Target"){
         //Target is position 2
           $targetDiv = $trialDiv.find('.position2');
-        } else if (positionTypeResponseMap[3][positionType] == "Target"){
+        } else if (positionTypeResponseMap[3][positionType - 1] == "Target"){
           $targetDiv = $trialDiv.find('.position3');
         }
       $trialDiv.find(".timerbar").show(0, function(){
