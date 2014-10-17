@@ -264,7 +264,7 @@ $(document).ready(function() {
                 '&hitId=' + hitId +
                 '&hash=' + amzhash +
                 '&experiment=' + experiment +
-                '&filename=' + $trialDiv.find('.itemID').attr('id'), 'onRecordStartUpdate', 'onRecordFinishUpdate', 'onError');
+                '&filename=' + workerId + $trialDiv.find('.itemID').attr('id'), 'onRecordStartUpdate', 'onRecordFinishUpdate', 'onError');
               $(this).oneTime(fixTime, function(){
                   $(this).hide(0, function(){
                       runStims($trialDiv);
