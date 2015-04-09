@@ -1,10 +1,26 @@
 # Experimental list versions
+## sz_mp
+### Design
+This is a 2x2 (within and between) subject design of neighbor/no neighbor and either s-final or z-final targets.
+
+### Stimuli
+The stimuli are s and z final words that either have or do not have s/z minimal pairs.
+
+46 or 56 total test trials.
+6 practice trials are given before hand.
+
+### List Count
+There are 8 lists total, 4 for s and 4 for z, of those 2 for the latin square and the reverse of both of those.
+
+### participants
+We are aiming for 5 people per list, 40 people total.
+
 ## sz_context
 ### Design
 This is a 2x2 (within and between) subject design of neighbor/no neighbor visually present and either s-final or z-final targets.
 
 ### Stimuli
-The stimuli are s and z final words
+The stimuli are s and z final words that have s/z minimal pairs.
 
 57 total test trials.
 6 practice trials are given before hand.
@@ -13,7 +29,7 @@ The stimuli are s and z final words
 There are 8 lists total, 4 for s and 4 for z, of those 2 for the latin square and the reverse of both of those.
 
 ### participants
-We are aiming for 4 to 5 people per list, 40 people total.
+We are aiming for 5 people per list, 40 people total.
 
 ## Rep1
 ### Design
