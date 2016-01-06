@@ -1,0 +1,6 @@
+six
+datetime
+webob
+sqlalchemy
+jinja2
+simplejson
