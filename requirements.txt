@@ -4,3 +4,4 @@ webob
 sqlalchemy
 jinja2
 simplejson
+paste
