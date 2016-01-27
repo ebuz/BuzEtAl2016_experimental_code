@@ -28,14 +28,18 @@ from random import choice, shuffle
 from six.moves import cPickle
 from six.moves import configparser
 import os.path
+from os import makedirs
+from pprint import pprint
+import logging
 from hashlib import sha224
 from datetime import datetime
 from webob import Request, Response
-from webob.exc import HTTPForbidden, HTTPBadRequest
+from webob.exc import HTTPForbidden, HTTPBadRequest, HTTPException
 from jinja2 import Environment, FileSystemLoader
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.pool import QueuePool
 from simplejson import loads, dumps
 from models import Worker, TrialList
 import sys
@@ -51,6 +55,11 @@ formtype = cfg.get('form', 'type')
 domain = cfg.get('host', 'domain')
 port = cfg.get('host', 'port')
 urlpath = cfg.get('host', 'path')
+#savebase = cfg.get('files','path')
+#if savebase != '':
+#    basepath = savebase
+wavsavebase = os.path.join(basepath, 'wav_uploads')
+production = cfg.getboolean('mode','production')
 
 # read in the stimuli via cPickle.
 stims = []
@@ -126,10 +135,26 @@ class BaeseberkGoldrickRep1Server(object):
         # this way if running standalone, gets app, else doesn't need it
         self.app = app
 
+        self.logger = logging.getLogger()
+        if production:
+            self.logger.setLevel(logging.ERROR)
+        else:
+            self.logger.setLevel(logging.INFO)
+
+        ch = logging.StreamHandler() # default stream is stderr
+        formatter = logging.Formatter('%(asctime)s %(module)s [[%(levelname)s]] %(message)s', '%a %d %b %y %T')
+        ch.setFormatter(formatter)
+        self.logger.addHandler(ch)
+
     def __call__(self, environ, start_response):
 
+        errors = environ['wsgi.errors']
+        # there should only be one handler and we're changing its output stream
+        # from stderr to wsgi.errors
+        self.logger.handlers[0].stream = errors
+
         # SQLAlchemy boilerplate code to connect to db and connect models to db objects
-        engine = create_engine(engine_string)
+        engine = create_engine(engine_string, poolclass=QueuePool)
         Session = sessionmaker(bind=engine)
         session = Session()
 
@@ -152,13 +177,6 @@ class BaeseberkGoldrickRep1Server(object):
                 worker.lastseen = datetime.now()
                 worker.lastitem = req.params['ItemNumber']
                 #print("Setting {} to {} at {}".format(worker.workerid, worker.lastitem, worker.lastseen))
-
-            if 'Abandoned' in req.params:
-                if req.params['Abandoned'] == 'true':
-                    worker.abandoned = True
-                    #print("{} has abandoned the hit".format(worker.workerid))
-                else:
-                    worker.abandoned = False
 
             if 'FinishedTrials' in req.params:
                 if req.params['FinishedTrials'] == 'true':
@@ -183,116 +201,197 @@ class BaeseberkGoldrickRep1Server(object):
             resp = Response(charset='utf8')
             resp.content_type = 'application/json'
             resp.text = unicode(dumps({'timestamp': worker.lastseen.isoformat(), 'item': worker.lastitem}))
+            session.close()
             return resp(environ, start_response)
         else:
-            env = Environment(loader=FileSystemLoader(os.path.join(basepath,'templates')))
-            env.filters['shuffle'] = shuffle_filter
-            amz_dict = {'workerId': '', 'assignmentId': '', 'hitId': '', 'list': ''}
-            templ, listid, condition, template, resp = [None for x in range(5)]
-            required_keys = ['assignmentId', 'hitId']
-            key_error_msg = 'Missing parameter: {0}. Required keys: {1}'
-
-            debug = False
-            if 'debug' in req.params:
-                debug = True if req.params['debug'] == '1' else False
-            try:
-                amz_dict['assignmentId'] = req.params['assignmentId']
-                amz_dict['hitId'] = req.params['hitId']
-            except KeyError as e:
-                resp = HTTPBadRequest(key_error_msg.format(e, required_keys))
-                return resp(environ, start_response)
-
-            in_preview = True if amz_dict['assignmentId'] == 'ASSIGNMENT_ID_NOT_AVAILABLE' else False
-
-            worker = None
-            old_worker = False
-            if not in_preview:
+            if 'wavreq' in req.params:
                 try:
-                    amz_dict['workerId'] = req.params['workerId']
+                    for k in ('workerId', 'assignmentId', 'hitId', 'hash'):
+                        if not req.params.has_key(k):
+                            raise HTTPBadRequest('Missing key: {}'.format(k))
+
+                    # Nothing should get saved in preview mode
+                    if req.params['assignmentId'] == 'ASSIGNMENT_ID_NOT_AVAILABLE':
+                        raise HTTPBadRequest('Files cannot be saved in HIT preview')
+
+                    # Check that the hash of the amazon params is right
+                    # This is pretty minimal security, but I'm not sure what else to do
+                    h = sha224("{}{}{}".format(req.params['workerId'],
+                                                req.params['hitId'],
+                                                req.params['assignmentId'])).hexdigest()
+
+                    # Use this to do a hash parameter instead of a cookie
+                    if req.params['hash'] != h:
+                        raise HTTPBadRequest('Bad hash')
+
+                    if req.params.has_key('experiment'):
+                        savepath = os.path.join(wavsavebase,
+                                                req.params['experiment'],
+                                                req.params['workerId'])
+                    else:
+                        savepath = os.path.join(wavsavebase,
+                                            req.params['workerId'],
+                                            req.params['hitId'])
+
+                    if req.method == 'POST':
+                        logging.info("Something was sent to me!")
+                        logging.info("Content type: {}".format(req.content_type))
+                        logging.info("Content length: {}".format(req.content_length))
+
+                        if req.content_type != 'audio/x-wav':
+                            raise HTTPBadRequest('Only WAV files can be uploaded')
+
+                        if req.params.has_key('filename'):
+                            savefile = req.params['filename'] + ".wav"
+                            if not req.params.has_key('experiment'):
+                                savepath = os.path.join(savepath, req.params['assignmentId'])
+                        else:
+                            savefile = req.params['assignmentId'] + ".wav"
+
+                        if not os.path.exists(savepath):
+                            makedirs(savepath)
+                        else:
+                            # delete old test file first so it isn't hanging around
+                            if savefile == 'test.wav' and os.path.isfile(os.path.join(savepath, savefile)):
+                                os.unlink(os.path.join(savepath, savefile))
+
+                        with open(os.path.join(savepath, savefile) , 'wb') as wavfile:
+                            wavfile.write(req.body)
+                            logging.info("Saved: {}".format(wavfile.name))
+
+                        resp = Response()
+                        return resp(environ, start_response)
+
+                    if req.method == 'GET':
+                        logging.info("Something was requested of me!")
+                        e = None
+                        sendfile = ""
+                        if req.params.has_key('filename'):
+                            if req.params['filename'] == "test":
+                                if not req.params.has_key('experiment'):
+                                    sendfile = os.path.join(savepath, req.params['assignmentId'], "test.wav")
+                                else:
+                                    sendfile = os.path.join(savepath, "test.wav")
+                                logging.info("File to play back: {}".format(sendfile))
+                                if os.path.exists(sendfile):
+                                    with open(sendfile,'rb') as wavfile:
+                                        resp = Response()
+                                        resp.content_type = 'audio/x-wav'
+                                        resp.body = wavfile.read()
+                                        return resp(environ, start_response)
+                                else:
+                                    e = HTTPBadRequest('WAV File cannot be found')
+                            else:
+                                e = HTTPForbidden('Only the level test wav can be played back')
+                        else:
+                            e = HTTPForbidden('WAVs can only be saved, not played back')
+                        return e(environ, start_response)
+
+                except HTTPException as e:
+                    logging.error("Encountered exception {} {}".format(e.status, e.detail))
+                    return e(environ, start_response)
+            else:
+                env = Environment(loader=FileSystemLoader(os.path.join(basepath,'templates')))
+                env.filters['shuffle'] = shuffle_filter
+                amz_dict = {'workerId': '', 'assignmentId': '', 'hitId': '', 'list': ''}
+                templ, listid, condition, template, resp = [None for x in range(5)]
+                required_keys = ['assignmentId', 'hitId']
+                key_error_msg = 'Missing parameter: {0}. Required keys: {1}'
+
+                debug = False
+                if 'debug' in req.params:
+                    debug = True if req.params['debug'] == '1' else False
+                try:
+                    amz_dict['assignmentId'] = req.params['assignmentId']
+                    amz_dict['hitId'] = req.params['hitId']
                 except KeyError as e:
-                    required_keys.append('workerId')
                     resp = HTTPBadRequest(key_error_msg.format(e, required_keys))
                     return resp(environ, start_response)
-                try:
-                    amz_dict['list'] = req.params['list']
-                except KeyError as e:
-                    amz_dict['list'] = random_lowest_list(session)
-                if debug:
-                  worker = get_or_make_worker(amz_dict, session)
-                elif worker_exists(amz_dict['workerId'], session):
-                  worker = get_worker(amz_dict['workerId'], session)
-                  if worker.finished_hit:
-                    old_worker = True
+
+                in_preview = True if amz_dict['assignmentId'] == 'ASSIGNMENT_ID_NOT_AVAILABLE' else False
+
+                worker = None
+                old_worker = False
+                if not in_preview:
+                    try:
+                        amz_dict['workerId'] = req.params['workerId']
+                    except KeyError as e:
+                        required_keys.append('workerId')
+                        resp = HTTPBadRequest(key_error_msg.format(e, required_keys))
+                        return resp(environ, start_response)
+                    try:
+                        amz_dict['list'] = req.params['list']
+                    except KeyError as e:
+                        amz_dict['list'] = random_lowest_list(session)
+                    if debug:
+                      worker = get_or_make_worker(amz_dict, session)
+                    elif worker_exists(amz_dict['workerId'], session):
+                      worker = get_worker(amz_dict['workerId'], session)
+                      if worker.finished_hit:
+                        old_worker = True
+                    else:
+                      worker = make_new_worker(amz_dict, session)
+
+                    amz_dict['hash'] = sha224("{}{}{}".format(req.params['workerId'],
+                                                          req.params['hitId'],
+                                                          req.params['assignmentId'])).hexdigest()
+
+                currlist, testtrials, practicetrials = [[] for x in range(3)]
+                feedbacktype, feedbackcondition, responsetimetype, experimentname, survey = None, None, None, None, None
+                if worker:
+                    listid = worker.triallist.number
+                    currlist = [x for x in stims if int(x['ListID']) == listid]
+                    practicetrials = [z for z in currlist if z['TrialType'] in ['Practice', 'practice']]
+                    testtrials = [z for z in currlist if z['TrialType'] in ['Test', 'test']]
+                    experimentname = testtrials[0]['ExperimentName']
+                    feedbacktype = testtrials[0]['PartnerFeedbackType']
+                    feedbackcondition = testtrials[0]['PartnerFeedbackCondition']
+                    responsetimetype = 0 if testtrials[0]['PartnerResponseTime'] == '-1' else 1
+
+                recorder_url = 'http://' + domain
+                if port != '':
+                    recorder_url += ':' + port
+                recorder_url += '/' + urlpath
+
+                t = None
+                if old_worker or (type(worker) != type(None) and not debug and worker.workerid in oldworkers):
+                    template = env.get_template('sorry.html')
+                    t = template.render()
                 else:
-                  worker = make_new_worker(amz_dict, session)
+                    startitem = 0
+                    if (type(worker) != type(None)):
+                        startitem = worker.lastitem
+                    template = env.get_template('baese-berk_goldrick_rep1.html')
+                    t = template.render(
+                        practicetrials = practicetrials,
+                        testtrials = testtrials,
+                        amz = amz_dict,
+                        listid = listid,
+                        feedbacktype = feedbacktype,
+                        feedbackcondition = feedbackcondition,
+                        responsetimetype = responsetimetype,
+                        experimentname = experimentname,
+                        formtype = formtype,
+                        recorder_url = recorder_url,
+                        debugmode = 1 if debug else 0,
+                        startitem = startitem,
+                        # on preview, don't bother loading heavy flash assets
+                        preview = in_preview)
 
-                amz_dict['hash'] = sha224("{}{}{}".format(req.params['workerId'],
-                                                      req.params['hitId'],
-                                                      req.params['assignmentId'])).hexdigest()
-
-            currlist, testtrials, practicetrials = [[] for x in range(3)]
-            feedbacktype, feedbackcondition, responsetimetype, experimentname, survey = None, None, None, None, None
-            if worker:
-                listid = worker.triallist.number
-                currlist = [x for x in stims if int(x['ListID']) == listid]
-                practicetrials = [z for z in currlist if z['TrialType'] in ['Practice', 'practice']]
-                testtrials = [z for z in currlist if z['TrialType'] in ['Test', 'test']]
-                experimentname = testtrials[0]['ExperimentName']
-                feedbacktype = testtrials[0]['PartnerFeedbackType']
-                feedbackcondition = testtrials[0]['PartnerFeedbackCondition']
-                responsetimetype = 0 if testtrials[0]['PartnerResponseTime'] == '-1' else 1
-
-            recorder_url = 'http://' + domain
-            if port != '':
-                recorder_url += ':' + port
-            recorder_url += '/' + urlpath
-
-            t = None
-            if old_worker or (type(worker) != type(None) and not debug and worker.workerid in oldworkers):
-                template = env.get_template('sorry.html')
-                t = template.render()
-            else:
-                startitem = 0
-                if (type(worker) != type(None)):
-                    startitem = worker.lastitem
-                template = env.get_template('baese-berk_goldrick_rep1.html')
-                t = template.render(
-                    practicetrials = practicetrials,
-                    testtrials = testtrials,
-                    amz = amz_dict,
-                    listid = listid,
-                    feedbacktype = feedbacktype,
-                    feedbackcondition = feedbackcondition,
-                    responsetimetype = responsetimetype,
-                    experimentname = experimentname,
-                    formtype = formtype,
-                    recorder_url = recorder_url,
-                    debugmode = 1 if debug else 0,
-                    startitem = startitem,
-                    # on preview, don't bother loading heavy flash assets
-                    preview = in_preview)
-
-            resp = Response()
-            resp.content_type='text/html'
-            resp.unicode_body = t
-            return resp(environ, start_response)
+                resp = Response()
+                resp.content_type='text/html'
+                resp.unicode_body = t
+                session.close()
+                return resp(environ, start_response)
 
 if __name__ == '__main__':
     import os
     from paste import httpserver, fileapp, urlmap
 
     app = urlmap.URLMap()
-    #app['/mturk/stimuli/baese-berk_goldrick_rep1'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'stimuli'))
-    app['/mturk/img'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'img'))
-    #app['/mturk/iso8601shim.min.js'] = fileapp.FileApp('iso8601shim.min.js')
-    app['/mturk/jquery.timers-1.2.js'] = fileapp.FileApp('jquery.timers-1.2.js')
-    app['/mturk/recorder.js'] = fileapp.FileApp('recorder.js')
-    app['/mturk/wami-helpers.js'] = fileapp.FileApp('wami-helpers.js')
-    app['/mturk/baese-berk_goldrick_rep1.js'] = fileapp.FileApp('baese-berk_goldrick_rep1.js')
-    #app['/mturk/modernizr.audioonly.js'] = fileapp.FileApp('modernizr.audioonly.js')
-    app['/mturk/modernizr.audiocanvas.js'] = fileapp.FileApp('modernizr.audiocanvas.js')
-    #app['/mturk/modernizr.canvas.js'] = fileapp.FileApp('modernizr.canvas.js')
-    app['/mturk/excanvas.js'] = fileapp.FileApp('excanvas.js')
-    app['/mturk/experiments/Wami.swf'] = fileapp.FileApp('Wami.swf')
-    app['/mturk/experiments/interactive_communication_1'] = BaeseberkGoldrickRep1Server(app)
+    app['/mturk/experiments/interactive_communication'] = BaeseberkGoldrickRep1Server(app)
+    app['/mturk/experiments/interactive_communication/static'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static'))
+    # app['/mturk/experiments/interactive_communication/img'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'img'))
+    # app['/mturk/experiments/interactive_communication/js'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'js'))
+    # app['/mturk/experiments/interactive_communication/Wami.swf'] = fileapp.FileApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Wami.swf'))
     httpserver.serve(app, host='127.0.0.1', port=8080)

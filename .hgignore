@@ -25,22 +25,17 @@ syntax: glob
 list*.html
 
 # the flowplayer install for testing
-flowplayer/*
+wav_uploads/*
 
-# JS file for making iso8601 dates
-iso8601shim.min.js
+# the flowplayer install for testing
+flowplayer/*
 
 # pickled version of stimuli
 *.pickle
 
-# Flash file of sound recorder
-Wami.swf
-
-# Wami recorder helper JS functions. Changes upstream frequently
-recorder.js
-
-# stimuli - currently useless
+# stimuli
 stimuli/*
+stimuli_creation/*
 
 # used for audiofiles
 data/*

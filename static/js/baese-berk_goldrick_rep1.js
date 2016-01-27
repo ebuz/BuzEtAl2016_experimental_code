@@ -23,7 +23,7 @@ $(document).ready(function() {
     endEarly = false;
     $.ajax({
       type: 'POST',
-      url: '/mturk/experiments/interactive_communication_1',
+      url: '/mturk/experiments/interactive_communication',
       data: {'ItemNumber': 0, 'Abandoned': false, 'WorkerId': workerId},
       datatype: 'json'
     }).done(function() {
@@ -45,8 +45,8 @@ $(document).ready(function() {
       $('button#playbacktest').attr('disabled', 'disabled');
       $('button#endrecordtest').removeAttr('disabled');
       $('button#endsetup').removeAttr('disabled');
-      Wami.startRecording(recorder_url + '?workerId=' +
-        workerId +
+      Wami.startRecording(recorder_url + '?wavreq=1' +
+        '&workerId=' + workerId +
         '&assignmentId=' + assignmentId +
         '&hitId=' + hitId +
         '&hash=' + amzhash +
@@ -68,8 +68,8 @@ $(document).ready(function() {
   });
   $('button#replaytest').on('click', function(e) {
     e.stopPropagation();
-    Wami.startPlaying(recorder_url + '?workerId=' +
-      workerId +
+    Wami.startPlaying(recorder_url + '?wavreq=1' +
+      '&workerId=' + workerId +
       '&assignmentId=' + assignmentId +
       '&hitId=' + hitId +
       '&hash=' + amzhash +
@@ -258,8 +258,8 @@ $(document).ready(function() {
       $trialDiv.show(0, function(){
           $(this).children().first().show(0, function(){
               $trialDiv.children('.record_start').val(new Date().getTime());
-              Wami.startRecording(recorder_url + '?workerId=' +
-                workerId +
+              Wami.startRecording(recorder_url + '?wavreq=1' +
+                '&workerId=' + workerId +
                 '&assignmentId=' + assignmentId +
                 '&hitId=' + hitId +
                 '&hash=' + amzhash +
@@ -339,7 +339,7 @@ $(document).ready(function() {
           } else {
             $.ajax({
                 type: 'POST',
-                url: '/mturk/experiments/interactive_communication_1',
+                url: '/mturk/experiments/interactive_communication',
                 data: {'FinishedTrials': "true", 'WorkerId': workerId},
                 datatype: 'json'
               }).done(function(msg) {
@@ -750,7 +750,7 @@ $(document).ready(function() {
     if (p6valid) {
       $.ajax({
           type: 'POST',
-          url: '/mturk/experiments/interactive_communication_1',
+          url: '/mturk/experiments/interactive_communication',
           data: {'FinishedSurvey': "true", 'WorkerId': workerId},
           datatype: 'json'
         }).done(function(msg) {
@@ -767,7 +767,7 @@ $(document).ready(function() {
       } else {
         $.ajax({
             type: 'POST',
-            url: '/mturk/experiments/interactive_communication_1',
+            url: '/mturk/experiments/interactive_communication',
             data: {'FinishedSurvey': "true", 'WorkerId': workerId},
             datatype: 'json'
           }).done(function(msg) {
@@ -793,7 +793,7 @@ $(document).ready(function() {
     } else {
       $.ajax({
           type: 'POST',
-          url: '/mturk/experiments/interactive_communication_1',
+          url: '/mturk/experiments/interactive_communication',
           data: {'FinishedHIT': 'true', 'WorkerId': workerId},
           datatype: 'json'
         }).done(function(msg) {
@@ -831,7 +831,7 @@ var onRecordFinishUpdate = function() {
   doneUpload = true;
   $.ajax({
       type: 'POST',
-      url: '/mturk/experiments/interactive_communication_1',
+      url: '/mturk/experiments/interactive_communication',
       data: {'ItemNumber': ++itemno, 'WorkerId': workerId},
       datatype: 'json'
     }).done(function(msg) {
@@ -891,8 +891,8 @@ var onTestRecordFinishUpdate = function() {
     }
 
     $('#micsetup').oneTime(500, function(){
-        Wami.startPlaying(recorder_url + "?workerId=" +
-        workerId +
+        Wami.startPlaying(recorder_url + '?wavreq=1' +
+        "&workerId=" + workerId +
         "&assignmentId=" + assignmentId +
         "&hitId=" + hitId +
         "&hash=" + amzhash +

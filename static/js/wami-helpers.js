@@ -1,5 +1,9 @@
 var setupRecorder = function() {
-    Wami.setup("wami", function() {checkSecurity();});
+    Wami.setup({
+        id: "wami",
+        swfUrl : "interactive_communication/static/Wami.swf",
+        onSecurity: function() {checkSecurity();}
+    });
 };
 
 var checkSecurity = function() {
@@ -121,8 +125,8 @@ var onTestRecordFinish = function() {
     }
 
     $('#micsetup').oneTime(1000, function(){
-        Wami.startPlaying(recorder_url + "?workerId=" +
-        workerId +
+        Wami.startPlaying(recorder_url + '?wavreq=1' +
+        "&workerId=" + workerId +
         "&assignmentId=" + assignmentId +
         "&hitId=" + hitId +
         "&hash=" + amzhash +

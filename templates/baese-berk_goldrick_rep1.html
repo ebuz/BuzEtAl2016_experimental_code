@@ -236,8 +236,8 @@
       #instructions #micwarning, #oldBrowserMessage, #startmessage, #earlyStop, #surveyStart, #page1, #page2, #page3, #page4, #page5, #page6, #submit, #comment, #practice, .trial, #teststart, #testing, .fixation, .stimuliframe, .timerbar, .responsecontainer, .posttrialwait {display:none;}
     </style>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/mturk/jquery.timers-1.2.js"></script>
-    <script type="text/javascript" src="/mturk/modernizr.audiocanvas.js"></script>
+    <script type="text/javascript" src="./interactive_communication/static/js/jquery.timers-1.2.js"></script>
+    <script type="text/javascript" src="./interactive_communication/static/js/modernizr.audiocanvas.js"></script>
     <script type="text/javascript">
       $(function(){
           $('#noJavaScript').hide();
@@ -271,9 +271,9 @@
         });
     </script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
-    <script type="text/javascript" src="/mturk/recorder.js"></script>
-    <script type="text/javascript" src="/mturk/wami-helpers.js"></script>
-    <script type="text/javascript" src="/mturk/baese-berk_goldrick_rep1.js"></script>
+    <script type="text/javascript" src="./interactive_communication/static/js/recorder.js"></script>
+    <script type="text/javascript" src="./interactive_communication/static/js/wami-helpers.js"></script>
+    <script type="text/javascript" src="./interactive_communication/static/js/baese-berk_goldrick_rep1.js"></script>
     <script type="text/javascript">
       var hitId = "{{amz.hitId}}";
       var workerId = "{{amz.workerId}}";
@@ -284,7 +284,7 @@
       var recorder_url = "{{recorder_url}}";
       var itemno = {{startitem}};
       var experiment = "{{experimentname}}";
-      var endurl = "interactive_communication_1";
+      var endurl = "interactive_communication";
     </script>
     </head>
 
@@ -308,10 +308,10 @@
         <p>Please <strong>do not accept this HIT</strong>, your results will be automatically rejected.  </p>
         <p>If you'd like to do this HIT, download an up-to-date version of one of these browsers and try again:</p>
         <div id="browserIcons">
-          <a target="_blank" href="https://www.google.com/chrome"><img src="/mturk/img/64-chrome.png" alt=""/></a>
-          <a target="_blank" href="https://www.mozilla.com/en-US/firefox/new/"><img src="/mturk/img/64-firefox.png" alt=""/></a>
-          <a target="_blank" href="http://www.opera.com/"><img src="/mturk/img/64-opera.png" alt=""/></a>
-          <a target="_blank" href="https://www.apple.com/safari/"><img src="/mturk/img/64-safari.png" alt=""/></a>
+          <a target="_blank" href="https://www.google.com/chrome"><img src="./interactive_communication/static/img/64-chrome.png" alt=""/></a>
+          <a target="_blank" href="https://www.mozilla.com/en-US/firefox/new/"><img src="./interactive_communication/static/img/64-firefox.png" alt=""/></a>
+          <a target="_blank" href="http://www.opera.com/"><img src="./interactive_communication/static/img/64-opera.png" alt=""/></a>
+          <a target="_blank" href="https://www.apple.com/safari/"><img src="./interactive_communication/static/img/64-safari.png" alt=""/></a>
         </div>
       </div>
 
@@ -330,11 +330,11 @@
           <p id="partnersyncmsg">Please wait a moment while we sync you with a partner, this initial connection generally takes 30 second to 2 minutes. Each trial will have a much shorter sync screen as well, usually not longer than 2 seconds.</p>
           <p>You've been waiting <span id="synctimer">0</span> seconds</p>
           <div id="initialsync">
-              <img src="/mturk/img/microphone.png">
-              <img src="/mturk/img/arrow.png">
-              <img src="/mturk/img/internet.png">
-              <img src="/mturk/img/arrow.png">
-              <img src="/mturk/img/headphone.png">
+              <img src="./interactive_communication/static/img/microphone.png">
+              <img src="./interactive_communication/static/img/arrow.png">
+              <img src="./interactive_communication/static/img/internet.png">
+              <img src="./interactive_communication/static/img/arrow.png">
+              <img src="./interactive_communication/static/img/headphone.png">
           </div>
           <p id='syncstatusmsg'>activating your microphone</p>
         </div>
@@ -348,11 +348,11 @@
       </div>
       <div id="practice">
         <div class="pretrialsync">
-            <img src="/mturk/img/microphone.png">
-            <img src="/mturk/img/arrow.png">
-            <img src="/mturk/img/internet.png">
-            <img src="/mturk/img/arrow.png">
-            <img src="/mturk/img/headphone.png">
+            <img src="./interactive_communication/static/img/microphone.png">
+            <img src="./interactive_communication/static/img/arrow.png">
+            <img src="./interactive_communication/static/img/internet.png">
+            <img src="./interactive_communication/static/img/arrow.png">
+            <img src="./interactive_communication/static/img/headphone.png">
         </div>
         {% for item in practicetrials %}
           <div id="practice_trial{{loop.index}}" class="trial">
@@ -360,26 +360,26 @@
               {{loop.index}} of {{loop.length}}
             </div>
             <div class="fixation">
-              <img class="fixationcross" src="/mturk/img/fixation.png">
+              <img class="fixationcross" src="./interactive_communication/static/img/fixation.png">
             </div>
             <div class="stimuliframe">
               <div class="position1">
-                <img class="speakercue" src="/mturk/img/microphone.png">
-                <img class="partnercue" src="/mturk/img/headphone.png">
+                <img class="speakercue" src="./interactive_communication/static/img/microphone.png">
+                <img class="partnercue" src="./interactive_communication/static/img/headphone.png">
                 <div class="stimulus">
                   {{item.Position1}}
                 </div>
               </div>
               <div class="position2">
-                <img class="speakercue" src="/mturk/img/microphone.png">
-                <img class="partnercue" src="/mturk/img/headphone.png">
+                <img class="speakercue" src="./interactive_communication/static/img/microphone.png">
+                <img class="partnercue" src="./interactive_communication/static/img/headphone.png">
                 <div class="stimulus">
                   {{item.Position2}}
                 </div>
               </div>
               <div class="position3">
-                <img class="speakercue" src="/mturk/img/microphone.png">
-                <img class="partnercue" src="/mturk/img/headphone.png">
+                <img class="speakercue" src="./interactive_communication/static/img/microphone.png">
+                <img class="partnercue" src="./interactive_communication/static/img/headphone.png">
                 <div class="stimulus">
                   {{item.Position3}}
                 </div>
@@ -416,11 +416,11 @@
       </div>
       <div id="testing">
         <div class="pretrialsync">
-            <img src="/mturk/img/microphone.png">
-            <img src="/mturk/img/arrow.png">
-            <img src="/mturk/img/internet.png">
-            <img src="/mturk/img/arrow.png">
-            <img src="/mturk/img/headphone.png">
+            <img src="./interactive_communication/static/img/microphone.png">
+            <img src="./interactive_communication/static/img/arrow.png">
+            <img src="./interactive_communication/static/img/internet.png">
+            <img src="./interactive_communication/static/img/arrow.png">
+            <img src="./interactive_communication/static/img/headphone.png">
         </div>
         {% for item in testtrials %}
           <div id="trial{{loop.index}}" class="trial">
@@ -428,26 +428,26 @@
               {{loop.index}} of {{loop.length}}
             </div>
             <div class="fixation">
-              <img class="fixationcross" src="/mturk/img/fixation.png">
+              <img class="fixationcross" src="./interactive_communication/static/img/fixation.png">
             </div>
             <div class="stimuliframe">
               <div class="position1">
-                <img class="speakercue" src="/mturk/img/microphone.png">
-                <img class="partnercue" src="/mturk/img/headphone.png">
+                <img class="speakercue" src="./interactive_communication/static/img/microphone.png">
+                <img class="partnercue" src="./interactive_communication/static/img/headphone.png">
                 <div class="stimulus">
                   {{item.Position1}}
                 </div>
               </div>
               <div class="position2">
-                <img class="speakercue" src="/mturk/img/microphone.png">
-                <img class="partnercue" src="/mturk/img/headphone.png">
+                <img class="speakercue" src="./interactive_communication/static/img/microphone.png">
+                <img class="partnercue" src="./interactive_communication/static/img/headphone.png">
                 <div class="stimulus">
                   {{item.Position2}}
                 </div>
               </div>
               <div class="position3">
-                <img class="speakercue" src="/mturk/img/microphone.png">
-                <img class="partnercue" src="/mturk/img/headphone.png">
+                <img class="speakercue" src="./interactive_communication/static/img/microphone.png">
+                <img class="partnercue" src="./interactive_communication/static/img/headphone.png">
                 <div class="stimulus">
                   {{item.Position3}}
                 </div>
