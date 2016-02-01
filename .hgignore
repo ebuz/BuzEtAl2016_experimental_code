@@ -34,6 +34,7 @@ flowplayer/*
 *.pickle
 
 # stimuli
+mturk/*/*
 stimuli/*
 stimuli_creation/*
 
