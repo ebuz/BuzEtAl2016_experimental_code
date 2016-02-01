@@ -23,7 +23,7 @@ $(document).ready(function() {
     endEarly = false;
     $.ajax({
       type: 'POST',
-      url: '/mturk/experiments/interactive_communication',
+      url: recorder_url,
       data: {'ItemNumber': 0, 'Abandoned': false, 'WorkerId': workerId},
       datatype: 'json'
     }).done(function() {
@@ -339,7 +339,7 @@ $(document).ready(function() {
           } else {
             $.ajax({
                 type: 'POST',
-                url: '/mturk/experiments/interactive_communication',
+                url: recorder_url,
                 data: {'FinishedTrials': "true", 'WorkerId': workerId},
                 datatype: 'json'
               }).done(function(msg) {
@@ -750,7 +750,7 @@ $(document).ready(function() {
     if (p6valid) {
       $.ajax({
           type: 'POST',
-          url: '/mturk/experiments/interactive_communication',
+          url: recorder_url,
           data: {'FinishedSurvey': "true", 'WorkerId': workerId},
           datatype: 'json'
         }).done(function(msg) {
@@ -767,7 +767,7 @@ $(document).ready(function() {
       } else {
         $.ajax({
             type: 'POST',
-            url: '/mturk/experiments/interactive_communication',
+            url: recorder_url,
             data: {'FinishedSurvey': "true", 'WorkerId': workerId},
             datatype: 'json'
           }).done(function(msg) {
@@ -793,7 +793,7 @@ $(document).ready(function() {
     } else {
       $.ajax({
           type: 'POST',
-          url: '/mturk/experiments/interactive_communication',
+          url: recorder_url,
           data: {'FinishedHIT': 'true', 'WorkerId': workerId},
           datatype: 'json'
         }).done(function(msg) {
@@ -831,7 +831,7 @@ var onRecordFinishUpdate = function() {
   doneUpload = true;
   $.ajax({
       type: 'POST',
-      url: '/mturk/experiments/interactive_communication',
+      url: recorder_url,
       data: {'ItemNumber': ++itemno, 'WorkerId': workerId},
       datatype: 'json'
     }).done(function(msg) {

@@ -1,7 +1,7 @@
 var setupRecorder = function() {
     Wami.setup({
         id: "wami",
-        swfUrl : "interactive_communication/static/Wami.swf",
+        swfUrl : "Wami.swf",
         onSecurity: function() {checkSecurity();}
     });
 };

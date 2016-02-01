@@ -348,10 +348,11 @@ class BaeseberkGoldrickRep1Server(object):
                     feedbackcondition = testtrials[0]['PartnerFeedbackCondition']
                     responsetimetype = 0 if testtrials[0]['PartnerResponseTime'] == '-1' else 1
 
-                recorder_url = 'http://' + domain
-                if port != '':
-                    recorder_url += ':' + port
-                recorder_url += '/' + urlpath
+#                recorder_url = 'https://' + domain
+#                if port != '':
+#                    recorder_url += ':' + port
+#                recorder_url += '/' + urlpath
+                recorder_url = urlpath
 
                 t = None
                 if old_worker or (type(worker) != type(None) and not debug and worker.workerid in oldworkers):
@@ -389,7 +390,7 @@ if __name__ == '__main__':
     from paste import httpserver, fileapp, urlmap
 
     app = urlmap.URLMap()
-    app['/mturk/experiments/interactive_communication'] = BaeseberkGoldrickRep1Server(app)
+    app[urlpath + '/hit'] = BaeseberkGoldrickRep1Server(app)
     app['/mturk/experiments/interactive_communication/static'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static'))
     # app['/mturk/experiments/interactive_communication/img'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'img'))
     # app['/mturk/experiments/interactive_communication/js'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'js'))
