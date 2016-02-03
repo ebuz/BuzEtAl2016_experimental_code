@@ -83,7 +83,7 @@ def main(argv=None):
     else:
       logging.info('No new workers to include.')
     old_workers = old_workers | new_workers
-  except NoResutFound:
+  except NoResultFound:
     logging.error('The database did not have any workers in it or some other issue occurred while retrieving workers.')
 
   with open(args.output_file, 'wb') as p:
