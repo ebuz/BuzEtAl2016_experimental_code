@@ -20,9 +20,15 @@
 
 import cPickle
 from csv import DictReader
+import argparse
+
+PARSER = argparse.ArgumentParser(prog = 'Make easy to load pre-parsed stimulus file', description = 'Extracts and pickles a list of workerids from the passed .sqlite database.')
+PARSER.add_argument('-s', '--stimuli_file', default = 'stimuli.csv')
+
+args = PARSER.parse_args()
 
 stims = []
-with open('stimuli.csv', 'rUb') as stimfile:
+with open(args.stimuli_file, 'rUb') as stimfile:
     stims = list(DictReader(stimfile))
 
 with open('stims.pickle', 'w') as picklefile:

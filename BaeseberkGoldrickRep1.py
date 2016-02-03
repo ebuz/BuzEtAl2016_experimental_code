@@ -85,8 +85,11 @@ def get_or_make_worker(amz_dict, session):
         session.commit()
         return worker
 
-def get_worker(workerid, session):
-    return session.query(Worker).filter_by(workerid = workerid).one()
+def get_worker(amz_dict, session):
+    return session.query(Worker).filter_by(workerid = amz_dict['workerId']).one()
+
+def get_list(amz_dict, session):
+    return session.query(TrialList).filter_by(number = amz_dict['list']).one()
 
 def make_new_worker(amz_dict, session):
     worker = Worker(workerid = amz_dict['workerId'], assignmentid = amz_dict['assignmentId'], hitid = amz_dict['hitId'], list_id = amz_dict['list'])
@@ -98,6 +101,13 @@ def worker_exists(workerid, session):
     try:
         worker = session.query(Worker).filter_by(workerid = workerid).one()
         return True
+    except NoResultFound:
+        return False
+
+def worker_finished(workerid, session):
+    try:
+        worker = session.query(Worker).filter_by(workerid = workerid).one()
+        return worker.finished_hit
     except NoResultFound:
         return False
 
@@ -298,9 +308,10 @@ class BaeseberkGoldrickRep1Server(object):
                 required_keys = ['assignmentId', 'hitId']
                 key_error_msg = 'Missing parameter: {0}. Required keys: {1}'
 
-                debug = False
+                amz_dict['debug'] = False
                 if 'debug' in req.params:
-                    debug = True if req.params['debug'] == '1' else False
+                    amz_dict['debug'] = True if req.params['debug'] == '1' else False
+
                 try:
                     amz_dict['assignmentId'] = req.params['assignmentId']
                     amz_dict['hitId'] = req.params['hitId']
@@ -323,14 +334,21 @@ class BaeseberkGoldrickRep1Server(object):
                         amz_dict['list'] = req.params['list']
                     except KeyError as e:
                         amz_dict['list'] = random_lowest_list(session)
-                    if debug:
-                      worker = get_or_make_worker(amz_dict, session)
-                    elif worker_exists(amz_dict['workerId'], session):
-                      worker = get_worker(amz_dict['workerId'], session)
-                      if worker.finished_hit:
+                    if amz_dict['workerId'] in oldworkers or worker_finished(amz_dict['workerId'], session):
                         old_worker = True
+                    elif not worker_exists(amz_dict['workerId'], session):
+                        worker = make_new_worker(amz_dict, session)
                     else:
-                      worker = make_new_worker(amz_dict, session)
+                        worker = get_worker(amz_dict, session)
+                        if worker.assignmentid != amz_dict['assignmentId']:
+                            if amz_dict['debug'] or worker.lastitem == 0:
+                                worker.triallist = get_list(amz_dict, session)
+                                # worker.trial_id = amz_dict['list']
+                                worker.assignmentid = amz_dict['assignmentId']
+                                worker.hitid = amz_dict['hitId']
+                                session.commit()
+                            else:
+                                old_worker = True
 
                     amz_dict['hash'] = sha224("{}{}{}".format(req.params['workerId'],
                                                           req.params['hitId'],
@@ -348,14 +366,9 @@ class BaeseberkGoldrickRep1Server(object):
                     feedbackcondition = testtrials[0]['PartnerFeedbackCondition']
                     responsetimetype = 0 if testtrials[0]['PartnerResponseTime'] == '-1' else 1
 
-#                recorder_url = 'https://' + domain
-#                if port != '':
-#                    recorder_url += ':' + port
-#                recorder_url += '/' + urlpath
                 recorder_url = urlpath
-
                 t = None
-                if old_worker or (type(worker) != type(None) and not debug and worker.workerid in oldworkers):
+                if old_worker:
                     template = env.get_template('sorry.html')
                     t = template.render()
                 else:
@@ -364,21 +377,20 @@ class BaeseberkGoldrickRep1Server(object):
                         startitem = worker.lastitem
                     template = env.get_template('baese-berk_goldrick_rep1.html')
                     t = template.render(
-                        practicetrials = practicetrials,
-                        testtrials = testtrials,
-                        amz = amz_dict,
-                        listid = listid,
-                        feedbacktype = feedbacktype,
-                        feedbackcondition = feedbackcondition,
-                        responsetimetype = responsetimetype,
-                        experimentname = experimentname,
-                        formtype = formtype,
-                        recorder_url = recorder_url,
-                        debugmode = 1 if debug else 0,
-                        startitem = startitem,
-                        # on preview, don't bother loading heavy flash assets
-                        preview = in_preview)
-
+                            practicetrials = practicetrials,
+                            testtrials = testtrials,
+                            amz = amz_dict,
+                            listid = listid,
+                            feedbacktype = feedbacktype,
+                            feedbackcondition = feedbackcondition,
+                            responsetimetype = responsetimetype,
+                            experimentname = experimentname,
+                            formtype = formtype,
+                            recorder_url = recorder_url,
+                            debugmode = 1 if amz_dict['debug'] else 0,
+                            startitem = startitem,
+                            # on preview, don't bother loading heavy flash assets
+                            preview = in_preview)
                 resp = Response()
                 resp.content_type='text/html'
                 resp.unicode_body = t
@@ -390,8 +402,8 @@ if __name__ == '__main__':
     from paste import httpserver, fileapp, urlmap
 
     app = urlmap.URLMap()
-    app[urlpath + '/hit'] = BaeseberkGoldrickRep1Server(app)
-    app['/mturk/experiments/interactive_communication/static'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static'))
+    app['/hit'] = BaeseberkGoldrickRep1Server(app)
+    app['/'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static'))
     # app['/mturk/experiments/interactive_communication/img'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'img'))
     # app['/mturk/experiments/interactive_communication/js'] = fileapp.DirectoryApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'js'))
     # app['/mturk/experiments/interactive_communication/Wami.swf'] = fileapp.FileApp(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Wami.swf'))
