@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $(':checked').removeAttr('checked');
+//  $(':checked').removeAttr('checked');
   $('input[name="browserid"]').val(navigator.userAgent);
   var finished = false;
   var p1Nudge = false;
@@ -370,7 +370,7 @@ $(document).ready(function() {
     };
   var runStims = function($trialDiv){
       var previewTime = 1500;
-      var timerTime = 10000;
+      var timerTime = 5000;
       var partnerRT = parseInt($trialDiv.children(':input.partnerresponsetime').val());
       var $targetDiv = $trialDiv.find('.position1');
       var positionType = $trialDiv.children(':input.targetposition').val();

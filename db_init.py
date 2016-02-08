@@ -28,10 +28,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import ConfigParser
 
-MAX_LIST = 8
 
 cfg = ConfigParser.SafeConfigParser()
 cfg.read('expt.cfg')
+
+MAX_LIST = int(cfg.get('db', 'lists'))
 
 engine_string = cfg.get('db', 'engine_string')
 
